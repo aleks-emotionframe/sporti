@@ -242,7 +242,44 @@ return<div className="screen" style={{padding:`0 ${px}px 20px`}}>
   {isStaff&&<button className="btn ag aglow anim d5" style={{marginTop:16}}>+ Neuen Termin erstellen</button>}
 </div>};
 
-const Events=({nav})=>{const[f,setF]=useState("alle");const types=["alle","training","spiel","turnier","helfer"];const fl=f==="alle"?evts:evts.filter(e=>e.type===f);return<div className="screen" style={{padding:`0 ${px}px 20px`}}><h2 className="anim" style={{fontSize:20,fontWeight:800,marginBottom:14}}>Termine</h2><div className="anim d1" style={{display:"flex",gap:6,overflowX:"auto",paddingBottom:8,marginBottom:14}}>{types.map(t=><button key={t} onClick={()=>setF(t)} style={{padding:"8px 14px",borderRadius:10,fontSize:9,fontWeight:700,textTransform:"uppercase",letterSpacing:".1em",whiteSpace:"nowrap",flexShrink:0,cursor:"pointer",background:f===t?(TC[t]?.c||"#00d4ff")+"18":"rgba(255,255,255,.03)",border:f===t?`1px solid ${(TC[t]?.c||"#00d4ff")}40`:"1px solid rgba(255,255,255,.06)",color:f===t?(TC[t]?.c||"#00d4ff"):"rgba(255,255,255,.25)",transition:"all .12s"}}>{t}</button>)}</div><div style={{display:"flex",flexDirection:"column",gap:8}}>{fl.map((ev,i)=><div key={ev.id} onClick={()=>nav("eventDetail",ev)} className={`glass card anim d${Math.min(i+1,5)}`} style={{cursor:"pointer"}}><div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:6}}><div><div style={{display:"flex",alignItems:"center",gap:6,marginBottom:3}}><Bdg type={ev.type}>{ev.type}</Bdg><span className="mono" style={{fontSize:9,color:"rgba(255,255,255,.2)"}}>+{ev.pts}</span></div><h4 style={{fontSize:13,fontWeight:600}}>{ev.title}</h4></div><SPill status={ev.status}/></div><div style={{fontSize:10,color:"rgba(255,255,255,.3)",fontWeight:300}}>{ev.date} · {ev.time}</div><div style={{fontSize:10,color:"rgba(255,255,255,.15)",fontWeight:300,marginTop:2}}>{ev.loc}</div></div>)}</div></div>};
+const Events=({nav,role})=>{const[f,setF]=useState("alle");const isParent=role==="elternteil";const linkedChildren=parentUser.children.filter(c=>c.linked);const[evCS,setEvCS]=useState({});const[absPopupEv,setAbsPopupEv]=useState(null);const[absChildEv,setAbsChildEv]=useState(null);const[absReasonEv,setAbsReasonEv]=useState("");
+const types=["alle","training","spiel","turnier","helfer"];const fl=f==="alle"?evts:evts.filter(e=>e.type===f);
+return<div className="screen" style={{padding:`0 ${px}px 20px`}}><h2 className="anim" style={{fontSize:20,fontWeight:800,marginBottom:14}}>Termine</h2><div className="anim d1" style={{display:"flex",gap:6,overflowX:"auto",paddingBottom:8,marginBottom:14}}>{types.map(t=><button key={t} onClick={()=>setF(t)} style={{padding:"8px 14px",borderRadius:10,fontSize:9,fontWeight:700,textTransform:"uppercase",letterSpacing:".1em",whiteSpace:"nowrap",flexShrink:0,cursor:"pointer",background:f===t?(TC[t]?.c||"#00d4ff")+"18":"rgba(255,255,255,.03)",border:f===t?`1px solid ${(TC[t]?.c||"#00d4ff")}40`:"1px solid rgba(255,255,255,.06)",color:f===t?(TC[t]?.c||"#00d4ff"):"rgba(255,255,255,.25)",transition:"all .12s"}}>{t}</button>)}</div><div style={{display:"flex",flexDirection:"column",gap:8}}>{fl.map((ev,i)=><div key={ev.id} className={`glass card anim d${Math.min(i+1,5)}`} style={{cursor:"pointer"}}>
+  <div onClick={()=>nav("eventDetail",ev)}>
+    <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:6}}><div><div style={{display:"flex",alignItems:"center",gap:6,marginBottom:3}}><Bdg type={ev.type}>{ev.type}</Bdg><span className="mono" style={{fontSize:9,color:"rgba(255,255,255,.2)"}}>+{ev.pts}</span></div><h4 style={{fontSize:13,fontWeight:600}}>{ev.title}</h4></div>{!isParent&&<SPill status={ev.status}/>}</div>
+    <div style={{fontSize:10,color:"rgba(255,255,255,.3)",fontWeight:300}}>{ev.date} · {ev.time}</div>
+    <div style={{fontSize:10,color:"rgba(255,255,255,.15)",fontWeight:300,marginTop:2}}>{ev.loc}</div>
+  </div>
+  {isParent&&<div style={{marginTop:8}}>
+    <div style={{display:"flex",flexDirection:"column",gap:4}}>
+      {linkedChildren.map(c=>{const cs=(evCS[ev.id]||{})[c.id];return<div key={c.id} style={{display:"flex",alignItems:"center",gap:8,padding:"6px 8px",borderRadius:10,background:"rgba(255,255,255,.02)"}}>
+        <Av name={c.name} size={22}/>
+        <span style={{flex:1,fontSize:11,fontWeight:500,color:"rgba(255,255,255,.6)"}}>{c.name.split(" ")[0]}</span>
+        {cs==="angemeldet"&&<span style={{fontSize:8,fontWeight:700,color:"#a3f7bf",padding:"2px 6px",borderRadius:5,background:"rgba(163,247,191,.1)"}}>✓ Dabei</span>}
+        {cs==="abgemeldet"&&<span style={{fontSize:8,fontWeight:700,color:"#ff6b35",padding:"2px 6px",borderRadius:5,background:"rgba(255,107,53,.1)"}}>✗ Abgesagt</span>}
+        {!cs&&<div style={{display:"flex",gap:4}}>
+          <button onClick={e=>{e.stopPropagation();setEvCS(p=>({...p,[ev.id]:{...(p[ev.id]||{}),[c.id]:"angemeldet"}}))}} style={{padding:"3px 8px",borderRadius:6,fontSize:8,fontWeight:700,cursor:"pointer",border:"none",background:"rgba(163,247,191,.1)",color:"#a3f7bf"}}>✓</button>
+          <button onClick={e=>{e.stopPropagation();setAbsChildEv(c);setAbsPopupEv(ev);setAbsReasonEv("")}} style={{padding:"3px 8px",borderRadius:6,fontSize:8,fontWeight:700,cursor:"pointer",border:"none",background:"rgba(255,255,255,.04)",color:"rgba(255,255,255,.25)"}}>✗</button>
+        </div>}
+      </div>})}
+    </div>
+    {Object.keys(evCS[ev.id]||{}).length>0&&<div style={{marginTop:4,fontSize:8,color:"rgba(255,159,67,.4)",textAlign:"center"}}>via {parentUser.name.split(" ")[0]} M.</div>}
+  </div>}
+</div>)}</div>
+{absPopupEv&&<div style={{position:"fixed",inset:0,zIndex:100,display:"flex",alignItems:"center",justifyContent:"center",padding:20}} onClick={()=>setAbsPopupEv(null)}>
+  <div style={{position:"absolute",inset:0,background:"rgba(0,0,0,.6)",backdropFilter:"blur(8px)",WebkitBackdropFilter:"blur(8px)"}}/>
+  <div onClick={e=>e.stopPropagation()} style={{position:"relative",width:"100%",maxWidth:340,borderRadius:20,background:"rgba(13,16,23,.85)",backdropFilter:"blur(40px)",WebkitBackdropFilter:"blur(40px)",border:"1px solid var(--glass-border-s)",padding:20,animation:"slideUp .25s ease-out",boxShadow:"0 20px 60px rgba(0,0,0,.4)"}}>
+    <h3 style={{fontSize:16,fontWeight:800,marginBottom:4}}>Absage</h3>
+    <p style={{fontSize:11,color:"rgba(255,255,255,.35)",fontWeight:300,marginBottom:14}}>{absPopupEv.title} – {absPopupEv.date}{absChildEv&&<span style={{color:"#ff9f43"}}> · {absChildEv.name}</span>}</p>
+    <label className="label">Grund der Absage *</label>
+    <textarea value={absReasonEv} onChange={e=>setAbsReasonEv(e.target.value)} placeholder="z.B. Krankheit, Termin..." style={{width:"100%",minHeight:70,background:"rgba(255,255,255,.04)",border:"1px solid rgba(255,255,255,.06)",borderRadius:12,padding:"10px 12px",color:"#fff",fontSize:13,fontFamily:"'Outfit',sans-serif",outline:"none",resize:"vertical",marginBottom:14}}/>
+    <div style={{display:"flex",gap:8}}>
+      <button onClick={()=>setAbsPopupEv(null)} style={{flex:1,padding:11,borderRadius:12,fontSize:12,fontWeight:600,cursor:"pointer",border:"1px solid rgba(255,255,255,.06)",background:"rgba(255,255,255,.03)",color:"rgba(255,255,255,.3)"}}>Abbrechen</button>
+      <button onClick={()=>{if(!absReasonEv.trim())return;setEvCS(p=>({...p,[absPopupEv.id]:{...(p[absPopupEv.id]||{}),[absChildEv.id]:"abgemeldet"}}));setAbsPopupEv(null)}} style={{flex:1,padding:11,borderRadius:12,fontSize:12,fontWeight:700,cursor:"pointer",border:"none",background:absReasonEv.trim()?"rgba(239,68,68,.8)":"rgba(255,255,255,.04)",color:absReasonEv.trim()?"#fff":"rgba(255,255,255,.15)",transition:"all .15s"}}>Absagen</button>
+    </div>
+  </div>
+</div>}
+</div>};
 
 const evChats={1:[{f:"Noah",t:"Komme 10 Min später, Bus hat Verspätung",tm:"18:45"},{f:"Coach Reto",t:"Kein Problem, aufwärmen startet pünktlich",tm:"18:47",co:true}],3:[{f:"Mia",t:"Wer fährt? Brauche Mitfahrgelegenheit",tm:"12:10"},{f:"Luca",t:"Wir haben noch Platz im Auto!",tm:"12:15",me:true},{f:"Coach Reto",t:"Besammlung 13:15 vor Ort, Trikots mitbringen!",tm:"13:00",co:true}]};
 
@@ -530,7 +567,7 @@ const changeTheme=(id)=>{setThemeId(id);applyTheme(id)};
 const nav=(t,d)=>{if(t==="eventDetail"){setEvD(d);setPrev(scr)}if(t==="chat")setChatBadge(0);setScr(t);document.getElementById("root").scrollTop=0;window.scrollTo?.(0,0)};
 window.__addTrainerMsg=(msg,ev)=>{const m={id:Date.now(),from:U.name,event:ev?.title||"Termin",t:msg,time:new Date().toLocaleTimeString("de-CH",{hour:"2-digit",minute:"2-digit"})};setTrainerInbox(p=>[m,...p]);setChatBadge(p=>p+1)};
 if(scr==="login")return<Login onLogin={r=>{setRole(r);setScr("dashboard")}}/>;
-const S={dashboard:<Dash role={role} nav={nav}/>,events:<Events nav={nav}/>,eventDetail:<EvDetail ev={evD} onBack={()=>setScr(prev)}/>,createEvent:<CreateEv onBack={()=>setScr("dashboard")}/>,rankings:<Rankings/>,chat:<Chat role={role} trainerInbox={trainerInbox}/>,helpers:<Helpers role={role}/>,finances:<Finances/>,stats:<Stats onBack={()=>setScr("dashboard")}/>,admin:<Admin nav={nav} themeId={themeId} changeTheme={changeTheme}/>,members:<Members/>,profile:<Profile onBack={()=>setScr("dashboard")} role={role}/>};
+const S={dashboard:<Dash role={role} nav={nav}/>,events:<Events nav={nav} role={role}/>,eventDetail:<EvDetail ev={evD} onBack={()=>setScr(prev)}/>,createEvent:<CreateEv onBack={()=>setScr("dashboard")}/>,rankings:<Rankings/>,chat:<Chat role={role} trainerInbox={trainerInbox}/>,helpers:<Helpers role={role}/>,finances:<Finances/>,stats:<Stats onBack={()=>setScr("dashboard")}/>,admin:<Admin nav={nav} themeId={themeId} changeTheme={changeTheme}/>,members:<Members/>,profile:<Profile onBack={()=>setScr("dashboard")} role={role}/>};
 const mains=["dashboard","events","rankings","helpers","chat","admin","profile"];
 return<div className="dot-grid" style={{position:"relative",minHeight:"100%"}}><Aurora/>
   <div className="glass-header" style={{position:"sticky",top:0,zIndex:40,padding:"0 16px"}}>
