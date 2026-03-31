@@ -125,18 +125,52 @@ const Members=()=><div className="screen" style={{padding:`0 ${px}px 20px`}}><di
 
 const Profile=({onBack})=><div className="screen" style={{padding:`0 ${px}px 20px`}}><Back onClick={onBack}/><div className="anim section" style={{display:"flex",flexDirection:"column",alignItems:"center",textAlign:"center"}}><div style={{position:"relative",marginBottom:14}}><div className="ag aglow" style={{width:84,height:84,borderRadius:22,display:"flex",alignItems:"center",justifyContent:"center",animation:"pulse-ring 4s ease-in-out infinite"}}><span style={{fontSize:26,fontWeight:900,color:"#06080f"}}>LM</span></div><div className="glass-s" style={{position:"absolute",bottom:-2,right:-2,width:28,height:28,borderRadius:10,display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer",fontSize:12}}>📷</div></div><h2 style={{fontSize:20,fontWeight:800,marginBottom:2}}>{U.name}</h2><p style={{fontSize:12,color:"rgba(255,255,255,.3)",fontWeight:300}}>{U.team} · {U.role}</p></div><div className="anim d1 section" style={{display:"flex",flexDirection:"column",gap:6}}>{[{l:"E-Mail",v:"luca@example.ch"},{l:"Geburtsdatum",v:"15.06.2008"},{l:"Eltern-Account",v:"Thomas Meier (verknüpft)"},{l:"Mitglied seit",v:"August 2021"}].map(f=><div key={f.l} className="glass card" style={{padding:12}}><div style={{fontSize:9,color:"rgba(255,255,255,.25)",fontWeight:700,textTransform:"uppercase",letterSpacing:".12em",marginBottom:2}}>{f.l}</div><div style={{fontSize:13,color:"rgba(255,255,255,.7)",fontWeight:500}}>{f.v}</div></div>)}</div><div className="anim d2 section"><h3 className="section-title">Abwesenheiten</h3><div style={{borderRadius:14,padding:12,background:"rgba(255,215,0,.04)",border:"1px solid rgba(255,215,0,.1)"}}><div style={{display:"flex",alignItems:"center",gap:6,marginBottom:3}}><Ic n="injury" s={13} c="#ffd700"/><span style={{fontSize:13,color:"#ffd700",fontWeight:500}}>Knöchelverletzung</span></div><div style={{fontSize:10,color:"rgba(255,255,255,.25)",fontWeight:300}}>Rückkehr: ca. 15. April 2026</div></div></div><button className="glass anim d3" style={{width:"100%",padding:12,borderRadius:12,color:"rgba(255,255,255,.3)",fontSize:12,fontWeight:500,display:"flex",alignItems:"center",justifyContent:"center",gap:6,cursor:"pointer",background:"rgba(255,255,255,.03)",border:"1px solid rgba(255,255,255,.06)"}}><Ic n="logout" s={14}/> Abmelden</button></div>;
 
+const news=[
+  {id:1,from:"Coach Reto",role:"trainer",t:"Training morgen findet in Halle 2 statt (nicht Halle 3)!",date:"31. Mär",time:"15:30"},
+  {id:2,from:"Vorstand",role:"vorstand",t:"Saisonabschluss-Fest am 28. Juni – bitte Datum reservieren!",date:"30. Mär",time:"10:00"},
+  {id:3,from:"Admin",role:"admin",t:"Neue Trikots sind da! Abholung ab Montag im Sekretariat.",date:"29. Mär",time:"09:15"},
+  {id:4,from:"Coach Reto",role:"trainer",t:"Spielbericht Meisterschaft online – bitte anschauen.",date:"28. Mär",time:"20:00"},
+];
+
+const NewsPopup=({open,onClose,role,onAdd})=>{const[inp,setInp]=useState("");const[items,setItems]=useState(news);const isStaff=role==="trainer"||role==="vorstand"||role==="admin";
+const send=()=>{if(!inp.trim())return;setItems(p=>[{id:Date.now(),from:role==="trainer"?"Coach":role.charAt(0).toUpperCase()+role.slice(1),role,t:inp.trim(),date:"Jetzt",time:new Date().toLocaleTimeString("de-CH",{hour:"2-digit",minute:"2-digit"})},...p]);setInp("")};
+if(!open)return null;
+return<div style={{position:"fixed",inset:0,zIndex:100,display:"flex",alignItems:"flex-end",justifyContent:"center"}} onClick={onClose}>
+  <div style={{position:"absolute",inset:0,background:"rgba(0,0,0,.6)",backdropFilter:"blur(8px)",WebkitBackdropFilter:"blur(8px)"}}/>
+  <div onClick={e=>e.stopPropagation()} style={{position:"relative",width:"100%",maxWidth:390,maxHeight:"75vh",borderRadius:"24px 24px 0 0",background:"#0d1017",border:"1px solid rgba(255,255,255,.06)",borderBottom:"none",display:"flex",flexDirection:"column",animation:"slideUp .25s ease-out"}}>
+    <div style={{padding:"20px 18px 12px",display:"flex",alignItems:"center",justifyContent:"space-between",borderBottom:"1px solid rgba(255,255,255,.04)"}}>
+      <div style={{display:"flex",alignItems:"center",gap:8}}><Ic n="bell" s={16} c="#00d4ff"/><h3 style={{fontSize:16,fontWeight:800}}>Neuigkeiten</h3></div>
+      <button onClick={onClose} style={{background:"rgba(255,255,255,.05)",border:"none",width:28,height:28,borderRadius:8,display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer"}}><Ic n="x" s={14} c="rgba(255,255,255,.3)"/></button>
+    </div>
+    <div style={{flex:1,overflowY:"auto",padding:"12px 18px"}}>
+      {items.map(n=><div key={n.id} style={{padding:"12px 0",borderBottom:"1px solid rgba(255,255,255,.03)"}}>
+        <div style={{display:"flex",alignItems:"center",gap:6,marginBottom:4}}>
+          <span style={{fontSize:10,fontWeight:700,color:RC[n.role]||"#00d4ff"}}>{n.from}</span>
+          <span className="mono" style={{fontSize:8,color:"rgba(255,255,255,.15)"}}>{n.date}, {n.time}</span>
+        </div>
+        <p style={{fontSize:13,color:"rgba(255,255,255,.65)",fontWeight:300,lineHeight:1.5}}>{n.t}</p>
+      </div>)}
+    </div>
+    {isStaff&&<div style={{padding:"10px 18px 18px",borderTop:"1px solid rgba(255,255,255,.04)",display:"flex",gap:8}}>
+      <input value={inp} onChange={e=>setInp(e.target.value)} onKeyDown={e=>e.key==="Enter"&&send()} placeholder="Neuigkeit posten..." style={{flex:1,padding:"9px 12px",fontSize:12}}/>
+      <button onClick={send} className="ag aglow" style={{width:36,height:36,borderRadius:10,border:"none",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}><Ic n="send" s={14} c="#06080f"/></button>
+    </div>}
+  </div>
+</div>};
+
 const Nav=({active,nav,role})=>{const isStaff=role==="trainer"||role==="vorstand"||role==="admin";const items=[{id:"dashboard",ic:"home",l:"Home"},{id:"events",ic:"calendar",l:"Termine"},isStaff?{id:"rankings",ic:"trophy",l:"Ranking"}:{id:"helpers",ic:"hand",l:"Helfer"},{id:"chat",ic:"chat",l:"Chat"}];items.push(isStaff?{id:"admin",ic:"settings",l:"Admin"}:{id:"profile",ic:"profile",l:"Profil"});return<div className="nav"><div className="nav-inner">{items.map(it=>{const a=active===it.id;return<button key={it.id} onClick={()=>nav(it.id)} className="nav-btn">{a&&<div className="nav-dot ag"/>}<Ic n={it.ic} s={18} c={a?"#00d4ff":"rgba(255,255,255,.2)"}/><span style={{fontSize:8,fontWeight:700,letterSpacing:".04em",color:a?"#00d4ff":"rgba(255,255,255,.2)"}}>{it.l}</span></button>})}</div></div>};
 
-const App=()=>{const[scr,setScr]=useState("login");const[role,setRole]=useState("spieler");const[evD,setEvD]=useState(null);const[prev,setPrev]=useState("dashboard");const nav=(t,d)=>{if(t==="eventDetail"){setEvD(d);setPrev(scr)}setScr(t);document.getElementById("root").scrollTop=0;window.scrollTo?.(0,0)};
+const App=()=>{const[scr,setScr]=useState("login");const[role,setRole]=useState("spieler");const[evD,setEvD]=useState(null);const[prev,setPrev]=useState("dashboard");const[showNews,setShowNews]=useState(false);const nav=(t,d)=>{if(t==="eventDetail"){setEvD(d);setPrev(scr)}setScr(t);document.getElementById("root").scrollTop=0;window.scrollTo?.(0,0)};
 if(scr==="login")return<Login onLogin={r=>{setRole(r);setScr("dashboard")}}/>;
 const S={dashboard:<Dash role={role} nav={nav}/>,events:<Events nav={nav}/>,eventDetail:<EvDetail ev={evD} onBack={()=>setScr(prev)}/>,createEvent:<CreateEv onBack={()=>setScr("dashboard")}/>,rankings:<Rankings/>,chat:<Chat/>,helpers:<Helpers/>,finances:<Finances/>,admin:<Admin nav={nav}/>,members:<Members/>,profile:<Profile onBack={()=>setScr("dashboard")}/>};
 const mains=["dashboard","events","rankings","helpers","chat","admin","profile"];
 return<div className="dot-grid" style={{position:"relative",minHeight:"100%"}}><Aurora/>
   <div style={{height:"env(safe-area-inset-top, 14px)",minHeight:14}}/>
-  <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"0 16px 0"}}><div style={{display:"flex",alignItems:"center",gap:8}}><div className="ag" style={{width:28,height:28,borderRadius:9,display:"flex",alignItems:"center",justifyContent:"center"}}><span style={{fontSize:10,fontWeight:900,color:"#06080f"}}>S</span></div><span style={{fontSize:10,fontWeight:800,color:"rgba(255,255,255,.2)",textTransform:"uppercase",letterSpacing:".2em"}}>Sporti</span></div><div style={{display:"flex",alignItems:"center",gap:8}}><RBdg role={role}/><div className="glass" style={{width:32,height:32,borderRadius:10,display:"flex",alignItems:"center",justifyContent:"center",position:"relative",cursor:"pointer"}} onClick={()=>nav("profile")}><Ic n="bell" s={14} c="rgba(255,255,255,.3)"/><div style={{position:"absolute",top:7,right:7,width:6,height:6,borderRadius:3,background:"#ff6b35",animation:"glow 2s ease-in-out infinite"}}/></div></div></div>
+  <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"0 16px 0"}}><div style={{display:"flex",alignItems:"center",gap:8}}><div className="ag" style={{width:28,height:28,borderRadius:9,display:"flex",alignItems:"center",justifyContent:"center"}}><span style={{fontSize:10,fontWeight:900,color:"#06080f"}}>S</span></div><span style={{fontSize:10,fontWeight:800,color:"rgba(255,255,255,.2)",textTransform:"uppercase",letterSpacing:".2em"}}>Sporti</span></div><div style={{display:"flex",alignItems:"center",gap:8}}><RBdg role={role}/><div className="glass" style={{width:32,height:32,borderRadius:10,display:"flex",alignItems:"center",justifyContent:"center",position:"relative",cursor:"pointer"}} onClick={()=>setShowNews(true)}><Ic n="bell" s={14} c="rgba(255,255,255,.3)"/><div style={{position:"absolute",top:7,right:7,width:6,height:6,borderRadius:3,background:"#ff6b35",animation:"glow 2s ease-in-out infinite"}}/></div></div></div>
   <div style={{height:1,background:"rgba(255,255,255,.04)",margin:"12px 16px 18px"}}/>
   <div style={{paddingBottom:72}}>{S[scr]||<Dash role={role} nav={nav}/>}</div>
   <Nav active={mains.includes(scr)?scr:prev} nav={nav} role={role}/>
+  <NewsPopup open={showNews} onClose={()=>setShowNews(false)} role={role}/>
 </div>};
 ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
 </script>
