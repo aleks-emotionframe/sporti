@@ -160,16 +160,16 @@ const isWithin24h=(ev)=>(parseEvDate(ev)-new Date())<24*60*60*1000;
 
 const Dash=({role,nav})=>{const isStaff=role==="trainer"||role==="vorstand"||role==="admin";const isParent=role==="elternteil";const q=getMotivation();
 const[statuses,setStatuses]=useState(()=>{const o={};evts.forEach(e=>o[e.id]=e.status);return o});
-const[childFor,setChildFor]=useState({});
-const[absPopup,setAbsPopup]=useState(null);const[absReason,setAbsReason]=useState("");const[latePopup,setLatePopup]=useState(null);const[lateMsg,setLateMsg]=useState("");const[lateSent,setLateSent]=useState(false);
+const[childStatuses,setChildStatuses]=useState({});
+const[absPopup,setAbsPopup]=useState(null);const[absReason,setAbsReason]=useState("");const[absChild,setAbsChild]=useState(null);
+const[latePopup,setLatePopup]=useState(null);const[lateMsg,setLateMsg]=useState("");const[lateSent,setLateSent]=useState(false);const[lateChild,setLateChild]=useState(null);
 const[childPicker,setChildPicker]=useState(null);
 const linkedChildren=parentUser.children.filter(c=>c.linked);
+const getChildStatus=(evId,childId)=>(childStatuses[evId]||{})[childId];
 
-const pickChild=(e,ev,action)=>{e.stopPropagation();if(!isParent){if(action==="zu")return handleZusageDirect(ev);return handleAbsageDirect(ev)};setChildPicker({ev,action})};
-const confirmChild=(child)=>{const ev=childPicker.ev;setChildFor(p=>({...p,[ev.id]:child}));if(childPicker.action==="zu"){setStatuses(p=>({...p,[ev.id]:"angemeldet"}));setChildPicker(null)}else{setChildPicker(null);if(isWithin24h(ev)){setLatePopup(ev);setLateMsg("");setLateSent(false)}else{setAbsPopup(ev);setAbsReason("")}}};
-const handleZusageDirect=(ev)=>{setStatuses(p=>({...p,[ev.id]:"angemeldet"}))};
-const handleAbsageDirect=(ev)=>{if(isWithin24h(ev)){setLatePopup(ev);setLateMsg("");setLateSent(false)}else{setAbsPopup(ev);setAbsReason("")}};
-const confirmAbsage=()=>{if(!absReason.trim())return;setStatuses(p=>({...p,[absPopup.id]:"abgemeldet"}));setAbsPopup(null);setAbsReason("")};
+const pickChild=(e,ev,action)=>{e.stopPropagation();if(!isParent){if(action==="zu"){setStatuses(p=>({...p,[ev.id]:"angemeldet"}))}else{if(isWithin24h(ev)){setLatePopup(ev);setLateMsg("");setLateSent(false)}else{setAbsPopup(ev);setAbsReason("");setAbsChild(null)}}return};setChildPicker({ev,action})};
+const confirmChild=(child)=>{const ev=childPicker.ev;if(childPicker.action==="zu"){setChildStatuses(p=>({...p,[ev.id]:{...(p[ev.id]||{}),[child.id]:"angemeldet"}}));setChildPicker(null)}else{setAbsChild(child);setChildPicker(null);if(isWithin24h(ev)){setLatePopup(ev);setLateMsg("");setLateSent(false);setLateChild(child)}else{setAbsPopup(ev);setAbsReason("")}}};
+const confirmAbsage=()=>{if(!absReason.trim())return;if(isParent&&absChild){setChildStatuses(p=>({...p,[absPopup.id]:{...(p[absPopup.id]||{}),[absChild.id]:"abgemeldet"}}));}else{setStatuses(p=>({...p,[absPopup.id]:"abgemeldet"}))}setAbsPopup(null);setAbsReason("");setAbsChild(null)};
 
 return<div className="screen" style={{padding:`0 ${px}px 20px`}}>
   <div className="anim section" style={{display:"flex",alignItems:"center",justifyContent:"space-between"}}><div><h2 style={{fontSize:20,fontWeight:800,letterSpacing:"-.01em",marginBottom:3}}>Hallo, {isParent?parentUser.name.split(" ")[0]:U.name.split(" ")[0]} <span style={{display:"inline-block",animation:"float 2s ease-in-out infinite"}}>👋</span></h2><p style={{color:"rgba(255,255,255,.35)",fontSize:12,fontWeight:300}}>{isParent?"Elternteil · "+linkedChildren.map(c=>c.name.split(" ")[0]).join(", "):U.team+" · "+U.role}</p></div><div style={{cursor:"pointer"}} onClick={()=>nav("profile")}><Av name={isParent?parentUser.name:U.name} size={40} glow ring/></div></div>
@@ -178,41 +178,38 @@ return<div className="screen" style={{padding:`0 ${px}px 20px`}}>
     <div style={{display:"flex",alignItems:"center",gap:10}}><div style={{width:32,height:32,borderRadius:10,background:"rgba(124,92,252,.1)",display:"flex",alignItems:"center",justifyContent:"center"}}><Ic n="chart" s={15} c="#b794fc"/></div><div><span style={{fontSize:13,fontWeight:600,color:"rgba(255,255,255,.7)"}}>Statistiken</span><p style={{fontSize:9,color:"rgba(255,255,255,.2)",marginTop:1}}>Punkte, Präsenz, Leistung</p></div></div>
     <span style={{color:"rgba(255,255,255,.15)",fontSize:16}}>›</span>
   </div>}
-  <div className="anim d3"><div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:12}}><h3 className="section-title" style={{marginBottom:0}}>Nächste Termine</h3><button style={{fontSize:10,color:"#00d4ff",fontWeight:600,background:"none",border:"none",cursor:"pointer"}} onClick={()=>nav("events")}>Alle →</button></div><div style={{display:"flex",flexDirection:"column",gap:8}}>{evts.slice(0,4).map((ev,i)=>{const st=statuses[ev.id];const cf=childFor[ev.id];return<div key={ev.id} className={`glass card anim d${Math.min(i+2,5)}`} style={{cursor:"pointer"}}>
+  <div className="anim d3"><div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:12}}><h3 className="section-title" style={{marginBottom:0}}>Nächste Termine</h3><button style={{fontSize:10,color:"#00d4ff",fontWeight:600,background:"none",border:"none",cursor:"pointer"}} onClick={()=>nav("events")}>Alle →</button></div><div style={{display:"flex",flexDirection:"column",gap:8}}>{evts.slice(0,4).map((ev,i)=>{const st=statuses[ev.id];const evCS=childStatuses[ev.id]||{};return<div key={ev.id} className={`glass card anim d${Math.min(i+2,5)}`} style={{cursor:"pointer"}}>
     <div onClick={()=>nav("eventDetail",ev)}>
       <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:8}}><div><div style={{display:"flex",alignItems:"center",gap:6,marginBottom:4}}><Bdg type={ev.type}>{ev.type}</Bdg><span className="mono" style={{fontSize:9,color:"rgba(255,255,255,.2)"}}>+{ev.pts}</span></div><h4 style={{fontSize:13,fontWeight:600}}>{ev.title}</h4></div></div>
       <div style={{display:"flex",alignItems:"center",gap:8,fontSize:10,color:"rgba(255,255,255,.3)",fontWeight:300}}><span>{ev.date}</span><span style={{color:"rgba(255,255,255,.1)"}}>·</span><span>{ev.time}</span></div>
       <div style={{display:"flex",alignItems:"center",gap:6,marginTop:8}}><div style={{flex:1,height:3,background:"rgba(255,255,255,.04)",borderRadius:3,overflow:"hidden"}}><div style={{height:"100%",borderRadius:3,width:`${(ev.att/ev.max)*100}%`,background:`linear-gradient(90deg,${(TC[ev.type]||TC.training).c}80,${(TC[ev.type]||TC.training).c}25)`,transition:"width .6s"}}/></div><span className="mono" style={{fontSize:8,color:"rgba(255,255,255,.2)"}}>{ev.att}/{ev.max}</span></div>
     </div>
-    <div style={{display:"flex",gap:6,marginTop:10}}>
+    {!isParent&&<div style={{display:"flex",gap:6,marginTop:10}}>
       <button onClick={e=>pickChild(e,ev,"zu")} style={{flex:1,padding:"7px 0",borderRadius:8,fontSize:10,fontWeight:700,cursor:"pointer",border:"none",transition:"all .12s",background:st==="angemeldet"?"linear-gradient(135deg,#a3f7bf,#00d4ff)":"rgba(163,247,191,.08)",color:st==="angemeldet"?"#06080f":"#a3f7bf",boxShadow:st==="angemeldet"?"0 0 12px rgba(163,247,191,.15)":"none"}}>✓ Zusage</button>
       <button onClick={e=>pickChild(e,ev,"ab")} style={{flex:1,padding:"7px 0",borderRadius:8,fontSize:10,fontWeight:700,cursor:"pointer",border:"none",transition:"all .12s",background:st==="abgemeldet"?"rgba(239,68,68,.7)":"rgba(255,255,255,.04)",color:st==="abgemeldet"?"#fff":"rgba(255,255,255,.25)"}}>✗ Absage</button>
-    </div>
-    {isParent&&cf&&(st==="angemeldet"||st==="abgemeldet")&&<div style={{marginTop:6,fontSize:9,color:"rgba(255,159,67,.5)",fontWeight:500,textAlign:"center"}}>{cf.name} · via {parentUser.name.split(" ")[0]} M.</div>}
-  </div>})}</div></div>
-
-  {childPicker&&<div style={{position:"fixed",inset:0,zIndex:100,display:"flex",alignItems:"center",justifyContent:"center",padding:20}} onClick={()=>setChildPicker(null)}>
-    <div style={{position:"absolute",inset:0,background:"rgba(0,0,0,.6)",backdropFilter:"blur(8px)",WebkitBackdropFilter:"blur(8px)"}}/>
-    <div onClick={e=>e.stopPropagation()} style={{position:"relative",width:"100%",maxWidth:340,borderRadius:20,background:"rgba(13,16,23,.85)",backdropFilter:"blur(40px)",WebkitBackdropFilter:"blur(40px)",border:"1px solid var(--glass-border-s)",padding:20,animation:"slideUp .25s ease-out",boxShadow:"0 20px 60px rgba(0,0,0,.4)"}}>
-      <h3 style={{fontSize:16,fontWeight:800,marginBottom:4}}>{childPicker.action==="zu"?"Zusage":"Absage"}</h3>
-      <p style={{fontSize:11,color:"rgba(255,255,255,.35)",fontWeight:300,marginBottom:14}}>{childPicker.ev.title} – {childPicker.ev.date}</p>
-      <label className="label">Für welches Kind?</label>
-      <div style={{display:"flex",flexDirection:"column",gap:8}}>
-        {linkedChildren.map(c=><button key={c.id} onClick={()=>confirmChild(c)} className="glass" style={{padding:"12px 14px",borderRadius:12,cursor:"pointer",display:"flex",alignItems:"center",gap:10,border:"1px solid rgba(255,255,255,.06)",background:"rgba(255,255,255,.03)",transition:"all .12s"}}>
-          <Av name={c.name} size={32}/>
-          <div style={{flex:1,textAlign:"left"}}><div style={{fontSize:13,fontWeight:600,color:"rgba(255,255,255,.8)"}}>{c.name}</div><div style={{fontSize:9,color:"rgba(255,255,255,.25)",marginTop:1}}>{c.team}</div></div>
-          <Ic n={childPicker.action==="zu"?"check":"x"} s={14} c={childPicker.action==="zu"?"#a3f7bf":"#ff6b35"}/>
-        </button>)}
+    </div>}
+    {isParent&&<div style={{marginTop:10}}>
+      <div style={{display:"flex",flexDirection:"column",gap:4}}>
+        {linkedChildren.map(c=>{const cs=evCS[c.id];return<div key={c.id} style={{display:"flex",alignItems:"center",gap:8,padding:"6px 8px",borderRadius:10,background:"rgba(255,255,255,.02)"}}>
+          <Av name={c.name} size={22}/>
+          <span style={{flex:1,fontSize:11,fontWeight:500,color:"rgba(255,255,255,.6)"}}>{c.name.split(" ")[0]}</span>
+          {cs==="angemeldet"&&<span style={{fontSize:8,fontWeight:700,color:"#a3f7bf",padding:"2px 6px",borderRadius:5,background:"rgba(163,247,191,.1)"}}>✓ Dabei</span>}
+          {cs==="abgemeldet"&&<span style={{fontSize:8,fontWeight:700,color:"#ff6b35",padding:"2px 6px",borderRadius:5,background:"rgba(255,107,53,.1)"}}>✗ Abgesagt</span>}
+          {!cs&&<div style={{display:"flex",gap:4}}>
+            <button onClick={e=>{e.stopPropagation();setChildStatuses(p=>({...p,[ev.id]:{...(p[ev.id]||{}),[c.id]:"angemeldet"}}))}} style={{padding:"3px 8px",borderRadius:6,fontSize:8,fontWeight:700,cursor:"pointer",border:"none",background:"rgba(163,247,191,.1)",color:"#a3f7bf"}}>✓</button>
+            <button onClick={e=>{e.stopPropagation();setAbsChild(c);if(isWithin24h(ev)){setLatePopup(ev);setLateMsg("");setLateSent(false);setLateChild(c)}else{setAbsPopup(ev);setAbsReason("")}}} style={{padding:"3px 8px",borderRadius:6,fontSize:8,fontWeight:700,cursor:"pointer",border:"none",background:"rgba(255,255,255,.04)",color:"rgba(255,255,255,.25)"}}>✗</button>
+          </div>}
+        </div>})}
       </div>
-      <button onClick={()=>setChildPicker(null)} style={{width:"100%",marginTop:12,padding:10,borderRadius:12,fontSize:12,fontWeight:500,cursor:"pointer",border:"1px solid rgba(255,255,255,.06)",background:"rgba(255,255,255,.03)",color:"rgba(255,255,255,.3)"}}>Abbrechen</button>
-    </div>
-  </div>}
+      {Object.keys(evCS).length>0&&<div style={{marginTop:4,fontSize:8,color:"rgba(255,159,67,.4)",textAlign:"center"}}>via {parentUser.name.split(" ")[0]} M.</div>}
+    </div>}
+  </div>})}</div></div>
 
   {absPopup&&<div style={{position:"fixed",inset:0,zIndex:100,display:"flex",alignItems:"center",justifyContent:"center",padding:20}} onClick={()=>setAbsPopup(null)}>
     <div style={{position:"absolute",inset:0,background:"rgba(0,0,0,.6)",backdropFilter:"blur(8px)",WebkitBackdropFilter:"blur(8px)"}}/>
     <div onClick={e=>e.stopPropagation()} style={{position:"relative",width:"100%",maxWidth:340,borderRadius:20,background:"rgba(13,16,23,.85)",backdropFilter:"blur(40px)",WebkitBackdropFilter:"blur(40px)",border:"1px solid var(--glass-border-s)",padding:20,animation:"slideUp .25s ease-out",boxShadow:"0 20px 60px rgba(0,0,0,.4)"}}>
       <h3 style={{fontSize:16,fontWeight:800,marginBottom:4}}>Absage</h3>
-      <p style={{fontSize:11,color:"rgba(255,255,255,.35)",fontWeight:300,marginBottom:14}}>{absPopup.title} – {absPopup.date}{isParent&&childFor[absPopup.id]&&<span style={{color:"#ff9f43"}}> · {childFor[absPopup.id].name}</span>}</p>
+      <p style={{fontSize:11,color:"rgba(255,255,255,.35)",fontWeight:300,marginBottom:14}}>{absPopup.title} – {absPopup.date}{isParent&&absChild&&<span style={{color:"#ff9f43"}}> · {absChild.name}</span>}</p>
       <label className="label">Grund der Absage *</label>
       <textarea value={absReason} onChange={e=>setAbsReason(e.target.value)} placeholder="z.B. Krankheit, Termin..." style={{width:"100%",minHeight:70,background:"rgba(255,255,255,.04)",border:"1px solid rgba(255,255,255,.06)",borderRadius:12,padding:"10px 12px",color:"#fff",fontSize:13,fontFamily:"'Outfit',sans-serif",outline:"none",resize:"vertical",marginBottom:14}}/>
       <div style={{display:"flex",gap:8}}>
