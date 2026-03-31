@@ -10,14 +10,14 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
-:root{--c1:#a3f7bf;--c2:#00d4ff;--c3:#7c5cfc;--c1r:163,247,191;--c2r:0,212,255;--c3r:124,92,252}
+:root{--c1:#a3f7bf;--c2:#00d4ff;--c3:#7c5cfc;--c1r:163,247,191;--c2r:0,212,255;--c3r:124,92,252;--glass:rgba(255,255,255,.04);--glass-s:rgba(255,255,255,.07);--glass-border:rgba(255,255,255,.08);--glass-border-s:rgba(255,255,255,.12);--blur:20px;--blur-s:32px}
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 *{font-family:'Outfit',sans-serif;-webkit-tap-highlight-color:transparent}
 html{height:100%;background:#000}
 body{height:100%;background:#06080f;color:#fff;overflow-x:hidden;display:flex;justify-content:center}
 #root{width:100%;max-width:390px;min-height:100%;position:relative;background:#06080f;overflow-x:hidden}
 ::-webkit-scrollbar{width:0;display:none}
-@media(min-width:500px){body{background:#111;align-items:center;padding:20px 0}#root{min-height:calc(100vh - 40px);max-height:calc(100vh - 40px);overflow-y:auto;border-radius:32px;border:2px solid rgba(255,255,255,.08);box-shadow:0 0 80px rgba(0,0,0,.5)}}
+@media(min-width:500px){body{background:#111;align-items:center;padding:20px 0}#root{min-height:calc(100vh - 40px);max-height:calc(100vh - 40px);overflow-y:auto;border-radius:32px;border:1px solid var(--glass-border-s);box-shadow:0 0 80px rgba(0,0,0,.5),inset 0 0 80px rgba(var(--c2r),.02)}}
 @keyframes borderGlow{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
 .moti-card{border:none!important}
 .moti-border{position:absolute;inset:-1px;border-radius:17px;padding:1.5px;background:linear-gradient(135deg,var(--c1),var(--c2),var(--c3),var(--c1));background-size:300% 300%;animation:borderGlow 4s ease infinite;-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none}
@@ -29,23 +29,35 @@ body{height:100%;background:#06080f;color:#fff;overflow-x:hidden;display:flex;ju
 @keyframes glow{0%,100%{opacity:.4}50%{opacity:.8}}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
 .anim{animation:slideUp .4s ease-out both}.d1{animation-delay:.04s}.d2{animation-delay:.08s}.d3{animation-delay:.12s}.d4{animation-delay:.16s}.d5{animation-delay:.2s}
-.glass{background:rgba(255,255,255,.03);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.06);transition:all .15s}
-.glass-s{background:rgba(255,255,255,.06);backdrop-filter:blur(30px);-webkit-backdrop-filter:blur(30px);border:1px solid rgba(255,255,255,.1)}
+
+.glass{background:var(--glass);backdrop-filter:blur(var(--blur));-webkit-backdrop-filter:blur(var(--blur));border:1px solid var(--glass-border);border-radius:16px;transition:all .15s}
+.glass-s{background:var(--glass-s);backdrop-filter:blur(var(--blur-s));-webkit-backdrop-filter:blur(var(--blur-s));border:1px solid var(--glass-border-s);border-radius:16px}
+.glass-header{background:rgba(6,8,15,.5);backdrop-filter:blur(var(--blur-s));-webkit-backdrop-filter:blur(var(--blur-s));border-bottom:1px solid var(--glass-border)}
+
 .gt{background:linear-gradient(135deg,var(--c1),var(--c2),var(--c3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .gt-w{background:linear-gradient(135deg,#ffd700,#ff6b35);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.ag{background:linear-gradient(135deg,var(--c1),var(--c2),var(--c3))}.aglow{box-shadow:0 0 20px rgba(var(--c2r),.12),0 0 40px rgba(var(--c1r),.06)}
-input,select{font-family:'Outfit',sans-serif;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:10px 12px;color:#fff;font-size:13px;outline:none;transition:border-color .2s;width:100%}
-input::placeholder{color:rgba(255,255,255,.12)}input:focus,select:focus{border-color:rgba(var(--c2r),.3)}textarea:focus{border-color:rgba(var(--c2r),.3)!important}select{appearance:none;color:rgba(255,255,255,.5)}
-.btn{width:100%;padding:13px;border-radius:12px;font-weight:700;font-size:13px;color:#06080f;border:none;cursor:pointer;transition:all .12s}.btn:active{transform:scale(.97)}
-.aurora-orb{position:absolute;border-radius:50%;pointer-events:none}.dot-grid{background-image:radial-gradient(rgba(255,255,255,.02) 1px,transparent 1px);background-size:20px 20px}
+.ag{background:linear-gradient(135deg,var(--c1),var(--c2),var(--c3))}.aglow{box-shadow:0 0 20px rgba(var(--c2r),.15),0 0 40px rgba(var(--c1r),.08)}
+
+input,select,textarea{font-family:'Outfit',sans-serif;background:var(--glass);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid var(--glass-border);border-radius:12px;padding:10px 12px;color:#fff;font-size:13px;outline:none;transition:all .2s;width:100%}
+input::placeholder,textarea::placeholder{color:rgba(255,255,255,.15)}
+input:focus,select:focus,textarea:focus{border-color:rgba(var(--c2r),.35);background:rgba(var(--c2r),.04);box-shadow:0 0 12px rgba(var(--c2r),.06)}
+select{appearance:none;color:rgba(255,255,255,.5)}
+
+.btn{width:100%;padding:13px;border-radius:14px;font-weight:700;font-size:13px;color:#06080f;border:none;cursor:pointer;transition:all .12s;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}.btn:active{transform:scale(.97)}
+
+.aurora-orb{position:absolute;border-radius:50%;pointer-events:none}
+.dot-grid{background-image:radial-gradient(rgba(255,255,255,.015) 1px,transparent 1px);background-size:24px 24px}
+
 .nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:390px;z-index:50;padding:0 0 env(safe-area-inset-bottom,0)}
-.nav-inner{display:flex;justify-content:space-around;padding:8px 0 10px;background:rgba(6,8,15,.94);backdrop-filter:blur(30px);-webkit-backdrop-filter:blur(30px);border-top:1px solid rgba(255,255,255,.04)}
+.nav-inner{display:flex;justify-content:space-around;padding:10px 0 12px;background:rgba(6,8,15,.75);backdrop-filter:blur(var(--blur-s));-webkit-backdrop-filter:blur(var(--blur-s));border-top:1px solid var(--glass-border)}
 @media(min-width:500px){.nav{bottom:20px;border-radius:0 0 30px 30px;overflow:hidden}}
 .nav-btn{display:flex;flex-direction:column;align-items:center;gap:3px;padding:2px 10px;background:none;border:none;cursor:pointer;position:relative}
 .nav-dot{position:absolute;top:-4px;width:16px;height:2px;border-radius:2px}
-.badge{padding:2px 7px;border-radius:6px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;display:inline-flex;align-items:center;gap:3px;white-space:nowrap}
+
+.badge{padding:2px 7px;border-radius:8px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;display:inline-flex;align-items:center;gap:3px;white-space:nowrap;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
 .ring-wrap{position:relative;display:inline-flex;align-items:center;justify-content:center}.ring-content{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
-.card{border-radius:14px;padding:12px}.screen{animation:fadeIn .25s ease-out}.mono{font-family:'JetBrains Mono',monospace}
+.card{border-radius:16px;padding:12px;background:var(--glass);backdrop-filter:blur(var(--blur));-webkit-backdrop-filter:blur(var(--blur));border:1px solid var(--glass-border)}
+.screen{animation:fadeIn .25s ease-out}.mono{font-family:'JetBrains Mono',monospace}
 .section{margin-bottom:20px}
 .section-title{font-size:10px;font-weight:700;color:rgba(255,255,255,.25);text-transform:uppercase;letter-spacing:.18em;margin-bottom:10px}
 .label{display:block;color:rgba(255,255,255,.25);font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.18em;margin-bottom:6px}
@@ -125,7 +137,7 @@ const Bdg=({children,type})=>{const s=TC[type]||{bg:"rgba(255,255,255,.05)",bd:"
 const RBdg=({role})=><span className="badge" style={{background:`${RC[role]||"#fff"}15`,border:`1px solid ${RC[role]||"#fff"}30`,color:RC[role]||"#fff",padding:"3px 8px"}}>{role}</span>;
 const SPill=({status})=>{if(status==="angemeldet")return<span className="badge" style={{background:"rgba(163,247,191,.1)",border:"1px solid rgba(163,247,191,.2)",color:"#a3f7bf"}}><Ic n="check" s={10}/> Dabei</span>;if(status==="abgemeldet")return<span className="badge" style={{background:"rgba(255,107,53,.1)",border:"1px solid rgba(255,107,53,.2)",color:"#ff6b35"}}><Ic n="x" s={10}/> Nein</span>;return<span className="badge" style={{background:"rgba(255,255,255,.03)",border:"1px solid rgba(255,255,255,.06)",color:"rgba(255,255,255,.2)"}}>Offen</span>};
 const Back=({onClick})=><button onClick={onClick} style={{display:"flex",alignItems:"center",gap:6,color:"rgba(255,255,255,.3)",background:"none",border:"none",cursor:"pointer",marginBottom:20,fontSize:13,fontWeight:400,padding:0}}><Ic n="back" s={16}/> Zurück</button>;
-const Aurora=()=><div style={{position:"absolute",inset:0,overflow:"hidden",pointerEvents:"none",zIndex:0}}><div className="aurora-orb" style={{width:300,height:300,top:"-10%",left:"-15%",background:`radial-gradient(circle,var(--c1),transparent 70%)`,opacity:.06,animation:"aurora 20s ease-in-out infinite"}}/><div className="aurora-orb" style={{width:350,height:350,top:"40%",right:"-25%",background:`radial-gradient(circle,var(--c2),transparent 70%)`,opacity:.04,animation:"aurora 25s ease-in-out infinite reverse"}}/><div className="aurora-orb" style={{width:250,height:250,bottom:"-5%",left:"30%",background:`radial-gradient(circle,var(--c3),transparent 70%)`,opacity:.03,animation:"aurora 22s ease-in-out infinite 5s"}}/></div>;
+const Aurora=()=><div style={{position:"absolute",inset:0,overflow:"hidden",pointerEvents:"none",zIndex:0}}><div className="aurora-orb" style={{width:350,height:350,top:"-10%",left:"-15%",background:`radial-gradient(circle,var(--c1),transparent 70%)`,opacity:.08,animation:"aurora 20s ease-in-out infinite"}}/><div className="aurora-orb" style={{width:400,height:400,top:"40%",right:"-25%",background:`radial-gradient(circle,var(--c2),transparent 70%)`,opacity:.06,animation:"aurora 25s ease-in-out infinite reverse"}}/><div className="aurora-orb" style={{width:300,height:300,bottom:"-5%",left:"30%",background:`radial-gradient(circle,var(--c3),transparent 70%)`,opacity:.05,animation:"aurora 22s ease-in-out infinite 5s"}}/></div>;
 const px=16;
 
 const Login=({onLogin})=>{const[r,setR]=useState("spieler");const[sh,setSh]=useState(false);useEffect(()=>{setSh(true)},[]);
@@ -163,7 +175,7 @@ return<div className="screen" style={{padding:`0 ${px}px 20px`}}>
 
   {absPopup&&<div style={{position:"fixed",inset:0,zIndex:100,display:"flex",alignItems:"center",justifyContent:"center",padding:20}} onClick={()=>setAbsPopup(null)}>
     <div style={{position:"absolute",inset:0,background:"rgba(0,0,0,.6)",backdropFilter:"blur(8px)",WebkitBackdropFilter:"blur(8px)"}}/>
-    <div onClick={e=>e.stopPropagation()} style={{position:"relative",width:"100%",maxWidth:340,borderRadius:20,background:"#0d1017",border:"1px solid rgba(255,255,255,.06)",padding:20,animation:"slideUp .25s ease-out"}}>
+    <div onClick={e=>e.stopPropagation()} style={{position:"relative",width:"100%",maxWidth:340,borderRadius:20,background:"rgba(13,16,23,.85)",backdropFilter:"blur(40px)",WebkitBackdropFilter:"blur(40px)",border:"1px solid var(--glass-border-s)",padding:20,animation:"slideUp .25s ease-out",boxShadow:"0 20px 60px rgba(0,0,0,.4)"}}>
       <h3 style={{fontSize:16,fontWeight:800,marginBottom:4}}>Absage</h3>
       <p style={{fontSize:11,color:"rgba(255,255,255,.35)",fontWeight:300,marginBottom:14}}>{absPopup.title} – {absPopup.date}</p>
       <label className="label">Grund der Absage *</label>
@@ -177,7 +189,7 @@ return<div className="screen" style={{padding:`0 ${px}px 20px`}}>
 
   {latePopup&&<div style={{position:"fixed",inset:0,zIndex:100,display:"flex",alignItems:"center",justifyContent:"center",padding:20}} onClick={()=>setLatePopup(null)}>
     <div style={{position:"absolute",inset:0,background:"rgba(0,0,0,.6)",backdropFilter:"blur(8px)",WebkitBackdropFilter:"blur(8px)"}}/>
-    <div onClick={e=>e.stopPropagation()} style={{position:"relative",width:"100%",maxWidth:340,borderRadius:20,background:"#0d1017",border:"1px solid rgba(255,107,53,.15)",padding:20,animation:"slideUp .25s ease-out"}}>
+    <div onClick={e=>e.stopPropagation()} style={{position:"relative",width:"100%",maxWidth:340,borderRadius:20,background:"rgba(13,16,23,.85)",backdropFilter:"blur(40px)",WebkitBackdropFilter:"blur(40px)",border:"1px solid rgba(255,107,53,.12)",padding:20,animation:"slideUp .25s ease-out",boxShadow:"0 20px 60px rgba(0,0,0,.4)"}}>
       <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:10}}><div style={{width:32,height:32,borderRadius:10,background:"rgba(255,107,53,.1)",display:"flex",alignItems:"center",justifyContent:"center"}}><Ic n="bell" s={16} c="#ff6b35"/></div><h3 style={{fontSize:16,fontWeight:800}}>Zu spät!</h3></div>
       <p style={{fontSize:13,color:"rgba(255,255,255,.55)",fontWeight:300,lineHeight:1.6,marginBottom:6}}>Absagen sind nur bis <strong style={{color:"#ff6b35",fontWeight:600}}>24 Stunden</strong> vor dem Termin möglich.</p>
       <p style={{fontSize:13,color:"rgba(255,255,255,.55)",fontWeight:300,lineHeight:1.6,marginBottom:14}}>Nachricht an den zuständigen Trainer:</p>
@@ -418,7 +430,7 @@ const send=()=>{if(!inp.trim())return;setItems(p=>[{id:Date.now(),from:role==="t
 if(!open)return null;
 return<div style={{position:"fixed",inset:0,zIndex:100,display:"flex",alignItems:"flex-end",justifyContent:"center"}} onClick={onClose}>
   <div style={{position:"absolute",inset:0,background:"rgba(0,0,0,.6)",backdropFilter:"blur(8px)",WebkitBackdropFilter:"blur(8px)"}}/>
-  <div onClick={e=>e.stopPropagation()} style={{position:"relative",width:"100%",maxWidth:390,maxHeight:"75vh",borderRadius:"24px 24px 0 0",background:"#0d1017",border:"1px solid rgba(255,255,255,.06)",borderBottom:"none",display:"flex",flexDirection:"column",animation:"slideUp .25s ease-out"}}>
+  <div onClick={e=>e.stopPropagation()} style={{position:"relative",width:"100%",maxWidth:390,maxHeight:"75vh",borderRadius:"24px 24px 0 0",background:"rgba(13,16,23,.8)",backdropFilter:"blur(40px)",WebkitBackdropFilter:"blur(40px)",border:"1px solid var(--glass-border-s)",borderBottom:"none",display:"flex",flexDirection:"column",animation:"slideUp .25s ease-out",boxShadow:"0 -10px 40px rgba(0,0,0,.3)"}}>
     <div style={{padding:"20px 18px 12px",display:"flex",alignItems:"center",justifyContent:"space-between",borderBottom:"1px solid rgba(255,255,255,.04)"}}>
       <div style={{display:"flex",alignItems:"center",gap:8}}><Ic n="bell" s={16} c="#00d4ff"/><h3 style={{fontSize:16,fontWeight:800}}>Neuigkeiten</h3></div>
       <button onClick={onClose} style={{background:"rgba(255,255,255,.05)",border:"none",width:28,height:28,borderRadius:8,display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer"}}><Ic n="x" s={14} c="rgba(255,255,255,.3)"/></button>
@@ -451,9 +463,13 @@ if(scr==="login")return<Login onLogin={r=>{setRole(r);setScr("dashboard")}}/>;
 const S={dashboard:<Dash role={role} nav={nav}/>,events:<Events nav={nav}/>,eventDetail:<EvDetail ev={evD} onBack={()=>setScr(prev)}/>,createEvent:<CreateEv onBack={()=>setScr("dashboard")}/>,rankings:<Rankings/>,chat:<Chat role={role} trainerInbox={trainerInbox}/>,helpers:<Helpers/>,finances:<Finances/>,stats:<Stats onBack={()=>setScr("dashboard")}/>,admin:<Admin nav={nav} themeId={themeId} changeTheme={changeTheme}/>,members:<Members/>,profile:<Profile onBack={()=>setScr("dashboard")}/>};
 const mains=["dashboard","events","rankings","helpers","chat","admin","profile"];
 return<div className="dot-grid" style={{position:"relative",minHeight:"100%"}}><Aurora/>
-  <div style={{height:"env(safe-area-inset-top, 14px)",minHeight:14}}/>
-  <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"0 16px 0"}}><div style={{display:"flex",alignItems:"center",gap:8}}><div className="ag" style={{width:28,height:28,borderRadius:9,display:"flex",alignItems:"center",justifyContent:"center"}}><span style={{fontSize:10,fontWeight:900,color:"#06080f"}}>S</span></div><span style={{fontSize:10,fontWeight:800,color:"rgba(255,255,255,.2)",textTransform:"uppercase",letterSpacing:".2em"}}>Sporti</span></div><div style={{display:"flex",alignItems:"center",gap:8}}><RBdg role={role}/><div className="glass" style={{width:32,height:32,borderRadius:10,display:"flex",alignItems:"center",justifyContent:"center",position:"relative",cursor:"pointer"}} onClick={()=>setShowNews(true)}><Ic n="bell" s={14} c="rgba(255,255,255,.3)"/><div style={{position:"absolute",top:7,right:7,width:6,height:6,borderRadius:3,background:"#ff6b35",animation:"glow 2s ease-in-out infinite"}}/></div></div></div>
-  <div style={{height:1,background:"rgba(255,255,255,.04)",margin:"12px 16px 18px"}}/>
+  <div className="glass-header" style={{position:"sticky",top:0,zIndex:40,padding:"0 16px"}}>
+    <div style={{height:"env(safe-area-inset-top, 14px)",minHeight:14}}/>
+    <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"10px 0 12px"}}>
+      <div style={{display:"flex",alignItems:"center",gap:8}}><div className="ag aglow" style={{width:30,height:30,borderRadius:10,display:"flex",alignItems:"center",justifyContent:"center"}}><span style={{fontSize:11,fontWeight:900,color:"#06080f"}}>S</span></div><span style={{fontSize:10,fontWeight:800,color:"rgba(255,255,255,.22)",textTransform:"uppercase",letterSpacing:".2em"}}>Sporti</span></div>
+      <div style={{display:"flex",alignItems:"center",gap:8}}><RBdg role={role}/><div className="glass" style={{width:34,height:34,borderRadius:11,display:"flex",alignItems:"center",justifyContent:"center",position:"relative",cursor:"pointer"}} onClick={()=>setShowNews(true)}><Ic n="bell" s={14} c="rgba(255,255,255,.35)"/><div style={{position:"absolute",top:7,right:7,width:6,height:6,borderRadius:3,background:"#ff6b35",animation:"glow 2s ease-in-out infinite"}}/></div></div>
+    </div>
+  </div>
   <div style={{paddingBottom:72}}>{S[scr]||<Dash role={role} nav={nav}/>}</div>
   <Nav active={mains.includes(scr)?scr:prev} nav={nav} role={role} chatBadge={role==="trainer"?chatBadge:0}/>
   <NewsPopup open={showNews} onClose={()=>setShowNews(false)} role={role}/>
