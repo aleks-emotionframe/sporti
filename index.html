@@ -63,7 +63,40 @@ const getMotivation=()=>{const attended=evts.filter(e=>e.status==="angemeldet").
 const evts=[{id:1,type:"training",title:"Training",date:"Mo, 31. Mär",time:"19:00–20:30",loc:"Sporthalle Muster",status:"angemeldet",pts:2,att:16,max:22},{id:2,type:"training",title:"Training",date:"Mi, 02. Apr",time:"19:00–20:30",loc:"Sporthalle Muster",status:"offen",pts:2,att:12,max:22},{id:3,type:"spiel",title:"Meisterschaft vs. SC Bern",date:"Sa, 05. Apr",time:"14:00–16:00",loc:"Wankdorf",status:"angemeldet",pts:5,att:18,max:22},{id:4,type:"turnier",title:"Frühlingsturnier ZH",date:"So, 13. Apr",time:"09:00–17:00",loc:"Heerenschürli",status:"offen",pts:8,att:14,max:22},{id:5,type:"helfer",title:"Helfer: Vereinsfest",date:"Fr, 18. Apr",time:"14:00–18:00",loc:"Vereinsgelände",status:"offen",pts:4,att:6,max:15},{id:6,type:"training",title:"Training",date:"Mo, 07. Apr",time:"19:00–20:30",loc:"Sporthalle Muster",status:"offen",pts:2,att:8,max:22}];
 const ranks=[{r:1,n:"Mia Keller",p:234,a:92,t:"U18 D"},{r:2,n:"Noah Brunner",p:211,a:88,t:"U18 H"},{r:3,n:"Luca Meier",p:187,a:78,t:"U18 H",me:true},{r:4,n:"Elena Fischer",p:176,a:74,t:"U18 D"},{r:5,n:"Tim Müller",p:165,a:70,t:"U18 H"},{r:6,n:"Lea Schmid",p:152,a:68,t:"U18 D"},{r:7,n:"Jan Weber",p:143,a:62,t:"U18 H"},{r:8,n:"Sara Huber",p:138,a:60,t:"U18 D"}];
 const mems=[{id:1,n:"Luca Meier",rl:"Spieler",tm:"U18 H",par:"Thomas M."},{id:2,n:"Mia Keller",rl:"Spielerin",tm:"U18 D",par:"Sandra K."},{id:3,n:"Noah Brunner",rl:"Spieler",tm:"U18 H"},{id:4,n:"Elena Fischer",rl:"Spielerin",tm:"U18 D",par:"Marco F."},{id:5,n:"Thomas Meier",rl:"Elternteil",tm:"–",child:"Luca M."},{id:6,n:"Coach Reto",rl:"Trainer",tm:"U18 H"},{id:7,n:"Sandra Keller",rl:"Elternteil",tm:"–",child:"Mia K."}];
-const chats=[{id:1,f:"Coach Reto",t:"Training morgen trotz Regen – Halle!",tm:"14:32",co:true},{id:2,f:"Noah",t:"Top, bin dabei 👍",tm:"14:35"},{id:3,f:"Mia",t:"Kann jemand mich mitnehmen?",tm:"14:40"},{id:4,f:"Luca",t:"Frag meinen Vater, moment!",tm:"14:42",me:true},{id:5,f:"Coach Reto",t:"Bitte bis 18:00 an-/abmelden für Sa!",tm:"15:10",co:true}];
+const convos={
+  spieler:[
+    {id:"coach",name:"Coach Reto",role:"trainer",last:"Alles klar, gute Besserung!",tm:"15:10",unread:1,msgs:[
+      {f:"Coach Reto",t:"Hey Luca, alles gut bei dir?",tm:"14:50"},
+      {f:"Luca",t:"Ja, hatte letzte Woche leicht Knie-Probleme",tm:"14:55",me:true},
+      {f:"Coach Reto",t:"Alles klar, gute Besserung!",tm:"15:10"}
+    ]},
+    {id:"noah",name:"Noah Brunner",role:"spieler",last:"Haha ja klar 😂",tm:"13:20",unread:0,msgs:[
+      {f:"Noah",t:"Fährst du am Samstag zum Spiel?",tm:"12:30"},
+      {f:"Luca",t:"Ja mein Vater fährt, hast du Platz?",tm:"12:45",me:true},
+      {f:"Noah",t:"Haha ja klar 😂",tm:"13:20"}
+    ]},
+    {id:"mia",name:"Mia Keller",role:"spieler",last:"Danke dir!",tm:"10:05",unread:0,msgs:[
+      {f:"Mia",t:"Hey, hast du die Übungen vom Training?",tm:"09:50"},
+      {f:"Luca",t:"Ja, schick ich dir gleich!",tm:"10:00",me:true},
+      {f:"Mia",t:"Danke dir!",tm:"10:05"}
+    ]}
+  ],
+  trainer:[
+    {id:"luca",name:"Luca Meier",role:"spieler",last:"Alles klar, gute Besserung!",tm:"15:10",unread:0,isAbmeldung:false,msgs:[
+      {f:"Luca",t:"Hey Coach, hatte letzte Woche leicht Knie-Probleme",tm:"14:55"},
+      {f:"Coach Reto",t:"Alles klar, gute Besserung!",tm:"15:10",me:true}
+    ]},
+    {id:"elena",name:"Elena Fischer",role:"spieler",last:"Ok, bin dabei!",tm:"14:00",unread:0,msgs:[
+      {f:"Coach Reto",t:"Elena, bitte Trikot mitbringen am Sa",tm:"13:40",me:true},
+      {f:"Elena",t:"Ok, bin dabei!",tm:"14:00"}
+    ]},
+    {id:"thomas",name:"Thomas Meier",role:"elternteil",last:"Danke für die Info",tm:"11:30",unread:0,msgs:[
+      {f:"Thomas",t:"Guten Tag, ist das Turnier bestätigt?",tm:"11:00"},
+      {f:"Coach Reto",t:"Ja, alles bestätigt. Details folgen.",tm:"11:20",me:true},
+      {f:"Thomas",t:"Danke für die Info",tm:"11:30"}
+    ]}
+  ]
+};
 const hlp=[{id:1,tl:"Vereinsfest Aufbau",d:"Fr, 18. Apr",tm:"14–18h",p:4,u:6,n:15},{id:2,tl:"Barbetrieb",d:"Sa, 19. Apr",tm:"11–22h",p:8,u:12,n:20},{id:3,tl:"Abbau",d:"So, 20. Apr",tm:"08–12h",p:4,u:4,n:10},{id:4,tl:"Kuchenverkauf",d:"So, 13. Apr",tm:"09–17h",p:6,u:8,n:8}];
 const fins=[{id:1,d:"Mitgliederbeitrag 25/26",a:350,du:"30.06.26",s:"offen"},{id:2,d:"Trikot-Set U18",a:85,du:"15.04.26",s:"bezahlt"},{id:3,d:"Busse: Unentsch. Fehlen",a:20,du:"31.03.26",s:"offen"}];
 const TC={training:{bg:"rgba(163,247,191,.1)",bd:"rgba(163,247,191,.25)",c:"#a3f7bf"},spiel:{bg:"rgba(255,215,0,.1)",bd:"rgba(255,215,0,.25)",c:"#ffd700"},turnier:{bg:"rgba(124,92,252,.1)",bd:"rgba(124,92,252,.25)",c:"#b794fc"},helfer:{bg:"rgba(0,212,255,.1)",bd:"rgba(0,212,255,.25)",c:"#00d4ff"}};
@@ -166,22 +199,53 @@ const CreateEv=({onBack})=>{const[rec,setRec]=useState(false);const[et,setEt]=us
 
 const Rankings=()=><div className="screen" style={{padding:`0 ${px}px 20px`}}><h2 className="anim" style={{fontSize:20,fontWeight:800,marginBottom:3}}>Rangliste</h2><p className="anim d1" style={{fontSize:11,color:"rgba(255,255,255,.25)",fontWeight:300,marginBottom:18}}>Saison 25/26 · Sportler/in des Jahres</p><div className="anim d2 section" style={{display:"flex",alignItems:"flex-end",justifyContent:"center",gap:8}}>{[ranks[1],ranks[0],ranks[2]].map((r,i)=>{const h=[85,115,70],m=["🥈","🥇","🥉"],c=["#c0c0c0","#ffd700","#cd7f32"],isG=i===1;return<div key={r.n} style={{display:"flex",flexDirection:"column",alignItems:"center",animation:isG?"float 3s ease-in-out infinite":"none"}}><span style={{fontSize:20,marginBottom:6}}>{m[i]}</span><Av name={r.n} size={isG?44:36} glow={isG} ring/><span style={{fontSize:10,color:"rgba(255,255,255,.6)",fontWeight:600,marginTop:8}}>{r.n.split(" ")[0]}</span><span className="gt" style={{fontSize:16,fontWeight:900}}>{r.p}</span><div style={{width:64,borderRadius:"12px 12px 0 0",marginTop:6,height:h[i],background:`linear-gradient(180deg,${c[i]}12,transparent)`,borderTop:`2px solid ${c[i]}35`}}/></div>})}</div><div style={{display:"flex",flexDirection:"column",gap:6}}>{ranks.map((r,i)=><div key={r.r} className={`glass card anim d${Math.min(i+1,5)}`} style={{display:"flex",alignItems:"center",gap:10,padding:10,...(r.me?{background:"rgba(0,212,255,.04)",borderColor:"rgba(0,212,255,.12)"}:{})}}><span className={r.r<=3?"gt":""} style={{width:24,textAlign:"center",fontWeight:900,fontSize:13,...(r.r>3?{color:"rgba(255,255,255,.2)"}:{})}}>{r.r}</span><Av name={r.n} size={30}/><div style={{flex:1,minWidth:0}}><div style={{fontSize:13,color:"rgba(255,255,255,.8)",fontWeight:500,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{r.n} {r.me&&<span style={{color:"#00d4ff",fontSize:9}}>(Du)</span>}</div><div style={{fontSize:9,color:"rgba(255,255,255,.2)",fontWeight:300}}>{r.t} · {r.a}%</div></div><span className="mono" style={{fontSize:12,fontWeight:900,color:"rgba(255,255,255,.5)"}}>{r.p}</span></div>)}</div></div>;
 
-const Chat=({role,trainerInbox=[]})=>{const isTrainer=role==="trainer"||role==="vorstand"||role==="admin";
-return<div className="screen" style={{padding:`0 ${px}px 20px`,display:"flex",flexDirection:"column",minHeight:"calc(100vh - 180px)"}}>
-  <h2 className="anim" style={{fontSize:20,fontWeight:800,marginBottom:3}}>Team-Chat</h2><p className="anim d1" style={{fontSize:11,color:"rgba(255,255,255,.25)",fontWeight:300,marginBottom:16}}>U18 Herren</p>
-  {isTrainer&&trainerInbox.length>0&&<div className="anim d1" style={{marginBottom:14}}>
-    <h3 className="section-title" style={{display:"flex",alignItems:"center",gap:6,color:"#ff6b35"}}><Ic n="bell" s={12} c="#ff6b35"/> Eingegangene Abmeldungen</h3>
-    <div style={{display:"flex",flexDirection:"column",gap:6}}>{trainerInbox.map(m=><div key={m.id} className="glass card" style={{padding:10,borderColor:"rgba(255,107,53,.15)"}}>
-      <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:4}}>
-        <span style={{fontSize:11,fontWeight:700,color:"#ff6b35"}}>{m.from}</span>
-        <span className="mono" style={{fontSize:8,color:"rgba(255,255,255,.15)"}}>{m.time}</span>
+const Chat=({role,trainerInbox=[]})=>{const isStaff=role==="trainer"||role==="vorstand"||role==="admin";
+const[openChat,setOpenChat]=useState(null);const[inp,setInp]=useState("");const[localMsgs,setLocalMsgs]=useState({});
+const myConvos=isStaff?convos.trainer:convos.spieler;
+const allConvos=[...trainerInbox.map(m=>({id:"abm_"+m.id,name:m.from,role:"spieler",last:m.t,tm:m.time,unread:1,isAbmeldung:true,event:m.event,msgs:[{f:m.from,t:m.t,tm:m.time}]})),...myConvos];
+const getMsgs=(c)=>[...(c.msgs||[]),...(localMsgs[c.id]||[])];
+const sendMsg=()=>{if(!inp.trim()||!openChat)return;const m={f:isStaff?"Coach Reto":"Luca",t:inp.trim(),tm:new Date().toLocaleTimeString("de-CH",{hour:"2-digit",minute:"2-digit"}),me:true};setLocalMsgs(p=>({...p,[openChat.id]:[...(p[openChat.id]||[]),m]}));setInp("")};
+
+if(openChat){const msgs=getMsgs(openChat);return<div className="screen" style={{padding:`0 ${px}px 20px`,display:"flex",flexDirection:"column",minHeight:"calc(100vh - 180px)"}}>
+  <button onClick={()=>setOpenChat(null)} style={{display:"flex",alignItems:"center",gap:6,color:"rgba(255,255,255,.25)",background:"none",border:"none",cursor:"pointer",marginBottom:12,fontSize:13,fontWeight:300,padding:0}}><Ic n="back" s={16}/> Nachrichten</button>
+  <div className="anim" style={{display:"flex",alignItems:"center",gap:10,marginBottom:16}}>
+    <Av name={openChat.name} size={36} ring/>
+    <div><h3 style={{fontSize:15,fontWeight:700}}>{openChat.name}</h3>
+    {openChat.isAbmeldung&&<div style={{display:"flex",alignItems:"center",gap:4,marginTop:2}}><span style={{fontSize:9,fontWeight:700,color:"#ff6b35",background:"rgba(255,107,53,.1)",padding:"2px 6px",borderRadius:4}}>Abmeldung · {openChat.event}</span></div>}
+    </div>
+  </div>
+  <div style={{flex:1,display:"flex",flexDirection:"column",gap:8,marginBottom:14,overflowY:"auto"}}>
+    {msgs.map((m,i)=><div key={i} className={`anim d${Math.min(i+1,5)}`} style={{display:"flex",justifyContent:m.me?"flex-end":"flex-start"}}>
+      <div style={{maxWidth:"80%",borderRadius:14,padding:"10px 14px",background:m.me?"linear-gradient(135deg,rgba(163,247,191,.1),rgba(0,212,255,.06))":"rgba(255,255,255,.03)",border:m.me?"1px solid rgba(163,247,191,.12)":"1px solid rgba(255,255,255,.06)"}}>
+        <p style={{fontSize:13,color:"rgba(255,255,255,.75)",fontWeight:300,lineHeight:1.5}}>{m.t}</p>
+        <div className="mono" style={{fontSize:8,color:"rgba(255,255,255,.15)",textAlign:"right",marginTop:3}}>{m.tm}</div>
       </div>
-      <div style={{fontSize:9,color:"rgba(255,255,255,.2)",marginBottom:3}}>{m.event}</div>
-      <p style={{fontSize:12,color:"rgba(255,255,255,.6)",fontWeight:300,lineHeight:1.4}}>{m.t}</p>
-    </div>)}</div>
-  </div>}
-  <div style={{flex:1,display:"flex",flexDirection:"column",gap:10,marginBottom:14}}>{chats.map((m,i)=><div key={m.id} className={`anim d${Math.min(i+1,5)}`} style={{display:"flex",justifyContent:m.me?"flex-end":"flex-start"}}><div style={{maxWidth:"78%",borderRadius:14,padding:"10px 14px",background:m.me?"linear-gradient(135deg,rgba(163,247,191,.1),rgba(0,212,255,.06))":m.co?"rgba(255,215,0,.05)":"rgba(255,255,255,.03)",border:m.me?"1px solid rgba(163,247,191,.12)":m.co?"1px solid rgba(255,215,0,.1)":"1px solid rgba(255,255,255,.06)"}}>{!m.me&&<div style={{fontSize:9,fontWeight:700,marginBottom:3,color:m.co?"#ffd700":"rgba(255,255,255,.3)"}}>{m.f}{m.co&&" 🏅"}</div>}<p style={{fontSize:13,color:"rgba(255,255,255,.75)",fontWeight:300,lineHeight:1.5}}>{m.t}</p><div className="mono" style={{fontSize:8,color:"rgba(255,255,255,.15)",textAlign:"right",marginTop:3}}>{m.tm}</div></div></div>)}</div>
-  <div className="anim d5" style={{display:"flex",gap:8}}><input placeholder="Nachricht..." style={{flex:1}}/><button className="ag aglow" style={{width:42,height:42,borderRadius:12,border:"none",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}><Ic n="send" s={16} c="#06080f"/></button></div>
+    </div>)}
+  </div>
+  <div className="anim d5" style={{display:"flex",gap:8}}>
+    <input value={inp} onChange={e=>setInp(e.target.value)} onKeyDown={e=>e.key==="Enter"&&sendMsg()} placeholder="Nachricht..." style={{flex:1}}/>
+    <button onClick={sendMsg} className="ag aglow" style={{width:42,height:42,borderRadius:12,border:"none",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}><Ic n="send" s={16} c="#06080f"/></button>
+  </div>
+</div>}
+
+return<div className="screen" style={{padding:`0 ${px}px 20px`}}>
+  <h2 className="anim" style={{fontSize:20,fontWeight:800,marginBottom:3}}>Nachrichten</h2>
+  <p className="anim d1" style={{fontSize:11,color:"rgba(255,255,255,.25)",fontWeight:300,marginBottom:16}}>Privat</p>
+  <div style={{display:"flex",flexDirection:"column",gap:6}}>
+    {allConvos.map((c,i)=><div key={c.id} onClick={()=>setOpenChat(c)} className={`glass card anim d${Math.min(i+1,5)}`} style={{display:"flex",alignItems:"center",gap:10,padding:12,cursor:"pointer",...(c.isAbmeldung?{borderColor:"rgba(255,107,53,.15)"}:{})}}>
+      <div style={{position:"relative"}}><Av name={c.name} size={38}/>
+        {c.unread>0&&<div style={{position:"absolute",top:-2,right:-2,width:10,height:10,borderRadius:5,background:c.isAbmeldung?"#ff6b35":"#00d4ff",border:"2px solid #0d1017",animation:"glow 2s ease-in-out infinite"}}/>}
+      </div>
+      <div style={{flex:1,minWidth:0}}>
+        <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:2}}>
+          <span style={{fontSize:13,fontWeight:c.unread>0?700:500,color:c.unread>0?"rgba(255,255,255,.9)":"rgba(255,255,255,.6)"}}>{c.name}</span>
+          <span className="mono" style={{fontSize:8,color:"rgba(255,255,255,.15)",flexShrink:0}}>{c.tm}</span>
+        </div>
+        {c.isAbmeldung&&<span style={{fontSize:8,fontWeight:700,color:"#ff6b35",marginBottom:2,display:"block"}}>Abmeldung · {c.event}</span>}
+        <p style={{fontSize:11,color:c.unread>0?"rgba(255,255,255,.5)":"rgba(255,255,255,.25)",fontWeight:c.unread>0?500:300,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{c.last}</p>
+      </div>
+    </div>)}
+  </div>
 </div>};
 
 const Helpers=()=><div className="screen" style={{padding:`0 ${px}px 20px`}}><h2 className="anim" style={{fontSize:20,fontWeight:800,marginBottom:3}}>Helfereinsätze</h2><p className="anim d1" style={{fontSize:11,color:"rgba(255,255,255,.25)",fontWeight:300,marginBottom:16}}>Punkte sammeln!</p><div style={{display:"flex",flexDirection:"column",gap:10}}>{hlp.map((h,i)=>{const full=h.u>=h.n;return<div key={h.id} className={`glass anim d${Math.min(i+1,5)}`} style={{borderRadius:18,padding:14}}><div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:8}}><div><h4 style={{fontSize:13,fontWeight:600}}>{h.tl}</h4><div style={{fontSize:10,color:"rgba(255,255,255,.25)",fontWeight:300,marginTop:3}}>{h.d} · {h.tm}</div></div><span className="badge" style={{background:"rgba(0,212,255,.1)",border:"1px solid rgba(0,212,255,.2)",color:"#00d4ff"}}>+{h.p}</span></div><div style={{display:"flex",alignItems:"center",gap:12,marginTop:10}}><Ring val={h.u} max={h.n} size={38} sw={3} color={full?"#ff6b35":"#00d4ff"}><span style={{fontSize:8,fontWeight:700,color:"rgba(255,255,255,.5)"}}>{h.u}</span></Ring><div style={{flex:1}}><div style={{fontSize:10,color:"rgba(255,255,255,.4)",fontWeight:500}}>{h.u}/{h.n} Helfer</div><div style={{height:4,background:"rgba(255,255,255,.04)",borderRadius:3,overflow:"hidden",marginTop:5}}><div style={{height:"100%",borderRadius:3,width:`${(h.u/h.n)*100}%`,background:full?"#ff6b35":"linear-gradient(90deg,#00d4ff,#7c5cfc)",transition:"width .6s"}}/></div></div></div><button style={{width:"100%",marginTop:12,padding:10,borderRadius:10,fontSize:10,fontWeight:700,textTransform:"uppercase",cursor:full?"not-allowed":"pointer",border:"none",background:full?"rgba(255,255,255,.03)":"rgba(0,212,255,.1)",color:full?"rgba(255,255,255,.15)":"#00d4ff",transition:"all .12s"}} disabled={full}>{full?"Voll":"Anmelden →"}</button></div>})}</div></div>;
