@@ -160,43 +160,59 @@ const isWithin24h=(ev)=>(parseEvDate(ev)-new Date())<24*60*60*1000;
 
 const Dash=({role,nav})=>{const isStaff=role==="trainer"||role==="vorstand"||role==="admin";const isParent=role==="elternteil";const q=getMotivation();
 const[statuses,setStatuses]=useState(()=>{const o={};evts.forEach(e=>o[e.id]=e.status);return o});
+const[childFor,setChildFor]=useState({});
 const[absPopup,setAbsPopup]=useState(null);const[absReason,setAbsReason]=useState("");const[latePopup,setLatePopup]=useState(null);const[lateMsg,setLateMsg]=useState("");const[lateSent,setLateSent]=useState(false);
-const[selChild,setSelChild]=useState(parentUser.children[0]?.id||"");
-const handleZusage=(e,ev)=>{e.stopPropagation();setStatuses(p=>({...p,[ev.id]:"angemeldet"}))};
-const handleAbsage=(e,ev)=>{e.stopPropagation();if(isWithin24h(ev)){setLatePopup(ev);setLateMsg("");setLateSent(false)}else{setAbsPopup(ev);setAbsReason("")}};
+const[childPicker,setChildPicker]=useState(null);
+const linkedChildren=parentUser.children.filter(c=>c.linked);
+
+const pickChild=(e,ev,action)=>{e.stopPropagation();if(!isParent){if(action==="zu")return handleZusageDirect(ev);return handleAbsageDirect(ev)};setChildPicker({ev,action})};
+const confirmChild=(child)=>{const ev=childPicker.ev;setChildFor(p=>({...p,[ev.id]:child}));if(childPicker.action==="zu"){setStatuses(p=>({...p,[ev.id]:"angemeldet"}));setChildPicker(null)}else{setChildPicker(null);if(isWithin24h(ev)){setLatePopup(ev);setLateMsg("");setLateSent(false)}else{setAbsPopup(ev);setAbsReason("")}}};
+const handleZusageDirect=(ev)=>{setStatuses(p=>({...p,[ev.id]:"angemeldet"}))};
+const handleAbsageDirect=(ev)=>{if(isWithin24h(ev)){setLatePopup(ev);setLateMsg("");setLateSent(false)}else{setAbsPopup(ev);setAbsReason("")}};
 const confirmAbsage=()=>{if(!absReason.trim())return;setStatuses(p=>({...p,[absPopup.id]:"abgemeldet"}));setAbsPopup(null);setAbsReason("")};
-const activeChild=parentUser.children.find(c=>c.id===selChild);
 
 return<div className="screen" style={{padding:`0 ${px}px 20px`}}>
-  <div className="anim section" style={{display:"flex",alignItems:"center",justifyContent:"space-between"}}><div><h2 style={{fontSize:20,fontWeight:800,letterSpacing:"-.01em",marginBottom:3}}>Hallo, {isParent?parentUser.name.split(" ")[0]:U.name.split(" ")[0]} <span style={{display:"inline-block",animation:"float 2s ease-in-out infinite"}}>👋</span></h2><p style={{color:"rgba(255,255,255,.35)",fontSize:12,fontWeight:300}}>{isParent?parentUser.role:U.team+" · "+U.role}</p></div><div style={{cursor:"pointer"}} onClick={()=>nav("profile")}><Av name={isParent?parentUser.name:U.name} size={40} glow ring/></div></div>
-  {isParent&&<div className="anim d1 section" style={{display:"flex",gap:6}}>
-    {parentUser.children.filter(c=>c.linked).map(c=><button key={c.id} onClick={()=>setSelChild(c.id)} style={{flex:1,padding:"10px 14px",borderRadius:12,fontSize:11,fontWeight:selChild===c.id?700:500,cursor:"pointer",background:selChild===c.id?"rgba(255,159,67,.12)":"rgba(255,255,255,.03)",border:selChild===c.id?"1px solid rgba(255,159,67,.35)":"1px solid rgba(255,255,255,.06)",color:selChild===c.id?"#ff9f43":"rgba(255,255,255,.3)",transition:"all .12s"}}>
-      {c.name}<div style={{fontSize:8,fontWeight:400,marginTop:2,color:selChild===c.id?"rgba(255,159,67,.6)":"rgba(255,255,255,.15)"}}>{c.team}</div>
-    </button>)}
-  </div>}
+  <div className="anim section" style={{display:"flex",alignItems:"center",justifyContent:"space-between"}}><div><h2 style={{fontSize:20,fontWeight:800,letterSpacing:"-.01em",marginBottom:3}}>Hallo, {isParent?parentUser.name.split(" ")[0]:U.name.split(" ")[0]} <span style={{display:"inline-block",animation:"float 2s ease-in-out infinite"}}>👋</span></h2><p style={{color:"rgba(255,255,255,.35)",fontSize:12,fontWeight:300}}>{isParent?"Elternteil · "+linkedChildren.map(c=>c.name.split(" ")[0]).join(", "):U.team+" · "+U.role}</p></div><div style={{cursor:"pointer"}} onClick={()=>nav("profile")}><Av name={isParent?parentUser.name:U.name} size={40} glow ring/></div></div>
   {!isStaff&&!isParent&&<div className="anim d1 section moti-card" style={{borderRadius:16,padding:14,background:"rgba(255,255,255,.02)",position:"relative",overflow:"hidden"}}><div className="moti-border"/><p style={{fontSize:12,color:"rgba(255,255,255,.7)",fontWeight:400,lineHeight:1.6,position:"relative",zIndex:1}}>{q}</p></div>}
   {isStaff&&<div className="anim d2 section" onClick={()=>nav("stats")} style={{cursor:"pointer",borderRadius:16,padding:"12px 14px",background:"rgba(255,255,255,.03)",border:"1px solid rgba(255,255,255,.06)",display:"flex",alignItems:"center",justifyContent:"space-between",transition:"all .12s"}}>
     <div style={{display:"flex",alignItems:"center",gap:10}}><div style={{width:32,height:32,borderRadius:10,background:"rgba(124,92,252,.1)",display:"flex",alignItems:"center",justifyContent:"center"}}><Ic n="chart" s={15} c="#b794fc"/></div><div><span style={{fontSize:13,fontWeight:600,color:"rgba(255,255,255,.7)"}}>Statistiken</span><p style={{fontSize:9,color:"rgba(255,255,255,.2)",marginTop:1}}>Punkte, Präsenz, Leistung</p></div></div>
     <span style={{color:"rgba(255,255,255,.15)",fontSize:16}}>›</span>
   </div>}
-  <div className="anim d3"><div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:12}}><h3 className="section-title" style={{marginBottom:0}}>Nächste Termine</h3><button style={{fontSize:10,color:"#00d4ff",fontWeight:600,background:"none",border:"none",cursor:"pointer"}} onClick={()=>nav("events")}>Alle →</button></div><div style={{display:"flex",flexDirection:"column",gap:8}}>{evts.slice(0,4).map((ev,i)=>{const st=statuses[ev.id];return<div key={ev.id} className={`glass card anim d${Math.min(i+2,5)}`} style={{cursor:"pointer"}}>
+  <div className="anim d3"><div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:12}}><h3 className="section-title" style={{marginBottom:0}}>Nächste Termine</h3><button style={{fontSize:10,color:"#00d4ff",fontWeight:600,background:"none",border:"none",cursor:"pointer"}} onClick={()=>nav("events")}>Alle →</button></div><div style={{display:"flex",flexDirection:"column",gap:8}}>{evts.slice(0,4).map((ev,i)=>{const st=statuses[ev.id];const cf=childFor[ev.id];return<div key={ev.id} className={`glass card anim d${Math.min(i+2,5)}`} style={{cursor:"pointer"}}>
     <div onClick={()=>nav("eventDetail",ev)}>
       <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:8}}><div><div style={{display:"flex",alignItems:"center",gap:6,marginBottom:4}}><Bdg type={ev.type}>{ev.type}</Bdg><span className="mono" style={{fontSize:9,color:"rgba(255,255,255,.2)"}}>+{ev.pts}</span></div><h4 style={{fontSize:13,fontWeight:600}}>{ev.title}</h4></div></div>
       <div style={{display:"flex",alignItems:"center",gap:8,fontSize:10,color:"rgba(255,255,255,.3)",fontWeight:300}}><span>{ev.date}</span><span style={{color:"rgba(255,255,255,.1)"}}>·</span><span>{ev.time}</span></div>
       <div style={{display:"flex",alignItems:"center",gap:6,marginTop:8}}><div style={{flex:1,height:3,background:"rgba(255,255,255,.04)",borderRadius:3,overflow:"hidden"}}><div style={{height:"100%",borderRadius:3,width:`${(ev.att/ev.max)*100}%`,background:`linear-gradient(90deg,${(TC[ev.type]||TC.training).c}80,${(TC[ev.type]||TC.training).c}25)`,transition:"width .6s"}}/></div><span className="mono" style={{fontSize:8,color:"rgba(255,255,255,.2)"}}>{ev.att}/{ev.max}</span></div>
     </div>
     <div style={{display:"flex",gap:6,marginTop:10}}>
-      <button onClick={e=>handleZusage(e,ev)} style={{flex:1,padding:"7px 0",borderRadius:8,fontSize:10,fontWeight:700,cursor:"pointer",border:"none",transition:"all .12s",background:st==="angemeldet"?"linear-gradient(135deg,#a3f7bf,#00d4ff)":"rgba(163,247,191,.08)",color:st==="angemeldet"?"#06080f":"#a3f7bf",boxShadow:st==="angemeldet"?"0 0 12px rgba(163,247,191,.15)":"none"}}>✓ Zusage{isParent&&st==="angemeldet"&&<span style={{fontSize:8,fontWeight:500,marginLeft:3}}>via Thomas M.</span>}</button>
-      <button onClick={e=>handleAbsage(e,ev)} style={{flex:1,padding:"7px 0",borderRadius:8,fontSize:10,fontWeight:700,cursor:"pointer",border:"none",transition:"all .12s",background:st==="abgemeldet"?"rgba(239,68,68,.7)":"rgba(255,255,255,.04)",color:st==="abgemeldet"?"#fff":"rgba(255,255,255,.25)"}}>✗ Absage{isParent&&st==="abgemeldet"&&<span style={{fontSize:8,fontWeight:500,marginLeft:3}}>via Thomas M.</span>}</button>
+      <button onClick={e=>pickChild(e,ev,"zu")} style={{flex:1,padding:"7px 0",borderRadius:8,fontSize:10,fontWeight:700,cursor:"pointer",border:"none",transition:"all .12s",background:st==="angemeldet"?"linear-gradient(135deg,#a3f7bf,#00d4ff)":"rgba(163,247,191,.08)",color:st==="angemeldet"?"#06080f":"#a3f7bf",boxShadow:st==="angemeldet"?"0 0 12px rgba(163,247,191,.15)":"none"}}>✓ Zusage</button>
+      <button onClick={e=>pickChild(e,ev,"ab")} style={{flex:1,padding:"7px 0",borderRadius:8,fontSize:10,fontWeight:700,cursor:"pointer",border:"none",transition:"all .12s",background:st==="abgemeldet"?"rgba(239,68,68,.7)":"rgba(255,255,255,.04)",color:st==="abgemeldet"?"#fff":"rgba(255,255,255,.25)"}}>✗ Absage</button>
     </div>
-    {isParent&&activeChild&&<div style={{marginTop:6,fontSize:9,color:"rgba(255,159,67,.5)",fontWeight:400,textAlign:"center"}}>Für {activeChild.name}</div>}
+    {isParent&&cf&&(st==="angemeldet"||st==="abgemeldet")&&<div style={{marginTop:6,fontSize:9,color:"rgba(255,159,67,.5)",fontWeight:500,textAlign:"center"}}>{cf.name} · via {parentUser.name.split(" ")[0]} M.</div>}
   </div>})}</div></div>
+
+  {childPicker&&<div style={{position:"fixed",inset:0,zIndex:100,display:"flex",alignItems:"center",justifyContent:"center",padding:20}} onClick={()=>setChildPicker(null)}>
+    <div style={{position:"absolute",inset:0,background:"rgba(0,0,0,.6)",backdropFilter:"blur(8px)",WebkitBackdropFilter:"blur(8px)"}}/>
+    <div onClick={e=>e.stopPropagation()} style={{position:"relative",width:"100%",maxWidth:340,borderRadius:20,background:"rgba(13,16,23,.85)",backdropFilter:"blur(40px)",WebkitBackdropFilter:"blur(40px)",border:"1px solid var(--glass-border-s)",padding:20,animation:"slideUp .25s ease-out",boxShadow:"0 20px 60px rgba(0,0,0,.4)"}}>
+      <h3 style={{fontSize:16,fontWeight:800,marginBottom:4}}>{childPicker.action==="zu"?"Zusage":"Absage"}</h3>
+      <p style={{fontSize:11,color:"rgba(255,255,255,.35)",fontWeight:300,marginBottom:14}}>{childPicker.ev.title} – {childPicker.ev.date}</p>
+      <label className="label">Für welches Kind?</label>
+      <div style={{display:"flex",flexDirection:"column",gap:8}}>
+        {linkedChildren.map(c=><button key={c.id} onClick={()=>confirmChild(c)} className="glass" style={{padding:"12px 14px",borderRadius:12,cursor:"pointer",display:"flex",alignItems:"center",gap:10,border:"1px solid rgba(255,255,255,.06)",background:"rgba(255,255,255,.03)",transition:"all .12s"}}>
+          <Av name={c.name} size={32}/>
+          <div style={{flex:1,textAlign:"left"}}><div style={{fontSize:13,fontWeight:600,color:"rgba(255,255,255,.8)"}}>{c.name}</div><div style={{fontSize:9,color:"rgba(255,255,255,.25)",marginTop:1}}>{c.team}</div></div>
+          <Ic n={childPicker.action==="zu"?"check":"x"} s={14} c={childPicker.action==="zu"?"#a3f7bf":"#ff6b35"}/>
+        </button>)}
+      </div>
+      <button onClick={()=>setChildPicker(null)} style={{width:"100%",marginTop:12,padding:10,borderRadius:12,fontSize:12,fontWeight:500,cursor:"pointer",border:"1px solid rgba(255,255,255,.06)",background:"rgba(255,255,255,.03)",color:"rgba(255,255,255,.3)"}}>Abbrechen</button>
+    </div>
+  </div>}
 
   {absPopup&&<div style={{position:"fixed",inset:0,zIndex:100,display:"flex",alignItems:"center",justifyContent:"center",padding:20}} onClick={()=>setAbsPopup(null)}>
     <div style={{position:"absolute",inset:0,background:"rgba(0,0,0,.6)",backdropFilter:"blur(8px)",WebkitBackdropFilter:"blur(8px)"}}/>
     <div onClick={e=>e.stopPropagation()} style={{position:"relative",width:"100%",maxWidth:340,borderRadius:20,background:"rgba(13,16,23,.85)",backdropFilter:"blur(40px)",WebkitBackdropFilter:"blur(40px)",border:"1px solid var(--glass-border-s)",padding:20,animation:"slideUp .25s ease-out",boxShadow:"0 20px 60px rgba(0,0,0,.4)"}}>
       <h3 style={{fontSize:16,fontWeight:800,marginBottom:4}}>Absage</h3>
-      <p style={{fontSize:11,color:"rgba(255,255,255,.35)",fontWeight:300,marginBottom:14}}>{absPopup.title} – {absPopup.date}</p>
+      <p style={{fontSize:11,color:"rgba(255,255,255,.35)",fontWeight:300,marginBottom:14}}>{absPopup.title} – {absPopup.date}{isParent&&childFor[absPopup.id]&&<span style={{color:"#ff9f43"}}> · {childFor[absPopup.id].name}</span>}</p>
       <label className="label">Grund der Absage *</label>
       <textarea value={absReason} onChange={e=>setAbsReason(e.target.value)} placeholder="z.B. Krankheit, Termin..." style={{width:"100%",minHeight:70,background:"rgba(255,255,255,.04)",border:"1px solid rgba(255,255,255,.06)",borderRadius:12,padding:"10px 12px",color:"#fff",fontSize:13,fontFamily:"'Outfit',sans-serif",outline:"none",resize:"vertical",marginBottom:14}}/>
       <div style={{display:"flex",gap:8}}>
