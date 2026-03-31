@@ -174,7 +174,13 @@ const confirmAbsage=()=>{if(!absReason.trim())return;if(isParent&&absChild){setC
 
 return<div className="screen" style={{padding:`0 ${px}px 20px`}}>
   <div className="anim section" style={{display:"flex",alignItems:"center",justifyContent:"space-between"}}><div><h2 style={{fontSize:20,fontWeight:800,letterSpacing:"-.01em",marginBottom:3}}>Hallo, {isParent?parentUser.name.split(" ")[0]:U.name.split(" ")[0]} <span style={{display:"inline-block",animation:"float 2s ease-in-out infinite"}}>👋</span></h2><p style={{color:"rgba(255,255,255,.35)",fontSize:12,fontWeight:300}}>{isParent?"Elternteil · "+linkedChildren.map(c=>c.name.split(" ")[0]).join(", "):U.team+" · "+U.role}</p></div><div style={{cursor:"pointer"}} onClick={()=>nav("profile")}><Av name={isParent?parentUser.name:U.name} size={40} glow ring/></div></div>
-  {!isStaff&&!isParent&&<div className="anim d1 section moti-card" style={{borderRadius:16,padding:14,background:"rgba(255,255,255,.02)",position:"relative",overflow:"hidden"}}><div className="moti-border"/><p style={{fontSize:12,color:"rgba(255,255,255,.7)",fontWeight:400,lineHeight:1.6,position:"relative",zIndex:1}}>{q}</p></div>}
+  {!isStaff&&!isParent&&(()=>{const m=getChildMotivation({name:U.name,att:U.att});const col=m.level==="high"?"#a3f7bf":m.level==="med"?"#ffd700":"#ff6b35";return<div className="anim d1 section glass" style={{borderRadius:14,padding:"12px 14px",display:"flex",alignItems:"center",gap:12,borderColor:col+"20"}}>
+    <Av name={U.name} size={32}/>
+    <div style={{flex:1,minWidth:0}}>
+      <div style={{fontSize:11,fontWeight:600,color:col,marginBottom:2}}>{U.att}% Präsenz</div>
+      <p style={{fontSize:11,color:"rgba(255,255,255,.55)",fontWeight:300,lineHeight:1.4}}>{m.text}</p>
+    </div>
+  </div>})()}
   {isParent&&<div className="anim d1 section" style={{display:"flex",flexDirection:"column",gap:8}}>
     {linkedChildren.map(c=>{const m=getChildMotivation(c);const col=m.level==="high"?"#a3f7bf":m.level==="med"?"#ffd700":"#ff6b35";return<div key={c.id} className="glass" style={{borderRadius:14,padding:"12px 14px",display:"flex",alignItems:"center",gap:12,borderColor:col+"20"}}>
       <Av name={c.name} size={32}/>
