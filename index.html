@@ -156,7 +156,27 @@ const Aurora=()=><div style={{position:"absolute",inset:0,overflow:"hidden",poin
 const px=16;
 
 const Login=({onLogin})=>{const[r,setR]=useState("spieler");const[sh,setSh]=useState(false);useEffect(()=>{setSh(true)},[]);
-return<div style={{minHeight:"100vh",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:24,position:"relative",overflow:"hidden",background:"#06080f"}}><Aurora/><div style={{width:"100%",maxWidth:320,position:"relative",zIndex:10,transition:"all .6s",opacity:sh?1:0,transform:sh?"translateY(0)":"translateY(24px)"}}><div style={{textAlign:"center",marginBottom:36}}><div className="ag aglow" style={{display:"inline-flex",alignItems:"center",justifyContent:"center",width:72,height:72,borderRadius:20,marginBottom:20,animation:"pulse-ring 3s ease-in-out infinite"}}><svg width="40" height="40" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="5" r="2.5" fill="#06080f"/><path d="M8 22l2-8-3-3h5.5L15 8l-1.5 3H19l-3 3 2 8" stroke="#06080f" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" fill="none"/><path d="M12 10v4" stroke="#06080f" strokeWidth="1.6" strokeLinecap="round"/><path d="M17 3l.8 1.6 1.7.3-1.2 1.2.3 1.7L17 7l-1.6.8.3-1.7L14.5 4.9l1.7-.3L17 3z" fill="#06080f" opacity=".7"/></svg></div><h1 className="gt" style={{fontSize:32,fontWeight:900,letterSpacing:"-.02em",marginBottom:6}}>Sporti</h1><p style={{color:"rgba(255,255,255,.3)",fontSize:12,fontWeight:300}}>Dein Sportverein. Deine App.</p></div>
+return<div style={{minHeight:"100vh",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:24,position:"relative",overflow:"hidden",background:"#06080f"}}><Aurora/><div style={{width:"100%",maxWidth:320,position:"relative",zIndex:10,transition:"all .6s",opacity:sh?1:0,transform:sh?"translateY(0)":"translateY(24px)"}}><div style={{textAlign:"center",marginBottom:40}}>
+  <svg width="80" height="80" viewBox="0 0 80 80" fill="none" style={{marginBottom:20,filter:"drop-shadow(0 0 20px rgba(var(--c2r),.15))"}}>
+    <defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stopColor="var(--c1)"/><stop offset="50%" stopColor="var(--c2)"/><stop offset="100%" stopColor="var(--c3)"/></linearGradient></defs>
+    <rect x="4" y="4" width="72" height="72" rx="20" fill="url(#lg)"/>
+    <rect x="4" y="4" width="72" height="72" rx="20" fill="none" stroke="rgba(255,255,255,.15)" strokeWidth="1"/>
+    <path d="M40 24c2.2 0 4-1.8 4-4s-1.8-4-4-4-4 1.8-4 4 1.8 4 4 4z" fill="#06080f"/>
+    <path d="M33 56l3-12.5-5.5-5.5H40l4-10-3 6h10l-5.5 5.5L49 56" stroke="#06080f" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M40 27v7" stroke="#06080f" strokeWidth="2.8" strokeLinecap="round"/>
+    <circle cx="56" cy="18" r="3" fill="none" stroke="#06080f" strokeWidth="1.5"/>
+    <path d="M56 15v6M53 18h6" stroke="#06080f" strokeWidth="1.5" strokeLinecap="round"/>
+  </svg>
+  <h1 style={{fontSize:38,fontWeight:900,letterSpacing:"-.03em",marginBottom:6}}>
+    <span className="gt">Sporti</span>
+  </h1>
+  <div style={{display:"flex",alignItems:"center",justifyContent:"center",gap:8,marginBottom:4}}>
+    <div style={{width:24,height:1,background:"linear-gradient(90deg,transparent,rgba(255,255,255,.15))"}}/>
+    <p style={{color:"rgba(255,255,255,.35)",fontSize:11,fontWeight:400,letterSpacing:".08em",textTransform:"uppercase"}}>Dein Sportverein</p>
+    <div style={{width:24,height:1,background:"linear-gradient(90deg,rgba(255,255,255,.15),transparent)"}}/>
+  </div>
+  <p style={{color:"rgba(255,255,255,.2)",fontSize:11,fontWeight:300,letterSpacing:".05em"}}>Deine App.</p>
+</div>
 <div className="glass-s" style={{borderRadius:20,padding:20,marginBottom:14}}><label className="label">E-Mail</label><input type="email" placeholder="luca@example.ch" style={{marginBottom:14}}/><label className="label">Passwort</label><input type="password" placeholder="••••••••" style={{marginBottom:18}}/><label className="label" style={{marginBottom:8}}>Demo: Einloggen als</label><div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:6,marginBottom:18}}>{["spieler","trainer","vorstand","admin","elternteil"].map(x=><button key={x} onClick={()=>setR(x)} style={{padding:"9px 0",borderRadius:10,fontSize:9,fontWeight:700,textTransform:"uppercase",letterSpacing:".08em",cursor:"pointer",background:r===x?"rgba(var(--c1r),.1)":"rgba(255,255,255,.03)",border:`1px solid ${r===x?"rgba(var(--c1r),.3)":"rgba(255,255,255,.06)"}`,color:r===x?"var(--c1)":"rgba(255,255,255,.25)",transition:"all .12s"}}>{RL[x]||x}</button>)}</div><button className="btn ag aglow" onClick={()=>onLogin(r)}>Einloggen →</button></div><p style={{textAlign:"center",color:"rgba(255,255,255,.2)",fontSize:11}}>Noch kein Konto? <span style={{color:"var(--c2)",cursor:"pointer"}}>Registrieren</span></p></div></div>};
 
 const parseEvDate=(ev)=>{const mo={"Jan":0,"Feb":1,"Mär":2,"Mar":2,"Apr":3,"Mai":4,"Jun":5,"Jul":6,"Aug":7,"Sep":8,"Okt":9,"Nov":10,"Dez":11};const p=ev.date.split(", ")[1];if(!p)return new Date(2099,0);const[d,m]=p.split(". ");const h=parseInt(ev.time)||19;return new Date(2026,mo[m]||0,parseInt(d),h)};
@@ -652,7 +672,10 @@ return<div className="dot-grid" style={{position:"relative",minHeight:"100%"}}><
   <div className="glass-header" style={{position:"sticky",top:0,zIndex:40,padding:"0 16px"}}>
     <div style={{height:"env(safe-area-inset-top, 14px)",minHeight:14}}/>
     <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"10px 0 12px"}}>
-      <div style={{display:"flex",alignItems:"center",gap:8}}><div className="ag aglow" style={{width:32,height:32,borderRadius:10,display:"flex",alignItems:"center",justifyContent:"center"}}><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="5" r="2.5" fill="#06080f"/><path d="M8 22l2-8-3-3h5.5L15 8l-1.5 3H19l-3 3 2 8" stroke="#06080f" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" fill="none"/><path d="M12 10v4" stroke="#06080f" strokeWidth="1.8" strokeLinecap="round"/><path d="M17 3l.8 1.6 1.7.3-1.2 1.2.3 1.7L17 7l-1.6.8.3-1.7L14.5 4.9l1.7-.3L17 3z" fill="#06080f" opacity=".7"/></svg></div><span style={{fontSize:10,fontWeight:800,color:"rgba(255,255,255,.22)",textTransform:"uppercase",letterSpacing:".2em"}}>Sporti</span></div>
+      <div style={{display:"flex",alignItems:"center",gap:8}}>
+        <svg width="30" height="30" viewBox="0 0 80 80" fill="none"><defs><linearGradient id="lgh" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stopColor="var(--c1)"/><stop offset="50%" stopColor="var(--c2)"/><stop offset="100%" stopColor="var(--c3)"/></linearGradient></defs><rect x="4" y="4" width="72" height="72" rx="20" fill="url(#lgh)"/><path d="M40 24c2.2 0 4-1.8 4-4s-1.8-4-4-4-4 1.8-4 4 1.8 4 4 4z" fill="#06080f"/><path d="M33 56l3-12.5-5.5-5.5H40l4-10-3 6h10l-5.5 5.5L49 56" stroke="#06080f" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/><path d="M40 27v7" stroke="#06080f" strokeWidth="3" strokeLinecap="round"/><circle cx="56" cy="18" r="3" fill="none" stroke="#06080f" strokeWidth="1.8"/><path d="M56 15v6M53 18h6" stroke="#06080f" strokeWidth="1.8" strokeLinecap="round"/></svg>
+        <span className="gt" style={{fontSize:14,fontWeight:900,letterSpacing:"-.02em"}}>Sporti</span>
+      </div>
       <div style={{display:"flex",alignItems:"center",gap:8}}><RBdg role={role}/><div style={{position:"relative",cursor:"pointer"}} onClick={()=>setShowNews(true)}><div className="glass" style={{width:34,height:34,borderRadius:11,display:"flex",alignItems:"center",justifyContent:"center"}}><Ic n="bell" s={15} c="rgba(255,255,255,.4)"/></div><div style={{position:"absolute",top:-5,right:-5,minWidth:20,height:20,borderRadius:10,background:"linear-gradient(135deg,#ff6b35,#ee5a24)",display:"flex",alignItems:"center",justifyContent:"center",padding:"0 5px",border:"2px solid #06080f",animation:"pulse-ring 1.5s ease-in-out infinite",boxShadow:"0 0 10px rgba(255,107,53,.4)"}}><span style={{fontSize:10,fontWeight:900,color:"#fff"}}>4</span></div></div></div>
     </div>
   </div>
