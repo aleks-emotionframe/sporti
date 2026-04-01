@@ -657,7 +657,7 @@ return<div className="dot-grid" style={{position:"relative",minHeight:"100%"}}><
   </div>
   <div style={{height:18}}/>
   <div style={{paddingBottom:85}}>{S[scr]||<Dash role={role} nav={nav}/>}</div>
-  <Nav active={mains.includes(scr)?scr:prev} nav={nav} role={role} chatBadge={(()=>{const isS=role==="trainer"||role==="vorstand"||role==="admin";const c=isS?convos.trainer:role==="elternteil"?convos.elternteil||[]:convos.spieler;return c.reduce((a,x)=>a+(x.unread||0),0)+chatBadge})()} helperBadge={hlp.filter(h=>h.u<h.n).length} eventsBadge={evts.filter(e=>e.status==="offen").length}/>
+  <Nav active={mains.includes(scr)?scr:prev} nav={nav} role={role} chatBadge={(()=>{const isS=role==="trainer"||role==="vorstand"||role==="admin";const c=isS?convos.trainer:role==="elternteil"?convos.elternteil||[]:convos.spieler;return c.reduce((a,x)=>a+(x.unread||0),0)+chatBadge})()} helperBadge={hlp.filter(h=>h.u<h.n).length} eventsBadge={evts.filter(e=>e.status==="offen"&&parseEvDate(e)>new Date()).length}/>
   <NewsPopup open={showNews} onClose={()=>setShowNews(false)} role={role}/>
 </div>};
 ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
