@@ -182,8 +182,30 @@ const pickChild=(e,ev,action)=>{e.stopPropagation();if(!isParent){if(action==="z
 const confirmChild=(child)=>{const ev=childPicker.ev;if(childPicker.action==="zu"){setChildStatuses(p=>({...p,[ev.id]:{...(p[ev.id]||{}),[child.id]:"angemeldet"}}));setChildPicker(null)}else{setAbsChild(child);setChildPicker(null);if(isWithin24h(ev)){setLatePopup(ev);setLateMsg("");setLateSent(false);setLateChild(child)}else{setAbsPopup(ev);setAbsReason("")}}};
 const confirmAbsage=()=>{if(!absReason.trim())return;if(isParent&&absChild){setChildStatuses(p=>({...p,[absPopup.id]:{...(p[absPopup.id]||{}),[absChild.id]:"abgemeldet"}}));}else{setStatuses(p=>({...p,[absPopup.id]:"abgemeldet"}))}setAbsPopup(null);setAbsReason("");setAbsChild(null)};
 
+const soonEvts=evts.filter(e=>{const d=parseEvDate(e);const now=new Date();const diff=d-now;return diff>0&&diff<3*24*60*60*1000});
+
 return<div className="screen" style={{padding:`0 ${px}px 20px`}}>
   <div className="anim section" style={{display:"flex",alignItems:"center",justifyContent:"space-between"}}><div><h2 style={{fontSize:20,fontWeight:800,letterSpacing:"-.01em",marginBottom:3}}>Hallo, {isParent?parentUser.name.split(" ")[0]:U.name.split(" ")[0]} <span style={{display:"inline-block",animation:"float 2s ease-in-out infinite"}}>👋</span></h2><p style={{color:"rgba(255,255,255,.35)",fontSize:12,fontWeight:300}}>{isParent?"Elternteil · "+linkedChildren.map(c=>c.name.split(" ")[0]).join(", "):U.team+" · "+U.role}</p></div><div style={{cursor:"pointer"}} onClick={()=>nav("profile")}><Av name={isParent?parentUser.name:U.name} size={40} glow ring/></div></div>
+
+  {soonEvts.length>0&&<div className="anim d1 section" style={{display:"flex",flexDirection:"column",gap:6}}>
+    {soonEvts.map(ev=>{const s=TC[ev.type]||TC.training;const d=parseEvDate(ev);const now=new Date();const hrs=Math.round((d-now)/(1000*60*60));const label=hrs<24?`In ${hrs}h`:hrs<48?"Morgen":"In "+Math.ceil(hrs/24)+" Tagen";
+    return<div key={ev.id} onClick={()=>nav("eventDetail",ev)} className="glass" style={{borderRadius:14,padding:"12px 14px",cursor:"pointer",borderColor:`${s.c}25`,background:`${s.c}06`}}>
+      <div style={{display:"flex",alignItems:"center",gap:10}}>
+        <div style={{width:36,height:36,borderRadius:10,background:`${s.c}15`,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
+          <Ic n="zap" s={16} c={s.c}/>
+        </div>
+        <div style={{flex:1,minWidth:0}}>
+          <div style={{display:"flex",alignItems:"center",gap:6,marginBottom:2}}>
+            <span style={{fontSize:10,fontWeight:700,color:s.c,background:`${s.c}15`,padding:"1px 6px",borderRadius:4}}>{label}</span>
+            <Bdg type={ev.type}>{ev.type}</Bdg>
+          </div>
+          <h4 style={{fontSize:13,fontWeight:600,color:"rgba(255,255,255,.85)"}}>{ev.title}</h4>
+          <div style={{fontSize:10,color:"rgba(255,255,255,.3)",fontWeight:300,marginTop:1}}>{ev.date} · {ev.time}</div>
+        </div>
+      </div>
+    </div>})}
+  </div>}
+
   {!isStaff&&!isParent&&(()=>{const m=getSelfMotivation(U);const col=m.level==="high"?"var(--c1)":m.level==="med"?"#ffd700":"#ff6b35";return<div className="anim d1 section glass" style={{borderRadius:14,padding:"12px 14px",display:"flex",alignItems:"center",gap:12,borderColor:col+"20"}}>
     <Av name={U.name} size={32}/>
     <div style={{flex:1,minWidth:0}}>
