@@ -49,10 +49,11 @@ select{appearance:none;color:rgba(255,255,255,.5)}
 .dot-grid{background-image:radial-gradient(rgba(255,255,255,.015) 1px,transparent 1px);background-size:24px 24px}
 
 .nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:390px;z-index:50;padding:0 0 env(safe-area-inset-bottom,0)}
-.nav-inner{display:flex;justify-content:space-around;padding:10px 0 12px;background:rgba(6,8,15,.75);backdrop-filter:blur(var(--blur-s));-webkit-backdrop-filter:blur(var(--blur-s));border-top:1px solid var(--glass-border)}
+.nav-inner{display:flex;justify-content:space-around;align-items:center;padding:8px 12px 14px;background:rgba(6,8,15,.82);backdrop-filter:blur(var(--blur-s));-webkit-backdrop-filter:blur(var(--blur-s));border-top:1px solid var(--glass-border)}
 @media(min-width:500px){.nav{bottom:20px;border-radius:0 0 30px 30px;overflow:hidden}}
-.nav-btn{display:flex;flex-direction:column;align-items:center;gap:3px;padding:2px 10px;background:none;border:none;cursor:pointer;position:relative}
-.nav-dot{position:absolute;top:-4px;width:16px;height:2px;border-radius:2px}
+.nav-btn{display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 14px;background:none;border:none;cursor:pointer;position:relative;border-radius:14px;transition:all .2s}
+.nav-btn-active{background:rgba(var(--c2r),.1)}
+.nav-dot{display:none}
 
 .badge{padding:2px 7px;border-radius:8px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;display:inline-flex;align-items:center;gap:3px;white-space:nowrap;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
 .ring-wrap{position:relative;display:inline-flex;align-items:center;justify-content:center}.ring-content{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
@@ -630,9 +631,10 @@ return<div style={{position:"fixed",inset:0,zIndex:100,display:"flex",alignItems
   </div>
 </div>};
 
-const Nav=({active,nav,role,chatBadge=0})=>{const isStaff=role==="trainer"||role==="vorstand"||role==="admin";const isParent=role==="elternteil";const items=[{id:"dashboard",ic:"home",l:"Home"},{id:"events",ic:"calendar",l:"Termine"},isStaff?{id:"rankings",ic:"trophy",l:"Ranking"}:{id:"helpers",ic:"hand",l:"Helfer"},{id:"chat",ic:"chat",l:"Chat"}];items.push(isStaff?{id:"admin",ic:"settings",l:"Admin"}:{id:"profile",ic:"profile",l:"Profil"});return<div className="nav"><div className="nav-inner">{items.map(it=>{const a=active===it.id;return<button key={it.id} onClick={()=>nav(it.id)} className="nav-btn" style={{position:"relative"}}>{a&&<div className="nav-dot ag"/>}<Ic n={it.ic} s={18} c={a?"var(--c2)":"rgba(255,255,255,.2)"}/>
-{it.id==="chat"&&chatBadge>0&&<div style={{position:"absolute",top:0,right:6,minWidth:16,height:16,borderRadius:8,background:"#ff6b35",display:"flex",alignItems:"center",justifyContent:"center",padding:"0 4px",animation:"pulse-ring 2s ease-in-out infinite"}}><span style={{fontSize:8,fontWeight:800,color:"#fff"}}>{chatBadge}</span></div>}
-<span style={{fontSize:8,fontWeight:700,letterSpacing:".04em",color:a?"var(--c2)":"rgba(255,255,255,.2)"}}>{it.l}</span></button>})}</div></div>};
+const Nav=({active,nav,role,chatBadge=0})=>{const isStaff=role==="trainer"||role==="vorstand"||role==="admin";const isParent=role==="elternteil";const items=[{id:"dashboard",ic:"home",l:"Home"},{id:"events",ic:"calendar",l:"Termine"},isStaff?{id:"rankings",ic:"trophy",l:"Ranking"}:{id:"helpers",ic:"hand",l:"Helfer"},{id:"chat",ic:"chat",l:"Chat"}];items.push(isStaff?{id:"admin",ic:"settings",l:"Admin"}:{id:"profile",ic:"profile",l:"Profil"});return<div className="nav"><div className="nav-inner">{items.map(it=>{const a=active===it.id;return<button key={it.id} onClick={()=>nav(it.id)} className={`nav-btn${a?" nav-btn-active":""}`} style={{position:"relative"}}>
+<Ic n={it.ic} s={22} c={a?"var(--c2)":"rgba(255,255,255,.25)"}/>
+{it.id==="chat"&&chatBadge>0&&<div style={{position:"absolute",top:2,right:4,minWidth:16,height:16,borderRadius:8,background:"#ff6b35",display:"flex",alignItems:"center",justifyContent:"center",padding:"0 4px",animation:"pulse-ring 2s ease-in-out infinite"}}><span style={{fontSize:8,fontWeight:800,color:"#fff"}}>{chatBadge}</span></div>}
+<span style={{fontSize:10,fontWeight:a?700:500,color:a?"var(--c2)":"rgba(255,255,255,.25)",transition:"all .2s"}}>{it.l}</span></button>})}</div></div>};
 
 const App=()=>{const[scr,setScr]=useState("login");const[role,setRole]=useState("spieler");const[evD,setEvD]=useState(null);const[prev,setPrev]=useState("dashboard");const[showNews,setShowNews]=useState(false);const[trainerInbox,setTrainerInbox]=useState([]);const[chatBadge,setChatBadge]=useState(0);const[themeId,setThemeId]=useState(savedTheme);const th=useTheme(themeId);
 const changeTheme=(id)=>{setThemeId(id);applyTheme(id)};
@@ -650,7 +652,7 @@ return<div className="dot-grid" style={{position:"relative",minHeight:"100%"}}><
     </div>
   </div>
   <div style={{height:18}}/>
-  <div style={{paddingBottom:72}}>{S[scr]||<Dash role={role} nav={nav}/>}</div>
+  <div style={{paddingBottom:85}}>{S[scr]||<Dash role={role} nav={nav}/>}</div>
   <Nav active={mains.includes(scr)?scr:prev} nav={nav} role={role} chatBadge={(role==="trainer"||role==="elternteil")?chatBadge:0}/>
   <NewsPopup open={showNews} onClose={()=>setShowNews(false)} role={role}/>
 </div>};
