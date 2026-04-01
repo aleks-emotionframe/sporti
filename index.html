@@ -631,10 +631,13 @@ return<div style={{position:"fixed",inset:0,zIndex:100,display:"flex",alignItems
   </div>
 </div>};
 
-const Nav=({active,nav,role,chatBadge=0,helperBadge=0})=>{const isStaff=role==="trainer"||role==="vorstand"||role==="admin";const isParent=role==="elternteil";const items=[{id:"dashboard",ic:"home",l:"Home"},{id:"events",ic:"calendar",l:"Termine"},isStaff?{id:"rankings",ic:"trophy",l:"Ranking"}:{id:"helpers",ic:"hand",l:"Helfer"},{id:"chat",ic:"chat",l:"Chat"}];items.push(isStaff?{id:"admin",ic:"settings",l:"Admin"}:{id:"profile",ic:"profile",l:"Profil"});return<div className="nav"><div className="nav-inner">{items.map(it=>{const a=active===it.id;return<button key={it.id} onClick={()=>nav(it.id)} className={`nav-btn${a?" nav-btn-active":""}`} style={{position:"relative"}}>
+const NavBadge=({count})=>count>0?<div style={{position:"absolute",top:2,right:4,minWidth:16,height:16,borderRadius:8,background:"linear-gradient(135deg,#ff6b35,#ee5a24)",display:"flex",alignItems:"center",justifyContent:"center",padding:"0 4px",border:"2px solid #06080f",animation:"pulse-ring 1.5s ease-in-out infinite",boxShadow:"0 0 8px rgba(255,107,53,.4)"}}><span style={{fontSize:8,fontWeight:800,color:"#fff"}}>{count}</span></div>:null;
+
+const Nav=({active,nav,role,chatBadge=0,helperBadge=0,eventsBadge=0})=>{const isStaff=role==="trainer"||role==="vorstand"||role==="admin";const isParent=role==="elternteil";const items=[{id:"dashboard",ic:"home",l:"Home"},{id:"events",ic:"calendar",l:"Termine"},isStaff?{id:"rankings",ic:"trophy",l:"Ranking"}:{id:"helpers",ic:"hand",l:"Helfer"},{id:"chat",ic:"chat",l:"Chat"}];items.push(isStaff?{id:"admin",ic:"settings",l:"Admin"}:{id:"profile",ic:"profile",l:"Profil"});
+const badges={chat:chatBadge,helpers:helperBadge,events:eventsBadge};
+return<div className="nav"><div className="nav-inner">{items.map(it=>{const a=active===it.id;return<button key={it.id} onClick={()=>nav(it.id)} className={`nav-btn${a?" nav-btn-active":""}`} style={{position:"relative"}}>
 <Ic n={it.ic} s={22} c={a?"var(--c2)":"rgba(255,255,255,.25)"}/>
-{it.id==="chat"&&chatBadge>0&&<div style={{position:"absolute",top:2,right:4,minWidth:16,height:16,borderRadius:8,background:"#ff6b35",display:"flex",alignItems:"center",justifyContent:"center",padding:"0 4px",animation:"pulse-ring 2s ease-in-out infinite"}}><span style={{fontSize:8,fontWeight:800,color:"#fff"}}>{chatBadge}</span></div>}
-{it.id==="helpers"&&helperBadge>0&&<div style={{position:"absolute",top:2,right:4,minWidth:16,height:16,borderRadius:8,background:"linear-gradient(135deg,#ff6b35,#ee5a24)",display:"flex",alignItems:"center",justifyContent:"center",padding:"0 4px",border:"2px solid #06080f",animation:"pulse-ring 1.5s ease-in-out infinite",boxShadow:"0 0 8px rgba(255,107,53,.4)"}}><span style={{fontSize:8,fontWeight:800,color:"#fff"}}>{helperBadge}</span></div>}
+<NavBadge count={badges[it.id]||0}/>
 <span style={{fontSize:10,fontWeight:a?700:500,color:a?"var(--c2)":"rgba(255,255,255,.25)",transition:"all .2s"}}>{it.l}</span></button>})}</div></div>};
 
 const App=()=>{const[scr,setScr]=useState("login");const[role,setRole]=useState("spieler");const[evD,setEvD]=useState(null);const[prev,setPrev]=useState("dashboard");const[showNews,setShowNews]=useState(false);const[trainerInbox,setTrainerInbox]=useState([]);const[chatBadge,setChatBadge]=useState(0);const[themeId,setThemeId]=useState(savedTheme);const th=useTheme(themeId);
@@ -654,7 +657,7 @@ return<div className="dot-grid" style={{position:"relative",minHeight:"100%"}}><
   </div>
   <div style={{height:18}}/>
   <div style={{paddingBottom:85}}>{S[scr]||<Dash role={role} nav={nav}/>}</div>
-  <Nav active={mains.includes(scr)?scr:prev} nav={nav} role={role} chatBadge={(role==="trainer"||role==="elternteil")?chatBadge:0} helperBadge={hlp.filter(h=>h.u<h.n).length}/>
+  <Nav active={mains.includes(scr)?scr:prev} nav={nav} role={role} chatBadge={(()=>{const isS=role==="trainer"||role==="vorstand"||role==="admin";const c=isS?convos.trainer:role==="elternteil"?convos.elternteil||[]:convos.spieler;return c.reduce((a,x)=>a+(x.unread||0),0)+chatBadge})()} helperBadge={hlp.filter(h=>h.u<h.n).length} eventsBadge={evts.filter(e=>e.status==="offen").length}/>
   <NewsPopup open={showNews} onClose={()=>setShowNews(false)} role={role}/>
 </div>};
 ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
