@@ -211,8 +211,8 @@ const soonEvts=filteredEvts.filter(e=>{const d=parseEvDate(e);const now=new Date
 
 return<div className="screen" style={{padding:`0 ${px}px 20px`}}>
   {(()=>{const showVibe=!isStaff&&!isParent;const m=showVibe?getSelfMotivation(U):null;const col=m?(m.level==="high"?"var(--c1)":m.level==="med"?"#ffd700":"#ff6b35"):null;const colR=m?(m.level==="high"?"var(--c1r)":m.level==="med"?"255,215,0":"255,107,53"):null;
-  return<div className={`anim section${showVibe?" moti-card":""}`} style={{borderRadius:showVibe?18:0,padding:showVibe?"16px 16px":"0",background:showVibe?`linear-gradient(135deg,rgba(${colR},.06),rgba(${colR},.01))`:"transparent",position:"relative",overflow:"hidden"}}>
-    {showVibe&&<div className="moti-border"/>}
+  return<div className={`anim section${(showVibe||isParent)?" moti-card":""}`} style={{borderRadius:(showVibe||isParent)?18:0,padding:(showVibe||isParent)?"16px 16px":"0",background:(showVibe||isParent)?`linear-gradient(135deg,rgba(${showVibe?colR:"var(--c1r)"},.06),rgba(${showVibe?colR:"var(--c1r)"},.01))`:"transparent",position:"relative",overflow:"hidden"}}>
+    {(showVibe||isParent)&&<div className="moti-border"/>}
     <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",position:"relative",zIndex:1}}>
       <div>
         <h2 style={{fontSize:20,fontWeight:800,letterSpacing:"-.01em",marginBottom:3}}>Hallo, {isParent?parentUser.name.split(" ")[0]:U.name.split(" ")[0]} <span style={{display:"inline-block",animation:"float 2s ease-in-out infinite"}}>👋</span></h2>
@@ -228,6 +228,21 @@ return<div className="screen" style={{padding:`0 ${px}px 20px`}}>
         <span style={{fontSize:11,fontWeight:800,color:col}}>{U.att}%</span>
       </div>
       <p style={{fontSize:13,fontWeight:600,color:"rgba(255,255,255,.8)",lineHeight:1.4}}>{m.text}</p>
+    </div>}
+    {isParent&&<div style={{marginTop:12,display:"flex",flexDirection:"column",gap:8,position:"relative",zIndex:1}}>
+      {linkedChildren.map(c=>{const mc=getChildMotivation(c);const cc=mc.level==="high"?"var(--c1)":mc.level==="med"?"#ffd700":"#ff6b35";return<div key={c.id} style={{display:"flex",alignItems:"center",gap:10}}>
+        <div style={{display:"flex",flexDirection:"column",alignItems:"center",gap:2}}>
+          <Av name={c.name} size={30}/>
+          <span style={{fontSize:8,fontWeight:800,color:cc}}>{c.att}%</span>
+        </div>
+        <div style={{flex:1}}>
+          <div style={{display:"flex",alignItems:"center",gap:4,marginBottom:2}}>
+            <span style={{fontSize:14,lineHeight:1}}>{mc.emoji}</span>
+            <span style={{fontSize:11,fontWeight:700,color:cc}}>{c.name.split(" ")[0]}</span>
+          </div>
+          <p style={{fontSize:11,fontWeight:500,color:"rgba(255,255,255,.65)",lineHeight:1.4}}>{mc.text}</p>
+        </div>
+      </div>})}
     </div>}
   </div>})()}
 
@@ -339,23 +354,6 @@ return<div className="screen" style={{padding:`0 ${px}px 20px`}}>
     </div>})}
   </div>}
 
-  {isParent&&<div className="anim d1 section" style={{display:"flex",flexDirection:"column",gap:8}}>
-    {linkedChildren.map(c=>{const m=getChildMotivation(c);const col=m.level==="high"?"var(--c1)":m.level==="med"?"#ffd700":"#ff6b35";const colR=m.level==="high"?"var(--c1r)":m.level==="med"?"255,215,0":"255,107,53";return<div key={c.id} style={{borderRadius:16,padding:"14px 14px",background:`linear-gradient(135deg,rgba(${colR},.07),rgba(${colR},.02))`,border:`1px solid rgba(${colR},.12)`,position:"relative",overflow:"hidden"}}>
-      <div style={{display:"flex",alignItems:"center",gap:10}}>
-        <div style={{display:"flex",flexDirection:"column",alignItems:"center",gap:3}}>
-          <Av name={c.name} size={34}/>
-          <span style={{fontSize:9,fontWeight:800,color:col}}>{c.att}%</span>
-        </div>
-        <div style={{flex:1,minWidth:0}}>
-          <div style={{display:"flex",alignItems:"center",gap:5,marginBottom:3}}>
-            <span style={{fontSize:16,lineHeight:1}}>{m.emoji}</span>
-            <span style={{fontSize:11,fontWeight:700,color:col}}>{c.name.split(" ")[0]}</span>
-          </div>
-          <p style={{fontSize:12,fontWeight:500,color:"rgba(255,255,255,.75)",lineHeight:1.4}}>{m.text}</p>
-        </div>
-      </div>
-    </div>})}
-  </div>}
   {isStaff&&!isAdmin&&<div className="anim d2 section" onClick={()=>nav("stats")} style={{cursor:"pointer",borderRadius:16,padding:"12px 14px",background:"rgba(255,255,255,.03)",border:"1px solid rgba(255,255,255,.06)",display:"flex",alignItems:"center",justifyContent:"space-between",transition:"all .12s"}}>
     <div style={{display:"flex",alignItems:"center",gap:10}}><div style={{width:32,height:32,borderRadius:10,background:"rgba(var(--c3r),.1)",display:"flex",alignItems:"center",justifyContent:"center"}}><Ic n="chart" s={15} c="var(--c3)"/></div><div><span style={{fontSize:13,fontWeight:600,color:"rgba(255,255,255,.7)"}}>Statistiken</span><p style={{fontSize:9,color:"rgba(255,255,255,.2)",marginTop:1}}>Punkte, Präsenz, Leistung</p></div></div>
     <span style={{color:"rgba(255,255,255,.15)",fontSize:16}}>›</span>
