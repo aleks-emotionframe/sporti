@@ -376,8 +376,8 @@ return<div className="screen" style={{padding:`0 ${px}px 20px`}}>
           {cs==="angemeldet"&&<span style={{fontSize:8,fontWeight:700,color:"var(--c1)",padding:"2px 6px",borderRadius:5,background:"rgba(var(--c1r),.1)"}}>✓ Dabei</span>}
           {cs==="abgemeldet"&&<span style={{fontSize:8,fontWeight:700,color:"#ff6b35",padding:"2px 6px",borderRadius:5,background:"rgba(255,107,53,.1)"}}>✗ Abgesagt</span>}
           {!cs&&<div style={{display:"flex",gap:4}}>
-            <button onClick={e=>{e.stopPropagation();setChildStatuses(p=>({...p,[ev.id]:{...(p[ev.id]||{}),[c.id]:"angemeldet"}}))}} style={{padding:"3px 8px",borderRadius:6,fontSize:8,fontWeight:700,cursor:"pointer",border:"none",background:"rgba(var(--c1r),.1)",color:"var(--c1)"}}>✓</button>
-            <button onClick={e=>{e.stopPropagation();setAbsChild(c);if(isWithin24h(ev)){setLatePopup(ev);setLateMsg("");setLateSent(false);setLateChild(c)}else{setAbsPopup(ev);setAbsReason("")}}} style={{padding:"3px 8px",borderRadius:6,fontSize:8,fontWeight:700,cursor:"pointer",border:"none",background:"rgba(255,255,255,.04)",color:"rgba(255,255,255,.25)"}}>✗</button>
+            <button onClick={e=>{e.stopPropagation();setChildStatuses(p=>({...p,[ev.id]:{...(p[ev.id]||{}),[c.id]:"angemeldet"}}))}} style={{padding:"6px 14px",borderRadius:8,fontSize:10,fontWeight:700,cursor:"pointer",border:"none",background:"rgba(var(--c1r),.1)",color:"var(--c1)"}}>✓</button>
+            <button onClick={e=>{e.stopPropagation();setAbsChild(c);if(isWithin24h(ev)){setLatePopup(ev);setLateMsg("");setLateSent(false);setLateChild(c)}else{setAbsPopup(ev);setAbsReason("")}}} style={{padding:"6px 14px",borderRadius:8,fontSize:10,fontWeight:700,cursor:"pointer",border:"none",background:"rgba(255,255,255,.04)",color:"rgba(255,255,255,.25)"}}>✗</button>
           </div>}
         </div>})}
       </div>
@@ -448,8 +448,8 @@ return<div className="screen" style={{padding:`0 ${px}px 20px`}}><h2 className="
         {cs==="angemeldet"&&<span style={{fontSize:8,fontWeight:700,color:"var(--c1)",padding:"2px 6px",borderRadius:5,background:"rgba(var(--c1r),.1)"}}>✓ Dabei</span>}
         {cs==="abgemeldet"&&<span style={{fontSize:8,fontWeight:700,color:"#ff6b35",padding:"2px 6px",borderRadius:5,background:"rgba(255,107,53,.1)"}}>✗ Abgesagt</span>}
         {!cs&&<div style={{display:"flex",gap:4}}>
-          <button onClick={e=>{e.stopPropagation();setEvCS(p=>({...p,[ev.id]:{...(p[ev.id]||{}),[c.id]:"angemeldet"}}))}} style={{padding:"3px 8px",borderRadius:6,fontSize:8,fontWeight:700,cursor:"pointer",border:"none",background:"rgba(var(--c1r),.1)",color:"var(--c1)"}}>✓</button>
-          <button onClick={e=>{e.stopPropagation();setAbsChildEv(c);setAbsPopupEv(ev);setAbsReasonEv("")}} style={{padding:"3px 8px",borderRadius:6,fontSize:8,fontWeight:700,cursor:"pointer",border:"none",background:"rgba(255,255,255,.04)",color:"rgba(255,255,255,.25)"}}>✗</button>
+          <button onClick={e=>{e.stopPropagation();setEvCS(p=>({...p,[ev.id]:{...(p[ev.id]||{}),[c.id]:"angemeldet"}}))}} style={{padding:"6px 14px",borderRadius:8,fontSize:10,fontWeight:700,cursor:"pointer",border:"none",background:"rgba(var(--c1r),.1)",color:"var(--c1)"}}>✓</button>
+          <button onClick={e=>{e.stopPropagation();setAbsChildEv(c);setAbsPopupEv(ev);setAbsReasonEv("")}} style={{padding:"6px 14px",borderRadius:8,fontSize:10,fontWeight:700,cursor:"pointer",border:"none",background:"rgba(255,255,255,.04)",color:"rgba(255,255,255,.25)"}}>✗</button>
         </div>}
       </div>})}
     </div>
