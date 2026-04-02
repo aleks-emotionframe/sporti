@@ -1413,7 +1413,7 @@ return<div className="dot-grid" style={{position:"relative",minHeight:"100%"}}><
   </div>
   <div style={{height:18}}/>
   <div style={{paddingBottom:85}}>{S[scr]||<Dash role={role} nav={nav}/>}</div>
-  <Nav active={mains.includes(scr)?scr:prev} nav={nav} role={role} chatBadge={(()=>{const isS=role==="trainer"||role==="vorstand"||role==="admin";const c=isS?convos.trainer:role==="elternteil"?convos.elternteil||[]:convos.spieler;return c.reduce((a,x)=>a+(x.unread||0),0)+chatBadge})()} helperBadge={hlpData.filter(h=>h.jobs.reduce((a,j)=>a+j.signed.length,0)<h.jobs.reduce((a,j)=>a+j.n,0)).length} eventsBadge={evts.filter(e=>e.status==="offen"&&parseEvDate(e)>new Date()).length}/>
+  <Nav active={mains.includes(scr)?scr:prev} nav={nav} role={role} chatBadge={(()=>{const isS=role==="trainer"||role==="vorstand"||role==="admin";const c=isS?convos.trainer:role==="elternteil"?convos.elternteil||[]:convos.spieler;return c.reduce((a,x)=>a+(x.unread||0),0)+chatBadge})()} helperBadge={hlpData.reduce((a,h)=>a+h.jobs.filter(j=>j.signed.length<j.n).length,0)} eventsBadge={evts.filter(e=>e.status==="offen"&&parseEvDate(e)>new Date()).length}/>
   <NewsPopup open={showNews} onClose={()=>setShowNews(false)} role={role}/>
 </div>};
 class EB extends React.Component{constructor(p){super(p);this.state={err:null}}static getDerivedStateFromError(e){return{err:e}}render(){if(this.state.err)return React.createElement('div',{style:{padding:20,color:'#ff6b35'}},React.createElement('h2',null,'Fehler'),React.createElement('pre',{style:{fontSize:11,whiteSpace:'pre-wrap',color:'#fff',opacity:.6}},this.state.err.toString()));return this.props.children}}
