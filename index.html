@@ -423,8 +423,9 @@ return<div className="screen" style={{padding:`0 ${px}px 20px`}}>
     </div>
   </div>}
 
-  {isStaff&&<button className="btn ag aglow anim d5" style={{marginTop:16}}>+ Neuen Termin erstellen</button>}
-</div>};
+  {isStaff&&!isAdmin&&<button className="btn ag aglow anim d5" style={{marginTop:16}}>+ Neuen Termin erstellen</button>}
+</div>}};
+
 
 const Events=({nav,role})=>{const[f,setF]=useState("alle");const[teamF,setTeamF]=useState("alle");const isParent=role==="elternteil";const isStaff=role==="trainer"||role==="vorstand"||role==="admin";const linkedChildren=parentUser.children.filter(c=>c.linked);const[evCS,setEvCS]=useState({});const[absPopupEv,setAbsPopupEv]=useState(null);const[absChildEv,setAbsChildEv]=useState(null);const[absReasonEv,setAbsReasonEv]=useState("");
 const roleEvts=filterEvtsByRole(evts,role);
