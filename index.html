@@ -660,7 +660,7 @@ return<div className="screen" style={{padding:`0 ${px}px 20px`}}>
 
 const Helpers=({role})=>{
 const isParent=role==="elternteil";
-const isAdmin=role==="vorstand"||role==="admin";
+const isAdmin=role==="vorstand"||role==="admin";const isStaff=role==="trainer"||isAdmin;
 const[helpers,setHelpers]=useState(()=>JSON.parse(JSON.stringify(hlpData)));
 const[selectedHelp,setSelectedHelp]=useState(null);
 const[editShift,setEditShift]=useState(null);
@@ -668,6 +668,7 @@ const[editJob,setEditJob]=useState(null);
 const[deleteConfirm,setDeleteConfirm]=useState(null);
 const[deleteJobConfirm,setDeleteJobConfirm]=useState(null);
 const[parentPicker,setParentPicker]=useState(null);
+const[confirmed,setConfirmed]=useState({});
 const parentOptions=[{id:"self",label:parentUser.name},{id:"partner",label:parentUser.partner},...parentUser.children.filter(c=>c.linked).map(c=>({id:c.id,label:c.name}))];
 const userName="Luca Meier";
 const getTotalSigned=(h)=>h.jobs.reduce((a,j)=>a+j.signed.length,0);
@@ -746,6 +747,10 @@ const DeletePopup=({title,onConfirm,onCancel})=><div style={{position:"fixed",in
 </div>;
 
 const doSignup=(hId,jId,who)=>{setHelpers(prev=>prev.map(h=>h.id===hId?{...h,jobs:h.jobs.map(j=>j.id===jId?{...j,signed:[...j.signed,who]}:j)}:h));if(selectedHelp&&selectedHelp.id===hId)setSelectedHelp(prev=>({...prev,jobs:prev.jobs.map(j=>j.id===jId?{...j,signed:[...j.signed,who]}:j)}))};
+const confKey=(hId,jId,name)=>`${hId}-${jId}-${name}`;
+const isConfirmed=(hId,jId,name)=>!!confirmed[confKey(hId,jId,name)];
+const doConfirm=(hId,jId,name)=>setConfirmed(p=>({...p,[confKey(hId,jId,name)]:true}));
+const doUnconfirm=(hId,jId,name)=>setConfirmed(p=>{const n={...p};delete n[confKey(hId,jId,name)];return n});
 const doSignoff=(hId,jId,who)=>{setHelpers(prev=>prev.map(h=>h.id===hId?{...h,jobs:h.jobs.map(j=>j.id===jId?{...j,signed:j.signed.filter(s=>s!==who)}:j)}:h));if(selectedHelp&&selectedHelp.id===hId)setSelectedHelp(prev=>({...prev,jobs:prev.jobs.map(j=>j.id===jId?{...j,signed:j.signed.filter(s=>s!==who)}:j)}))};
 const isSignedUp=(job,who)=>job.signed.includes(who);
 const myNames=isParent?parentOptions.map(o=>o.label):[userName];
@@ -788,16 +793,20 @@ if(selectedHelp){
       {h.jobs.map((j,ji)=>{const jFull=j.signed.length>=j.n;const mySig=mySignedName(j);
       return<div key={j.id} className={`glass anim d${Math.min(ji+1,5)}`} style={{borderRadius:16,padding:14}}>
         <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:8}}>
-          <div style={{flex:1}}><h4 style={{fontSize:13,fontWeight:600}}>{j.name}</h4>{isAdmin&&j.p&&<span style={{fontSize:9,color:"var(--c1)",fontWeight:600}}>+{j.p} Pkt</span>}</div>
+          <div style={{flex:1}}><h4 style={{fontSize:13,fontWeight:600}}>{j.name}</h4><div style={{display:"flex",alignItems:"center",gap:6,marginTop:2}}>{isAdmin&&j.p&&<span style={{fontSize:9,color:"var(--c1)",fontWeight:600}}>+{j.p} Pkt</span>}{isStaff&&j.signed.length>0&&<span style={{fontSize:8,color:j.signed.filter(s=>isConfirmed(h.id,j.id,s)).length===j.signed.length?"var(--c1)":"rgba(255,255,255,.2)"}}>✓ {j.signed.filter(s=>isConfirmed(h.id,j.id,s)).length}/{j.signed.length} bestätigt</span>}</div></div>
           <span style={{fontSize:10,fontWeight:700,color:jFull?"#ff6b35":"var(--c2)",background:jFull?"rgba(255,107,53,.1)":"rgba(var(--c2r),.1)",padding:"3px 8px",borderRadius:8}}>{j.signed.length}/{j.n}</span>
         </div>
         <div style={{height:4,background:"rgba(255,255,255,.04)",borderRadius:3,overflow:"hidden",marginBottom:8}}>
           <div style={{height:"100%",borderRadius:3,width:`${(j.signed.length/j.n)*100}%`,background:jFull?"#ff6b35":"linear-gradient(90deg,var(--c2),var(--c3))",transition:"width .6s"}}/>
         </div>
-        {j.signed.length>0&&<div style={{display:"flex",flexWrap:"wrap",gap:6,marginBottom:8}}>
-          {j.signed.map((s,si)=><div key={si} style={{display:"flex",alignItems:"center",gap:5,padding:"3px 8px 3px 3px",borderRadius:8,background:"rgba(255,255,255,.03)",border:"1px solid rgba(255,255,255,.04)"}}>
-            <Av name={s} size={20}/><span style={{fontSize:10,color:"rgba(255,255,255,.5)",fontWeight:500}}>{s}</span>
-          </div>)}
+        {j.signed.length>0&&<div style={{display:"flex",flexDirection:"column",gap:4,marginBottom:8}}>
+          {j.signed.map((s,si)=>{const conf=isConfirmed(h.id,j.id,s);return<div key={si} style={{display:"flex",alignItems:"center",gap:6,padding:"5px 8px",borderRadius:10,background:conf?"rgba(var(--c1r),.06)":"rgba(255,255,255,.02)",border:conf?"1px solid rgba(var(--c1r),.12)":"1px solid rgba(255,255,255,.04)"}}>
+            <Av name={s} size={22}/>
+            <span style={{fontSize:11,color:conf?"var(--c1)":"rgba(255,255,255,.5)",fontWeight:500,flex:1}}>{s}</span>
+            {conf&&<span style={{fontSize:7,fontWeight:800,color:"var(--c1)",background:"rgba(var(--c1r),.12)",padding:"2px 5px",borderRadius:4,textTransform:"uppercase",letterSpacing:".08em"}}>Bestätigt</span>}
+            {isStaff&&!conf&&<button onClick={()=>doConfirm(h.id,j.id,s)} style={{padding:"3px 8px",borderRadius:6,fontSize:8,fontWeight:700,cursor:"pointer",border:"none",background:"rgba(var(--c1r),.1)",color:"var(--c1)"}}>✓ Bestätigen</button>}
+            {isStaff&&conf&&<button onClick={()=>doUnconfirm(h.id,j.id,s)} style={{padding:"3px 6px",borderRadius:6,fontSize:8,fontWeight:600,cursor:"pointer",border:"1px solid rgba(255,255,255,.06)",background:"rgba(255,255,255,.03)",color:"rgba(255,255,255,.2)"}}>↩</button>}
+          </div>})}
         </div>}
         {mySig?<button onClick={()=>doSignoff(h.id,j.id,mySig)} style={{width:"100%",padding:9,borderRadius:10,fontSize:10,fontWeight:700,cursor:"pointer",border:"1px solid rgba(var(--c1r),.15)",background:"rgba(var(--c1r),.08)",color:"var(--c1)",transition:"all .12s"}}>Abmelden{isParent&&<span style={{fontWeight:500,marginLeft:4}}>({mySig})</span>}</button>
         :!jFull?isParent?<button onClick={()=>setParentPicker({hId:h.id,jId:j.id})} style={{width:"100%",padding:9,borderRadius:10,fontSize:10,fontWeight:700,cursor:"pointer",border:"none",background:"rgba(var(--c2r),.1)",color:"var(--c2)",transition:"all .12s"}}>Anmelden</button>
