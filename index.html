@@ -152,27 +152,27 @@ const convos={
   ]
 };
 let hlpData=[
-  {id:1,tl:"Vereinsfest Aufbau",d:"Fr, 18. Apr",tm:"14–18h",loc:"Vereinsgelände",desc:"Aufbau der Infrastruktur für das Vereinsfest",p:4,jobs:[
-    {id:1,name:"Zelte aufstellen",n:4,signed:["Noah Brunner","Mia Keller"]},
-    {id:2,name:"Tische & Stühle",n:3,signed:["Thomas Meier"]},
-    {id:3,name:"Dekoration",n:3,signed:[]},
-    {id:4,name:"Technik / Strom",n:2,signed:["Coach Reto"]}
+  {id:1,tl:"Vereinsfest Aufbau",d:"Fr, 18. Apr",tm:"14–18h",loc:"Vereinsgelände",desc:"Aufbau der Infrastruktur für das Vereinsfest",jobs:[
+    {id:1,name:"Zelte aufstellen",n:4,p:4,signed:["Noah Brunner","Mia Keller"]},
+    {id:2,name:"Tische & Stühle",n:3,p:3,signed:["Thomas Meier"]},
+    {id:3,name:"Dekoration",n:3,p:2,signed:[]},
+    {id:4,name:"Technik / Strom",n:2,p:5,signed:["Coach Reto"]}
   ]},
-  {id:2,tl:"Barbetrieb",d:"Sa, 19. Apr",tm:"11–22h",loc:"Vereinsgelände",desc:"Bar- und Getränkeservice während dem Fest",p:8,jobs:[
-    {id:1,name:"Bar Schicht 1 (11-16h)",n:4,signed:["Elena Fischer","Tim Müller"]},
-    {id:2,name:"Bar Schicht 2 (16-22h)",n:4,signed:["Lea Schmid"]},
-    {id:3,name:"Einkauf / Nachschub",n:2,signed:[]},
-    {id:4,name:"Kasse",n:2,signed:["Sandra Keller"]}
+  {id:2,tl:"Barbetrieb",d:"Sa, 19. Apr",tm:"11–22h",loc:"Vereinsgelände",desc:"Bar- und Getränkeservice während dem Fest",jobs:[
+    {id:1,name:"Bar Schicht 1 (11-16h)",n:4,p:6,signed:["Elena Fischer","Tim Müller"]},
+    {id:2,name:"Bar Schicht 2 (16-22h)",n:4,p:6,signed:["Lea Schmid"]},
+    {id:3,name:"Einkauf / Nachschub",n:2,p:4,signed:[]},
+    {id:4,name:"Kasse",n:2,p:8,signed:["Sandra Keller"]}
   ]},
-  {id:3,tl:"Abbau",d:"So, 20. Apr",tm:"08–12h",loc:"Vereinsgelände",desc:"Abbau und Aufräumen nach dem Fest",p:4,jobs:[
-    {id:1,name:"Zelte abbauen",n:4,signed:[]},
-    {id:2,name:"Reinigung",n:4,signed:[]},
-    {id:3,name:"Entsorgung",n:2,signed:[]}
+  {id:3,tl:"Abbau",d:"So, 20. Apr",tm:"08–12h",loc:"Vereinsgelände",desc:"Abbau und Aufräumen nach dem Fest",jobs:[
+    {id:1,name:"Zelte abbauen",n:4,p:4,signed:[]},
+    {id:2,name:"Reinigung",n:4,p:3,signed:[]},
+    {id:3,name:"Entsorgung",n:2,p:4,signed:[]}
   ]},
-  {id:4,tl:"Kuchenverkauf",d:"So, 13. Apr",tm:"09–17h",loc:"Heerenschürli",desc:"Kuchen- und Getränkeverkauf am Turnier",p:6,jobs:[
-    {id:1,name:"Kuchen backen",n:4,signed:["Mia Keller","Elena Fischer","Sandra Keller","Thomas Meier"]},
-    {id:2,name:"Verkauf Vormittag",n:2,signed:["Lea Schmid","Noah Brunner"]},
-    {id:3,name:"Verkauf Nachmittag",n:2,signed:["Tim Müller","Coach Reto"]}
+  {id:4,tl:"Kuchenverkauf",d:"So, 13. Apr",tm:"09–17h",loc:"Heerenschürli",desc:"Kuchen- und Getränkeverkauf am Turnier",jobs:[
+    {id:1,name:"Kuchen backen",n:4,p:3,signed:["Mia Keller","Elena Fischer","Sandra Keller","Thomas Meier"]},
+    {id:2,name:"Verkauf Vormittag",n:2,p:5,signed:["Lea Schmid","Noah Brunner"]},
+    {id:3,name:"Verkauf Nachmittag",n:2,p:5,signed:["Tim Müller","Coach Reto"]}
   ]}
 ];
 const fins=[{id:1,d:"Mitgliederbeitrag 25/26",a:350,du:"30.06.26",s:"offen"},{id:2,d:"Trikot-Set U18",a:85,du:"15.04.26",s:"bezahlt"},{id:3,d:"Busse: Unentsch. Fehlen",a:20,du:"31.03.26",s:"offen"}];
@@ -683,8 +683,7 @@ const ShiftPopup=()=>{
   const[tm,setTm]=useState(editShift?.tm||"");
   const[loc,setLoc]=useState(editShift?.loc||"");
   const[desc,setDesc]=useState(editShift?.desc||"");
-  const[p,setP]=useState(editShift?.p||0);
-  const save=()=>{if(!tl.trim())return;if(isNew){const nw={id:nextId(helpers),tl,d,tm,loc,desc,p:Number(p),jobs:[]};setHelpers(prev=>[...prev,nw])}else{setHelpers(prev=>prev.map(h=>h.id===editShift.id?{...h,tl,d,tm,loc,desc,p:Number(p)}:h));if(selectedHelp&&selectedHelp.id===editShift.id)setSelectedHelp(prev=>({...prev,tl,d,tm,loc,desc,p:Number(p)}))}setEditShift(null)};
+  const save=()=>{if(!tl.trim())return;if(isNew){const nw={id:nextId(helpers),tl,d,tm,loc,desc,jobs:[]};setHelpers(prev=>[...prev,nw])}else{setHelpers(prev=>prev.map(h=>h.id===editShift.id?{...h,tl,d,tm,loc,desc}:h));if(selectedHelp&&selectedHelp.id===editShift.id)setSelectedHelp(prev=>({...prev,tl,d,tm,loc,desc}))}setEditShift(null)};
   return<div style={{position:"fixed",inset:0,zIndex:100,display:"flex",alignItems:"center",justifyContent:"center",padding:20}} onClick={()=>setEditShift(null)}>
     <div style={{position:"absolute",inset:0,background:"rgba(0,0,0,.6)",backdropFilter:"blur(8px)",WebkitBackdropFilter:"blur(8px)"}}/>
     <div onClick={e=>e.stopPropagation()} style={{position:"relative",width:"100%",maxWidth:340,maxHeight:"80vh",overflowY:"auto",borderRadius:20,background:"rgba(13,16,23,.75)",backdropFilter:"blur(40px)",WebkitBackdropFilter:"blur(40px)",border:"1px solid rgba(255,255,255,.1)",padding:20,animation:"slideUp .25s ease-out",boxShadow:"0 24px 64px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.08)"}}>
@@ -697,7 +696,7 @@ const ShiftPopup=()=>{
         </div>
         <div><label className="label">Ort</label><input value={loc} onChange={e=>setLoc(e.target.value)} placeholder="Vereinsgelände"/></div>
         <div><label className="label">Beschreibung</label><textarea value={desc} onChange={e=>setDesc(e.target.value)} placeholder="Details zum Einsatz..." style={{width:"100%",minHeight:60,background:"rgba(255,255,255,.04)",border:"1px solid rgba(255,255,255,.06)",borderRadius:12,padding:"10px 12px",color:"#fff",fontSize:13,fontFamily:"'Outfit',sans-serif",outline:"none",resize:"vertical"}}/></div>
-        <div><label className="label">Punkte</label><input type="number" value={p} onChange={e=>setP(e.target.value)} placeholder="4"/></div>
+        <div style={{borderRadius:12,padding:10,background:"rgba(var(--c2r),.04)",border:"1px solid rgba(var(--c2r),.08)"}}><p style={{fontSize:10,color:"rgba(255,255,255,.3)"}}>Punkte werden pro Job vergeben, nicht pro Einsatz.</p></div>
       </div>
       <div style={{display:"flex",gap:8,marginTop:16}}>
         <button onClick={()=>setEditShift(null)} style={{flex:1,padding:11,borderRadius:12,fontSize:12,fontWeight:600,cursor:"pointer",border:"1px solid rgba(255,255,255,.06)",background:"rgba(255,255,255,.03)",color:"rgba(255,255,255,.3)"}}>Abbrechen</button>
@@ -712,14 +711,18 @@ const JobPopup=()=>{
   const isNew=!editJob?.jid;
   const[name,setName]=useState(editJob?.name||"");
   const[n,setN]=useState(editJob?.n||2);
-  const save=()=>{if(!name.trim())return;const hId=editJob.hId;if(isNew){const newJob={id:nextId((helpers.find(h=>h.id===hId)||{jobs:[]}).jobs),name,n:Number(n),signed:[]};setHelpers(prev=>prev.map(h=>h.id===hId?{...h,jobs:[...h.jobs,newJob]}:h));if(selectedHelp&&selectedHelp.id===hId)setSelectedHelp(prev=>({...prev,jobs:[...prev.jobs,newJob]}))}else{setHelpers(prev=>prev.map(h=>h.id===hId?{...h,jobs:h.jobs.map(j=>j.id===editJob.jid?{...j,name,n:Number(n)}:j)}:h));if(selectedHelp&&selectedHelp.id===hId)setSelectedHelp(prev=>({...prev,jobs:prev.jobs.map(j=>j.id===editJob.jid?{...j,name,n:Number(n)}:j)}))}setEditJob(null)};
+  const[pts,setPts]=useState(editJob?.p||3);
+  const save=()=>{if(!name.trim())return;const hId=editJob.hId;if(isNew){const newJob={id:nextId((helpers.find(h=>h.id===hId)||{jobs:[]}).jobs),name,n:Number(n),p:Number(pts),signed:[]};setHelpers(prev=>prev.map(h=>h.id===hId?{...h,jobs:[...h.jobs,newJob]}:h));if(selectedHelp&&selectedHelp.id===hId)setSelectedHelp(prev=>({...prev,jobs:[...prev.jobs,newJob]}))}else{setHelpers(prev=>prev.map(h=>h.id===hId?{...h,jobs:h.jobs.map(j=>j.id===editJob.jid?{...j,name,n:Number(n),p:Number(pts)}:j)}:h));if(selectedHelp&&selectedHelp.id===hId)setSelectedHelp(prev=>({...prev,jobs:prev.jobs.map(j=>j.id===editJob.jid?{...j,name,n:Number(n),p:Number(pts)}:j)}))}setEditJob(null)};
   return<div style={{position:"fixed",inset:0,zIndex:100,display:"flex",alignItems:"center",justifyContent:"center",padding:20}} onClick={()=>setEditJob(null)}>
     <div style={{position:"absolute",inset:0,background:"rgba(0,0,0,.6)",backdropFilter:"blur(8px)",WebkitBackdropFilter:"blur(8px)"}}/>
     <div onClick={e=>e.stopPropagation()} style={{position:"relative",width:"100%",maxWidth:340,borderRadius:20,background:"rgba(13,16,23,.75)",backdropFilter:"blur(40px)",WebkitBackdropFilter:"blur(40px)",border:"1px solid rgba(255,255,255,.1)",padding:20,animation:"slideUp .25s ease-out",boxShadow:"0 24px 64px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.08)"}}>
       <h3 style={{fontSize:16,fontWeight:800,marginBottom:14}}>{isNew?"Job hinzufügen":"Job bearbeiten"}</h3>
       <div style={{display:"flex",flexDirection:"column",gap:12}}>
         <div><label className="label">Job-Name</label><input value={name} onChange={e=>setName(e.target.value)} placeholder="z.B. Zelte aufstellen"/></div>
-        <div><label className="label">Anzahl Helfer benötigt</label><input type="number" value={n} onChange={e=>setN(e.target.value)} placeholder="4"/></div>
+        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8}}>
+          <div><label className="label">Helfer benötigt</label><input type="number" value={n} onChange={e=>setN(e.target.value)} placeholder="4"/></div>
+          <div><label className="label">Punkte</label><input type="number" value={pts} onChange={e=>setPts(e.target.value)} placeholder="3"/></div>
+        </div>
       </div>
       <div style={{display:"flex",gap:8,marginTop:16}}>
         <button onClick={()=>setEditJob(null)} style={{flex:1,padding:11,borderRadius:12,fontSize:12,fontWeight:600,cursor:"pointer",border:"1px solid rgba(255,255,255,.06)",background:"rgba(255,255,255,.03)",color:"rgba(255,255,255,.3)"}}>Abbrechen</button>
@@ -766,7 +769,7 @@ if(selectedHelp){
         </div>
         <div style={{display:"flex",flexDirection:"column",alignItems:"center",gap:6}}>
           <Ring val={totalS} max={totalN} size={60} sw={4} color={full?"#ff6b35":"var(--c2)"}><span style={{fontSize:14,fontWeight:900}}>{totalS}</span></Ring>
-          <span className="badge" style={{background:"rgba(var(--c2r),.1)",border:"none",color:"var(--c2)"}}>+{h.p} Pkt</span>
+          <span className="badge" style={{background:"rgba(var(--c2r),.1)",border:"none",color:"var(--c2)"}}>+{h.jobs.reduce((a,j)=>a+(j.p||0),0)} Pkt total</span>
         </div>
       </div>
     </div>
@@ -785,7 +788,7 @@ if(selectedHelp){
       {h.jobs.map((j,ji)=>{const jFull=j.signed.length>=j.n;const mySig=mySignedName(j);
       return<div key={j.id} className={`glass anim d${Math.min(ji+1,5)}`} style={{borderRadius:16,padding:14}}>
         <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:8}}>
-          <h4 style={{fontSize:13,fontWeight:600,flex:1}}>{j.name}</h4>
+          <div style={{flex:1}}><h4 style={{fontSize:13,fontWeight:600}}>{j.name}</h4>{j.p&&<span style={{fontSize:9,color:"var(--c1)",fontWeight:600}}>+{j.p} Pkt</span>}</div>
           <span style={{fontSize:10,fontWeight:700,color:jFull?"#ff6b35":"var(--c2)",background:jFull?"rgba(255,107,53,.1)":"rgba(var(--c2r),.1)",padding:"3px 8px",borderRadius:8}}>{j.signed.length}/{j.n}</span>
         </div>
         <div style={{height:4,background:"rgba(255,255,255,.04)",borderRadius:3,overflow:"hidden",marginBottom:8}}>
@@ -801,7 +804,7 @@ if(selectedHelp){
         :<button onClick={()=>doSignup(h.id,j.id,userName)} style={{width:"100%",padding:9,borderRadius:10,fontSize:10,fontWeight:700,cursor:"pointer",border:"none",background:"rgba(var(--c2r),.1)",color:"var(--c2)",transition:"all .12s"}}>Anmelden</button>
         :<div style={{width:"100%",padding:9,borderRadius:10,fontSize:10,fontWeight:700,textAlign:"center",background:"rgba(255,255,255,.03)",color:"rgba(255,255,255,.15)"}}>Voll</div>}
         {isAdmin&&<div style={{display:"flex",gap:6,marginTop:8}}>
-          <button onClick={()=>setEditJob({hId:h.id,jid:j.id,name:j.name,n:j.n})} style={{flex:1,padding:7,borderRadius:8,fontSize:9,fontWeight:600,cursor:"pointer",border:"1px solid rgba(255,255,255,.06)",background:"rgba(255,255,255,.03)",color:"rgba(255,255,255,.25)",display:"flex",alignItems:"center",justifyContent:"center",gap:3}}><Ic n="pencil" s={10} c="rgba(255,255,255,.25)"/> Bearbeiten</button>
+          <button onClick={()=>setEditJob({hId:h.id,jid:j.id,name:j.name,n:j.n,p:j.p||0})} style={{flex:1,padding:7,borderRadius:8,fontSize:9,fontWeight:600,cursor:"pointer",border:"1px solid rgba(255,255,255,.06)",background:"rgba(255,255,255,.03)",color:"rgba(255,255,255,.25)",display:"flex",alignItems:"center",justifyContent:"center",gap:3}}><Ic n="pencil" s={10} c="rgba(255,255,255,.25)"/> Bearbeiten</button>
           <button onClick={()=>setDeleteJobConfirm({hId:h.id,jId:j.id,name:j.name})} style={{padding:"7px 10px",borderRadius:8,fontSize:9,fontWeight:600,cursor:"pointer",border:"1px solid rgba(239,68,68,.1)",background:"rgba(239,68,68,.04)",color:"rgba(239,68,68,.4)",display:"flex",alignItems:"center",justifyContent:"center"}}><Ic n="trash" s={10} c="rgba(239,68,68,.4)"/></button>
         </div>}
       </div>})}
@@ -840,7 +843,7 @@ return<div className="screen" style={{padding:`0 ${px}px 20px`}}>
           <h4 style={{fontSize:13,fontWeight:600}}>{h.tl}</h4>
           <div style={{fontSize:10,color:"rgba(255,255,255,.25)",fontWeight:300,marginTop:3}}>{h.d} · {h.tm}</div>
         </div>
-        <span className="badge" style={{background:"rgba(var(--c2r),.1)",border:"1px solid rgba(var(--c2r),.2)",color:"var(--c2)",flexShrink:0}}>+{h.p}</span>
+        <span className="badge" style={{background:"rgba(var(--c2r),.1)",border:"1px solid rgba(var(--c2r),.2)",color:"var(--c2)",flexShrink:0}}>+{h.jobs.reduce((a,j)=>a+(j.p||0),0)} Pkt</span>
       </div>
       <div style={{display:"flex",alignItems:"center",gap:12,marginTop:10}}>
         <Ring val={totalS} max={totalN} size={38} sw={3} color={full?"#ff6b35":"var(--c2)"}><span style={{fontSize:8,fontWeight:700,color:"rgba(255,255,255,.5)"}}>{totalS}</span></Ring>
