@@ -864,6 +864,109 @@ return<div className="screen" style={{padding:`0 ${px}px 20px`}}>
 </div></div></div>}
 </div>};
 
+const AbsenceSection=()=>{
+const[absences,setAbsences]=useState([
+  {id:1,grund:"Verletzung",detail:"Knöchelverletzung",von:"2026-04-01",bis:"2026-04-15",bemerkung:"",active:true}
+]);
+const[showAbsPopup,setShowAbsPopup]=useState(false);
+const[absGrund,setAbsGrund]=useState("Krankheit");
+const[absVon,setAbsVon]=useState("");
+const[absBis,setAbsBis]=useState("");
+const[absBemerkung,setAbsBemerkung]=useState("");
+const[absSaved,setAbsSaved]=useState(false);
+
+const fmtDate=(d)=>{if(!d)return"–";const p=d.split("-");if(p.length!==3)return d;return`${p[2]}.${p[1]}.${p[0]}`};
+const isActive=(a)=>{const now=new Date();const bis=new Date(a.bis+"T23:59:59");return bis>=now};
+const absIcons={Krankheit:"injury",Verletzung:"injury",Ferien:"star",Privat:"profile",Anderes:"bell"};
+const absColors={Krankheit:"#ff6b35",Verletzung:"#ffd700",Ferien:"var(--c2)",Privat:"var(--c3)",Anderes:"rgba(255,255,255,.4)"};
+
+const handleMelden=()=>{
+  if(!absVon||!absBis)return;
+  const newAbs={id:Date.now(),grund:absGrund,detail:absGrund,von:absVon,bis:absBis,bemerkung:absBemerkung,active:true};
+  setAbsences(p=>[newAbs,...p]);
+  setAbsSaved(true);
+  setTimeout(()=>{setAbsSaved(false);setShowAbsPopup(false);setAbsGrund("Krankheit");setAbsVon("");setAbsBis("");setAbsBemerkung("")},1800);
+};
+
+const activeAbs=absences.filter(a=>isActive(a));
+const pastAbs=absences.filter(a=>!isActive(a));
+
+return<div className="anim d3 section">
+  <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:10}}>
+    <h3 className="section-title" style={{marginBottom:0}}>Abwesenheiten</h3>
+    <button onClick={()=>setShowAbsPopup(true)} style={{padding:"6px 12px",borderRadius:8,fontSize:9,fontWeight:700,cursor:"pointer",border:"none",background:"rgba(var(--c2r),.1)",color:"var(--c2)",display:"flex",alignItems:"center",gap:4,transition:"all .12s"}}><Ic n="plus" s={10} c="var(--c2)"/> Melden</button>
+  </div>
+
+  {activeAbs.length>0&&<div style={{display:"flex",flexDirection:"column",gap:6,marginBottom:10}}>
+    {activeAbs.map(a=>{const col=absColors[a.grund]||"#ffd700";return<div key={a.id} style={{borderRadius:14,padding:12,background:`${typeof col==="string"&&col.startsWith("#")?col+"08":"rgba(255,215,0,.04)"}`,border:`1px solid ${typeof col==="string"&&col.startsWith("#")?col+"18":"rgba(255,215,0,.1)"}`,borderLeft:`3px solid ${col}`}}>
+      <div style={{display:"flex",alignItems:"center",gap:8}}>
+        <div style={{width:30,height:30,borderRadius:9,background:`${typeof col==="string"&&col.startsWith("#")?col+"15":"rgba(var(--c2r),.1)"}`,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}><Ic n={absIcons[a.grund]||"bell"} s={14} c={col}/></div>
+        <div style={{flex:1,minWidth:0}}>
+          <div style={{display:"flex",alignItems:"center",gap:6,marginBottom:2}}>
+            <span style={{fontSize:12,color:col,fontWeight:600}}>{a.detail||a.grund}</span>
+            <span style={{fontSize:7,fontWeight:800,color:"#06080f",background:col,padding:"1px 5px",borderRadius:4,textTransform:"uppercase",letterSpacing:".08em"}}>Aktiv</span>
+          </div>
+          <div style={{fontSize:10,color:"rgba(255,255,255,.3)",fontWeight:300}}>{fmtDate(a.von)} – {fmtDate(a.bis)}</div>
+          {a.bemerkung&&<div style={{fontSize:10,color:"rgba(255,255,255,.2)",fontWeight:300,marginTop:3,fontStyle:"italic"}}>{a.bemerkung}</div>}
+        </div>
+      </div>
+    </div>})}
+  </div>}
+
+  {pastAbs.length>0&&<div style={{display:"flex",flexDirection:"column",gap:6,marginBottom:10}}>
+    <div style={{fontSize:8,fontWeight:700,color:"rgba(255,255,255,.15)",textTransform:"uppercase",letterSpacing:".12em",marginBottom:2}}>Vergangene</div>
+    {pastAbs.map(a=><div key={a.id} style={{borderRadius:14,padding:10,background:"rgba(255,255,255,.02)",border:"1px solid rgba(255,255,255,.04)",opacity:.5}}>
+      <div style={{display:"flex",alignItems:"center",gap:8}}>
+        <div style={{width:26,height:26,borderRadius:8,background:"rgba(255,255,255,.04)",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}><Ic n={absIcons[a.grund]||"bell"} s={12} c="rgba(255,255,255,.25)"/></div>
+        <div style={{flex:1,minWidth:0}}>
+          <span style={{fontSize:11,color:"rgba(255,255,255,.4)",fontWeight:500}}>{a.detail||a.grund}</span>
+          <div style={{fontSize:9,color:"rgba(255,255,255,.15)",fontWeight:300}}>{fmtDate(a.von)} – {fmtDate(a.bis)}</div>
+        </div>
+      </div>
+    </div>)}
+  </div>}
+
+  {absences.length===0&&<div className="glass card" style={{padding:14,textAlign:"center"}}><Ic n="check" s={16} c="var(--c1)"/><p style={{fontSize:12,color:"rgba(255,255,255,.3)",fontWeight:300,marginTop:4}}>Keine Abwesenheiten</p></div>}
+
+  <div style={{borderRadius:12,padding:10,background:"rgba(var(--c2r),.03)",border:"1px solid rgba(var(--c2r),.06)",marginTop:6}}>
+    <div style={{display:"flex",alignItems:"center",gap:6}}>
+      <Ic n="shield" s={12} c="rgba(var(--c2r),.4)"/>
+      <p style={{fontSize:10,color:"rgba(255,255,255,.25)",fontWeight:300,lineHeight:1.5}}>Gemeldete Abwesenheiten werden den Trainern mitgeteilt. Während registrierter Abwesenheit fallen keine Bussen an.</p>
+    </div>
+  </div>
+
+  {showAbsPopup&&<div style={{position:"fixed",inset:0,zIndex:100,display:"flex",alignItems:"center",justifyContent:"center",padding:20}} onClick={()=>{if(!absSaved){setShowAbsPopup(false)}}}>
+    <div style={{position:"absolute",inset:0,background:"rgba(0,0,0,.6)",backdropFilter:"blur(8px)",WebkitBackdropFilter:"blur(8px)"}}/>
+    <div onClick={e=>e.stopPropagation()} style={{position:"relative",width:"100%",maxWidth:340,borderRadius:20,background:"rgba(13,16,23,.75)",backdropFilter:"blur(40px)",WebkitBackdropFilter:"blur(40px)",border:"1px solid rgba(255,255,255,.1)",padding:20,animation:"slideUp .25s ease-out",boxShadow:"0 24px 64px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.08)"}}>
+      {absSaved?<div style={{textAlign:"center",padding:"20px 0"}}>
+        <div style={{width:48,height:48,borderRadius:14,background:"rgba(var(--c1r),.1)",display:"flex",alignItems:"center",justifyContent:"center",margin:"0 auto 12px"}}><Ic n="check" s={22} c="var(--c1)"/></div>
+        <h3 style={{fontSize:16,fontWeight:800,marginBottom:4}}>Abwesenheit gemeldet</h3>
+        <p style={{fontSize:12,color:"rgba(255,255,255,.35)",fontWeight:300,lineHeight:1.5}}>Deine Trainer wurden benachrichtigt. Während dieser Abwesenheit werden keine Bussen erhoben.</p>
+      </div>:<>
+      <h3 style={{fontSize:16,fontWeight:800,marginBottom:4}}>Abwesenheit melden</h3>
+      <p style={{fontSize:11,color:"rgba(255,255,255,.35)",fontWeight:300,marginBottom:16}}>Trainer werden automatisch informiert</p>
+      <div style={{display:"flex",flexDirection:"column",gap:12}}>
+        <div>
+          <label className="label">Grund</label>
+          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:4}}>
+            {["Krankheit","Verletzung","Ferien","Privat","Anderes"].map(g=>{const col=absColors[g]||"rgba(255,255,255,.4)";return<button key={g} onClick={()=>setAbsGrund(g)} style={{padding:"8px 0",borderRadius:8,fontSize:9,fontWeight:700,textTransform:"uppercase",cursor:"pointer",background:absGrund===g?`${typeof col==="string"&&col.startsWith("#")?col+"15":"rgba(var(--c2r),.1)"}`:("rgba(255,255,255,.03)"),border:absGrund===g?`1px solid ${typeof col==="string"&&col.startsWith("#")?col+"40":"rgba(var(--c2r),.25)"}`:"1px solid rgba(255,255,255,.06)",color:absGrund===g?col:"rgba(255,255,255,.25)",transition:"all .12s"}}>{g}</button>})}
+          </div>
+        </div>
+        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8}}>
+          <div><label className="label">Von</label><input type="date" value={absVon} onChange={e=>setAbsVon(e.target.value)}/></div>
+          <div><label className="label">Bis</label><input type="date" value={absBis} onChange={e=>setAbsBis(e.target.value)}/></div>
+        </div>
+        <div><label className="label">Bemerkung (optional)</label><textarea value={absBemerkung} onChange={e=>setAbsBemerkung(e.target.value)} placeholder="z.B. Details zur Verletzung..." style={{width:"100%",minHeight:60,background:"rgba(255,255,255,.04)",border:"1px solid rgba(255,255,255,.06)",borderRadius:12,padding:"10px 12px",color:"#fff",fontSize:13,fontFamily:"'Outfit',sans-serif",outline:"none",resize:"vertical"}}/></div>
+        <div style={{display:"flex",gap:8}}>
+          <button onClick={()=>setShowAbsPopup(false)} style={{flex:1,padding:11,borderRadius:12,fontSize:12,fontWeight:600,cursor:"pointer",border:"1px solid rgba(255,255,255,.06)",background:"rgba(255,255,255,.03)",color:"rgba(255,255,255,.3)"}}>Abbrechen</button>
+          <button onClick={handleMelden} style={{flex:1,padding:11,borderRadius:12,fontSize:12,fontWeight:700,cursor:"pointer",border:"none",background:(absVon&&absBis)?"linear-gradient(135deg,var(--c1),var(--c2))":"rgba(255,255,255,.04)",color:(absVon&&absBis)?"#06080f":"rgba(255,255,255,.15)",transition:"all .15s"}}>Melden</button>
+        </div>
+      </div>
+      </>}
+    </div>
+  </div>}
+</div>};
+
 const Profile=({onBack,role,nav})=>{const isParent=role==="elternteil";const myFines=memberFines.filter(f=>f.member==="Luca Meier");const openFines=myFines.filter(f=>f.status==="offen");const totalOpen=openFines.reduce((a,f)=>a+f.amount,0);
 const[children,setChildren]=useState(parentUser.children.filter(c=>c.linked));
 const[unlinkPopup,setUnlinkPopup]=useState(null);
@@ -910,7 +1013,7 @@ return<div className="screen" style={{padding:`0 ${px}px 20px`}}><Back onClick={
     <span style={{color:"rgba(255,255,255,.1)",fontSize:14}}>›</span>
   </div>
 </div>
-<div className="anim d3 section"><h3 className="section-title">Abwesenheiten</h3><div style={{borderRadius:14,padding:12,background:"rgba(255,215,0,.04)",border:"1px solid rgba(255,215,0,.1)"}}><div style={{display:"flex",alignItems:"center",gap:6,marginBottom:3}}><Ic n="injury" s={13} c="#ffd700"/><span style={{fontSize:13,color:"#ffd700",fontWeight:500}}>Knöchelverletzung</span></div><div style={{fontSize:10,color:"rgba(255,255,255,.25)",fontWeight:300}}>Rückkehr: ca. 15. April 2026</div></div></div><button className="glass anim d4" style={{width:"100%",padding:12,borderRadius:12,color:"rgba(255,255,255,.3)",fontSize:12,fontWeight:500,display:"flex",alignItems:"center",justifyContent:"center",gap:6,cursor:"pointer",background:"rgba(255,255,255,.03)",border:"1px solid rgba(255,255,255,.06)"}}><Ic n="logout" s={14}/> Abmelden</button></div>};
+<AbsenceSection/><button className="glass anim d4" style={{width:"100%",padding:12,borderRadius:12,color:"rgba(255,255,255,.3)",fontSize:12,fontWeight:500,display:"flex",alignItems:"center",justifyContent:"center",gap:6,cursor:"pointer",background:"rgba(255,255,255,.03)",border:"1px solid rgba(255,255,255,.06)"}}><Ic n="logout" s={14}/> Abmelden</button></div>};
 
 const news=[
   {id:1,from:"Coach Reto",role:"trainer",t:"Training morgen findet in Halle 2 statt (nicht Halle 3)!",date:"31. Mär",time:"15:30"},
