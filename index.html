@@ -549,12 +549,14 @@ const CreateEv=({onBack,role})=>{const[rec,setRec]=useState(false);const[et,setE
 
 const Rankings=()=><div className="screen" style={{padding:`0 ${px}px 20px`}}><h2 className="anim" style={{fontSize:20,fontWeight:800,marginBottom:3}}>Rangliste</h2><p className="anim d1" style={{fontSize:11,color:"rgba(255,255,255,.25)",fontWeight:300,marginBottom:18}}>Saison 25/26 · Sportler/in des Jahres</p><div className="anim d2 section" style={{display:"flex",alignItems:"flex-end",justifyContent:"center",gap:8}}>{[ranks[1],ranks[0],ranks[2]].map((r,i)=>{const h=[85,115,70],m=["🥈","🥇","🥉"],c=["#c0c0c0","#ffd700","#cd7f32"],isG=i===1;return<div key={r.n} style={{display:"flex",flexDirection:"column",alignItems:"center",animation:isG?"float 3s ease-in-out infinite":"none"}}><span style={{fontSize:20,marginBottom:6}}>{m[i]}</span><Av name={r.n} size={isG?44:36} glow={isG} ring/><span style={{fontSize:10,color:"rgba(255,255,255,.6)",fontWeight:600,marginTop:8}}>{r.n.split(" ")[0]}</span><span className="gt" style={{fontSize:16,fontWeight:900}}>{r.p}</span><div style={{width:64,borderRadius:"12px 12px 0 0",marginTop:6,height:h[i],background:`linear-gradient(180deg,${c[i]}12,transparent)`,borderTop:`2px solid ${c[i]}35`}}/></div>})}</div><div style={{display:"flex",flexDirection:"column",gap:6}}>{ranks.map((r,i)=><div key={r.r} className={`glass card anim d${Math.min(i+1,5)}`} style={{display:"flex",alignItems:"center",gap:10,padding:10,...(r.me?{background:"rgba(var(--c2r),.04)",borderColor:"rgba(var(--c2r),.12)"}:{})}}><span className={r.r<=3?"gt":""} style={{width:24,textAlign:"center",fontWeight:900,fontSize:13,...(r.r>3?{color:"rgba(255,255,255,.2)"}:{})}}>{r.r}</span><Av name={r.n} size={30}/><div style={{flex:1,minWidth:0}}><div style={{fontSize:13,color:"rgba(255,255,255,.8)",fontWeight:500,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{r.n} {r.me&&<span style={{color:"var(--c2)",fontSize:9}}>(Du)</span>}</div><div style={{fontSize:9,color:"rgba(255,255,255,.2)",fontWeight:300}}>{r.t} · {r.a}%</div></div><span className="mono" style={{fontSize:12,fontWeight:900,color:"rgba(255,255,255,.5)"}}>{r.p}</span></div>)}</div></div>;
 
-const Chat=({role,trainerInbox=[]})=>{const isStaff=role==="trainer"||role==="vorstand"||role==="admin";const isParent=role==="elternteil";
-const[openChat,setOpenChat]=useState(null);const[inp,setInp]=useState("");const[localMsgs,setLocalMsgs]=useState({});
+const Chat=({role,trainerInbox=[]})=>{const isStaff=role==="trainer"||role==="vorstand"||role==="admin";const isParent=role==="elternteil";const canCreate=isStaff;
+const[openChat,setOpenChat]=useState(null);const[inp,setInp]=useState("");const[localMsgs,setLocalMsgs]=useState({});const[newChats,setNewChats]=useState([]);const[showNewChat,setShowNewChat]=useState(false);const[searchNew,setSearchNew]=useState("");
 const myConvos=isParent?convos.elternteil:isStaff?convos.trainer:convos.spieler;
-const allConvos=[...trainerInbox.map(m=>({id:"abm_"+m.id,name:m.from,role:"spieler",last:m.t,tm:m.time,unread:1,isAbmeldung:true,event:m.event,msgs:[{f:m.from,t:m.t,tm:m.time}]})),...myConvos];
+const allConvos=[...trainerInbox.map(m=>({id:"abm_"+m.id,name:m.from,role:"spieler",last:m.t,tm:m.time,unread:1,isAbmeldung:true,event:m.event,msgs:[{f:m.from,t:m.t,tm:m.time}]})),...newChats,...myConvos];
 const getMsgs=(c)=>[...(c.msgs||[]),...(localMsgs[c.id]||[])];
 const sendMsg=()=>{if(!inp.trim()||!openChat)return;const m={f:isParent?"Thomas M. (Elternteil)":isStaff?"Coach Reto":"Luca",t:inp.trim(),tm:new Date().toLocaleTimeString("de-CH",{hour:"2-digit",minute:"2-digit"}),me:true};setLocalMsgs(p=>({...p,[openChat.id]:[...(p[openChat.id]||[]),m]}));setInp("")};
+const startNewChat=(member)=>{const existing=allConvos.find(c=>c.name===member.n);if(existing){setOpenChat(existing);setShowNewChat(false);return}const nc={id:"new_"+member.id,name:member.n,role:member.rl,last:"",tm:"Jetzt",unread:0,msgs:[]};setNewChats(p=>[nc,...p]);setOpenChat(nc);setShowNewChat(false)};
+const availableMembers=mems.filter(m=>{const already=allConvos.some(c=>c.name===m.n);return!already&&m.n!==(isStaff?"Coach Reto":"Luca Meier")}).filter(m=>!searchNew||m.n.toLowerCase().includes(searchNew.toLowerCase()));
 
 if(openChat){const msgs=getMsgs(openChat);return<div className="screen" style={{padding:`0 ${px}px 20px`,display:"flex",flexDirection:"column",minHeight:"calc(100vh - 180px)"}}>
   <button onClick={()=>setOpenChat(null)} style={{display:"flex",alignItems:"center",gap:6,color:"rgba(255,255,255,.25)",background:"none",border:"none",cursor:"pointer",marginBottom:12,fontSize:13,fontWeight:300,padding:0}}><Ic n="back" s={16}/> Nachrichten</button>
@@ -579,8 +581,12 @@ if(openChat){const msgs=getMsgs(openChat);return<div className="screen" style={{
 </div>}
 
 return<div className="screen" style={{padding:`0 ${px}px 20px`}}>
-  <h2 className="anim" style={{fontSize:20,fontWeight:800,marginBottom:3}}>Nachrichten</h2>
-  <p className="anim d1" style={{fontSize:11,color:"rgba(255,255,255,.25)",fontWeight:300,marginBottom:16}}>Privat</p>
+  <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:3}}>
+    <h2 className="anim" style={{fontSize:20,fontWeight:800}}>Nachrichten</h2>
+    {canCreate&&<button onClick={()=>{setSearchNew("");setShowNewChat(true)}} className="ag aglow" style={{width:34,height:34,borderRadius:10,border:"none",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}}><Ic n="plus" s={15} c="#06080f"/></button>}
+  </div>
+  <p className="anim d1" style={{fontSize:11,color:"rgba(255,255,255,.25)",fontWeight:300,marginBottom:16}}>Privat{!canCreate&&" · Antworten auf bestehende Chats"}</p>
+  {allConvos.length===0&&<div className="glass card" style={{padding:20,textAlign:"center"}}><Ic n="chat" s={24} c="rgba(255,255,255,.1)"/><p style={{fontSize:12,color:"rgba(255,255,255,.2)",fontWeight:300,marginTop:8}}>Noch keine Nachrichten</p></div>}
   <div style={{display:"flex",flexDirection:"column",gap:6}}>
     {allConvos.map((c,i)=><div key={c.id} onClick={()=>setOpenChat(c)} className={`glass card anim d${Math.min(i+1,5)}`} style={{display:"flex",alignItems:"center",gap:10,padding:12,cursor:"pointer",...(c.isAbmeldung?{borderColor:"rgba(255,107,53,.15)"}:{})}}>
       <div style={{position:"relative"}}><Av name={c.name} size={38}/>
@@ -592,10 +598,27 @@ return<div className="screen" style={{padding:`0 ${px}px 20px`}}>
           <span className="mono" style={{fontSize:8,color:"rgba(255,255,255,.15)",flexShrink:0}}>{c.tm}</span>
         </div>
         {c.isAbmeldung&&<span style={{fontSize:8,fontWeight:700,color:"#ff6b35",marginBottom:2,display:"block"}}>Abmeldung · {c.event}</span>}
-        <p style={{fontSize:11,color:c.unread>0?"rgba(255,255,255,.5)":"rgba(255,255,255,.25)",fontWeight:c.unread>0?500:300,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{c.last}</p>
+        <p style={{fontSize:11,color:c.unread>0?"rgba(255,255,255,.5)":"rgba(255,255,255,.25)",fontWeight:c.unread>0?500:300,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{c.last||"Chat starten..."}</p>
       </div>
     </div>)}
   </div>
+
+  {showNewChat&&<div style={{position:"fixed",inset:0,zIndex:100,display:"flex",alignItems:"flex-end",justifyContent:"center"}} onClick={()=>setShowNewChat(false)}>
+    <div style={{position:"absolute",inset:0,background:"rgba(0,0,0,.6)",backdropFilter:"blur(8px)",WebkitBackdropFilter:"blur(8px)"}}/>
+    <div onClick={e=>e.stopPropagation()} style={{position:"relative",width:"100%",maxWidth:390,maxHeight:"70vh",borderRadius:"24px 24px 0 0",background:"rgba(13,16,23,.85)",backdropFilter:"blur(40px)",WebkitBackdropFilter:"blur(40px)",border:"1px solid rgba(255,255,255,.1)",borderBottom:"none",display:"flex",flexDirection:"column",animation:"slideUp .25s ease-out",boxShadow:"0 -10px 40px rgba(0,0,0,.3)"}}>
+      <div style={{padding:"18px 18px 12px",borderBottom:"1px solid rgba(255,255,255,.04)"}}>
+        <h3 style={{fontSize:16,fontWeight:800,marginBottom:10}}>Neuer Chat</h3>
+        <input value={searchNew} onChange={e=>setSearchNew(e.target.value)} placeholder="Mitglied suchen..." style={{width:"100%"}}/>
+      </div>
+      <div style={{flex:1,overflowY:"auto",padding:"8px 18px 18px"}}>
+        {availableMembers.map(m=><div key={m.id} onClick={()=>startNewChat(m)} className="glass" style={{display:"flex",alignItems:"center",gap:10,padding:"10px 12px",borderRadius:12,cursor:"pointer",marginBottom:6}}>
+          <Av name={m.n} size={32}/>
+          <div><div style={{fontSize:13,fontWeight:500,color:"rgba(255,255,255,.7)"}}>{m.n}</div><div style={{fontSize:9,color:"rgba(255,255,255,.25)",marginTop:1}}>{m.rl}{m.tm&&m.tm!=="–"?" · "+m.tm:""}</div></div>
+        </div>)}
+        {availableMembers.length===0&&<p style={{textAlign:"center",color:"rgba(255,255,255,.15)",fontSize:12,padding:20}}>Keine weiteren Mitglieder</p>}
+      </div>
+    </div>
+  </div>}
 </div>};
 
 const Helpers=({role})=>{const isParent=role==="elternteil";const[signupFor,setSignupFor]=useState("self");const[signedUp,setSignedUp]=useState({});
