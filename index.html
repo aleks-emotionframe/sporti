@@ -185,7 +185,26 @@ const confirmAbsage=()=>{if(!absReason.trim())return;if(isParent&&absChild){setC
 const soonEvts=evts.filter(e=>{const d=parseEvDate(e);const now=new Date();const diff=d-now;return diff>0&&diff<3*24*60*60*1000});
 
 return<div className="screen" style={{padding:`0 ${px}px 20px`}}>
-  <div className="anim section" style={{display:"flex",alignItems:"center",justifyContent:"space-between"}}><div><h2 style={{fontSize:20,fontWeight:800,letterSpacing:"-.01em",marginBottom:3}}>Hallo, {isParent?parentUser.name.split(" ")[0]:U.name.split(" ")[0]} <span style={{display:"inline-block",animation:"float 2s ease-in-out infinite"}}>👋</span></h2><p style={{color:"rgba(255,255,255,.35)",fontSize:12,fontWeight:300}}>{isParent?"Elternteil · "+linkedChildren.map(c=>c.name.split(" ")[0]).join(", "):U.team+" · "+U.role}</p></div><div style={{cursor:"pointer"}} onClick={()=>nav("profile")}><Av name={isParent?parentUser.name:U.name} size={40} glow ring/></div></div>
+  {(()=>{const showVibe=!isStaff&&!isParent;const m=showVibe?getSelfMotivation(U):null;const col=m?(m.level==="high"?"var(--c1)":m.level==="med"?"#ffd700":"#ff6b35"):null;const colR=m?(m.level==="high"?"var(--c1r)":m.level==="med"?"255,215,0":"255,107,53"):null;
+  return<div className={`anim section${showVibe?" moti-card":""}`} style={{borderRadius:showVibe?18:0,padding:showVibe?"16px 16px":"0",background:showVibe?`linear-gradient(135deg,rgba(${colR},.06),rgba(${colR},.01))`:"transparent",position:"relative",overflow:"hidden"}}>
+    {showVibe&&<div className="moti-border"/>}
+    <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",position:"relative",zIndex:1}}>
+      <div>
+        <h2 style={{fontSize:20,fontWeight:800,letterSpacing:"-.01em",marginBottom:3}}>Hallo, {isParent?parentUser.name.split(" ")[0]:U.name.split(" ")[0]} <span style={{display:"inline-block",animation:"float 2s ease-in-out infinite"}}>👋</span></h2>
+        <p style={{color:"rgba(255,255,255,.35)",fontSize:12,fontWeight:300}}>{isParent?"Elternteil · "+linkedChildren.map(c=>c.name.split(" ")[0]).join(", "):U.team+" · "+U.role}</p>
+      </div>
+      <div style={{cursor:"pointer"}} onClick={()=>nav("profile")}><Av name={isParent?parentUser.name:U.name} size={40} glow ring/></div>
+    </div>
+    {showVibe&&<div style={{marginTop:12,position:"relative",zIndex:1}}>
+      <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:6}}>
+        <span style={{fontSize:22,lineHeight:1}}>{m.emoji}</span>
+        <div style={{fontSize:9,fontWeight:700,color:col,textTransform:"uppercase",letterSpacing:".12em"}}>Dein Vibe</div>
+        <div style={{height:4,flex:1,maxWidth:60,background:`rgba(${colR},.15)`,borderRadius:3,overflow:"hidden"}}><div style={{height:"100%",width:`${U.att}%`,borderRadius:3,background:col,transition:"width .8s"}}/></div>
+        <span style={{fontSize:11,fontWeight:800,color:col}}>{U.att}%</span>
+      </div>
+      <p style={{fontSize:13,fontWeight:600,color:"rgba(255,255,255,.8)",lineHeight:1.4}}>{m.text}</p>
+    </div>}
+  </div>})()}
 
   {soonEvts.length>0&&<div className="anim d1 section" style={{display:"flex",flexDirection:"column",gap:6}}>
     {soonEvts.map(ev=>{const s=TC[ev.type]||TC.training;const d=parseEvDate(ev);const now=new Date();const hrs=Math.round((d-now)/(1000*60*60));const label=hrs<24?`In ${hrs}h`:hrs<48?"Morgen":"In "+Math.ceil(hrs/24)+" Tagen";
@@ -206,20 +225,6 @@ return<div className="screen" style={{padding:`0 ${px}px 20px`}}>
     </div>})}
   </div>}
 
-  {!isStaff&&!isParent&&(()=>{const m=getSelfMotivation(U);const col=m.level==="high"?"var(--c1)":m.level==="med"?"#ffd700":"#ff6b35";const colR=m.level==="high"?"var(--c1r)":m.level==="med"?"255,215,0":"255,107,53";return<div className="anim d1 section moti-card" style={{borderRadius:18,padding:"16px 16px",background:`linear-gradient(135deg,rgba(${colR},.06),rgba(${colR},.01))`,position:"relative",overflow:"hidden"}}>
-    <div className="moti-border"/>
-    <div style={{display:"flex",alignItems:"center",gap:6,marginBottom:8,position:"relative",zIndex:1}}>
-      <span style={{fontSize:28,lineHeight:1}}>{m.emoji}</span>
-      <div style={{flex:1}}>
-        <div style={{fontSize:9,fontWeight:700,color:col,textTransform:"uppercase",letterSpacing:".12em",marginBottom:2}}>Dein Vibe</div>
-        <div style={{display:"flex",alignItems:"center",gap:6}}>
-          <div style={{height:4,flex:1,maxWidth:80,background:`rgba(${colR},.15)`,borderRadius:3,overflow:"hidden"}}><div style={{height:"100%",width:`${U.att}%`,borderRadius:3,background:col,transition:"width .8s"}}/></div>
-          <span style={{fontSize:11,fontWeight:800,color:col}}>{U.att}%</span>
-        </div>
-      </div>
-    </div>
-    <p style={{fontSize:14,fontWeight:600,color:"rgba(255,255,255,.85)",lineHeight:1.5,position:"relative",zIndex:1}}>{m.text}</p>
-  </div>})()}
   {isParent&&<div className="anim d1 section" style={{display:"flex",flexDirection:"column",gap:8}}>
     {linkedChildren.map(c=>{const m=getChildMotivation(c);const col=m.level==="high"?"var(--c1)":m.level==="med"?"#ffd700":"#ff6b35";const colR=m.level==="high"?"var(--c1r)":m.level==="med"?"255,215,0":"255,107,53";return<div key={c.id} style={{borderRadius:16,padding:"14px 14px",background:`linear-gradient(135deg,rgba(${colR},.07),rgba(${colR},.02))`,border:`1px solid rgba(${colR},.12)`,position:"relative",overflow:"hidden"}}>
       <div style={{display:"flex",alignItems:"center",gap:10}}>
