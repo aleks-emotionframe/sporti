@@ -428,6 +428,7 @@ return<div className="screen" style={{padding:`0 ${px}px 20px`}}>
 
 
 const Events=({nav,role})=>{const[f,setF]=useState("alle");const[teamF,setTeamF]=useState("alle");const isParent=role==="elternteil";const isStaff=role==="trainer"||role==="vorstand"||role==="admin";const linkedChildren=parentUser.children.filter(c=>c.linked);const[evCS,setEvCS]=useState({});const[absPopupEv,setAbsPopupEv]=useState(null);const[absChildEv,setAbsChildEv]=useState(null);const[absReasonEv,setAbsReasonEv]=useState("");
+const[evStatuses,setEvStatuses]=useState(()=>{const o={};evts.forEach(e=>o[e.id]=e.status);return o});
 const roleEvts=filterEvtsByRole(evts,role);
 const types=["alle","training","spiel","turnier","helfer"];const afterType=f==="alle"?roleEvts:roleEvts.filter(e=>e.type===f);const fl=(role==="admin"||role==="vorstand")&&teamF!=="alle"?afterType.filter(e=>!e.team||e.team===teamF):afterType;
 return<div className="screen" style={{padding:`0 ${px}px 20px`}}><h2 className="anim" style={{fontSize:20,fontWeight:800,marginBottom:14}}>Termine</h2><div className="anim d1" style={{display:"flex",gap:6,overflowX:"auto",paddingBottom:8,marginBottom:8}}>{types.map(t=><button key={t} onClick={()=>setF(t)} style={{padding:"8px 14px",borderRadius:10,fontSize:9,fontWeight:700,textTransform:"uppercase",letterSpacing:".1em",whiteSpace:"nowrap",flexShrink:0,cursor:"pointer",background:f===t?(TC[t]?.c||"var(--c2)")+"18":"rgba(255,255,255,.03)",border:f===t?`1px solid ${(TC[t]?.c||"var(--c2)")}40`:"1px solid rgba(255,255,255,.06)",color:f===t?(TC[t]?.c||"var(--c2)"):"rgba(255,255,255,.25)",transition:"all .12s"}}>{t}</button>)}</div>
@@ -440,6 +441,10 @@ return<div className="screen" style={{padding:`0 ${px}px 20px`}}><h2 className="
     <div style={{fontSize:10,color:"rgba(255,255,255,.3)",fontWeight:300}}>{ev.date} · {ev.time}</div>
     <div style={{fontSize:10,color:"rgba(255,255,255,.15)",fontWeight:300,marginTop:2}}>{ev.loc}</div>
   </div>
+  {!isParent&&(()=>{const st=evStatuses[ev.id];return<div style={{display:"flex",gap:6,marginTop:10}}>
+    <button onClick={e=>{e.stopPropagation();setEvStatuses(p=>({...p,[ev.id]:"angemeldet"}))}} style={{flex:1,padding:"7px 0",borderRadius:8,fontSize:10,fontWeight:700,cursor:"pointer",border:"none",transition:"all .12s",background:st==="angemeldet"?"linear-gradient(135deg,var(--c1),var(--c2))":"rgba(var(--c1r),.08)",color:st==="angemeldet"?"#06080f":"var(--c1)",boxShadow:st==="angemeldet"?"0 0 12px rgba(var(--c1r),.15)":"none"}}>✓ Zusage</button>
+    <button onClick={e=>{e.stopPropagation();if(isWithin24h(ev)){setAbsPopupEv(ev);setAbsReasonEv("")}else{setAbsPopupEv(ev);setAbsReasonEv("")}}} style={{flex:1,padding:"7px 0",borderRadius:8,fontSize:10,fontWeight:700,cursor:"pointer",border:"none",transition:"all .12s",background:st==="abgemeldet"?"rgba(239,68,68,.7)":"rgba(255,255,255,.04)",color:st==="abgemeldet"?"#fff":"rgba(255,255,255,.25)"}}>✗ Absage</button>
+  </div>})()}
   {isParent&&<div style={{marginTop:8}}>
     <div style={{display:"flex",flexDirection:"column",gap:4}}>
       {linkedChildren.map(c=>{const cs=(evCS[ev.id]||{})[c.id];return<div key={c.id} style={{display:"flex",alignItems:"center",gap:8,padding:"6px 8px",borderRadius:10,background:"rgba(255,255,255,.02)"}}>
@@ -465,7 +470,7 @@ return<div className="screen" style={{padding:`0 ${px}px 20px`}}><h2 className="
     <textarea value={absReasonEv} onChange={e=>setAbsReasonEv(e.target.value)} placeholder="z.B. Krankheit, Termin..." style={{width:"100%",minHeight:70,background:"rgba(255,255,255,.04)",border:"1px solid rgba(255,255,255,.06)",borderRadius:12,padding:"10px 12px",color:"#fff",fontSize:13,fontFamily:"'Outfit',sans-serif",outline:"none",resize:"vertical",marginBottom:14}}/>
     <div style={{display:"flex",gap:8}}>
       <button onClick={()=>setAbsPopupEv(null)} style={{flex:1,padding:11,borderRadius:12,fontSize:12,fontWeight:600,cursor:"pointer",border:"1px solid rgba(255,255,255,.06)",background:"rgba(255,255,255,.03)",color:"rgba(255,255,255,.3)"}}>Abbrechen</button>
-      <button onClick={()=>{if(!absReasonEv.trim())return;setEvCS(p=>({...p,[absPopupEv.id]:{...(p[absPopupEv.id]||{}),[absChildEv.id]:"abgemeldet"}}));setAbsPopupEv(null)}} style={{flex:1,padding:11,borderRadius:12,fontSize:12,fontWeight:700,cursor:"pointer",border:"none",background:absReasonEv.trim()?"rgba(239,68,68,.8)":"rgba(255,255,255,.04)",color:absReasonEv.trim()?"#fff":"rgba(255,255,255,.15)",transition:"all .15s"}}>Absagen</button>
+      <button onClick={()=>{if(!absReasonEv.trim())return;if(isParent&&absChildEv){setEvCS(p=>({...p,[absPopupEv.id]:{...(p[absPopupEv.id]||{}),[absChildEv.id]:"abgemeldet"}}))}else{setEvStatuses(p=>({...p,[absPopupEv.id]:"abgemeldet"}))}setAbsPopupEv(null)}} style={{flex:1,padding:11,borderRadius:12,fontSize:12,fontWeight:700,cursor:"pointer",border:"none",background:absReasonEv.trim()?"rgba(239,68,68,.8)":"rgba(255,255,255,.04)",color:absReasonEv.trim()?"#fff":"rgba(255,255,255,.15)",transition:"all .15s"}}>Absagen</button>
     </div>
   </div>
 </div>}
