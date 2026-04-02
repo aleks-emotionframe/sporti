@@ -19,8 +19,8 @@ body{height:100%;background:#06080f;color:#fff;overflow-x:hidden;display:flex;ju
 ::-webkit-scrollbar{width:0;display:none}
 @media(min-width:500px){body{background:#111;align-items:center;padding:20px 0}#root{min-height:calc(100vh - 40px);max-height:calc(100vh - 40px);overflow-y:auto;border-radius:32px;border:1px solid rgba(255,255,255,.1);box-shadow:0 0 80px rgba(0,0,0,.5),inset 0 0 0 1px rgba(255,255,255,.06)}}
 @keyframes borderGlow{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
-.moti-card{border:none!important}
-.moti-border{position:absolute;inset:-1px;border-radius:17px;padding:1.5px;background:linear-gradient(135deg,var(--c1),var(--c2),var(--c3),var(--c1));background-size:300% 300%;animation:borderGlow 4s ease infinite;-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none}
+.moti-card{border:none!important;isolation:isolate}
+.moti-border{position:absolute;inset:0;border-radius:18px;padding:2px;background:linear-gradient(135deg,var(--c1),var(--c2),var(--c3),var(--c1));background-size:400% 400%;animation:borderGlow 3s linear infinite;pointer-events:none}.moti-border::after{content:'';position:absolute;inset:2px;border-radius:16px;background:#06080f}
 
 @keyframes aurora{0%,100%{transform:translate(0,0) rotate(0) scale(1)}33%{transform:translate(20px,-15px) rotate(3deg) scale(1.05)}66%{transform:translate(-15px,10px) rotate(-2deg) scale(.97)}}
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
