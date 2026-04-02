@@ -658,15 +658,212 @@ return<div className="screen" style={{padding:`0 ${px}px 20px`}}>
   </div>}
 </div>};
 
-const Helpers=({role})=>{const isParent=role==="elternteil";const[signupFor,setSignupFor]=useState("self");const[signedUp,setSignedUp]=useState({});
-const parentOptions=[{id:"self",label:"Ich selbst"},{id:"partner",label:parentUser.partner},...parentUser.children.filter(c=>c.linked).map(c=>({id:c.id,label:c.name}))];
-const handleSignup=(hId)=>{const who=isParent?parentOptions.find(o=>o.id===signupFor)?.label||"Ich selbst":"";setSignedUp(p=>({...p,[hId]:who||true}))};
-return<div className="screen" style={{padding:`0 ${px}px 20px`}}><h2 className="anim" style={{fontSize:20,fontWeight:800,marginBottom:3}}>Helfereinsätze</h2><p className="anim d1" style={{fontSize:11,color:"rgba(255,255,255,.25)",fontWeight:300,marginBottom:16}}>Punkte sammeln!</p>
-{isParent&&<div className="anim d1" style={{marginBottom:16}}><label className="label">Für wen anmelden?</label><div style={{display:"flex",gap:6,flexWrap:"wrap"}}>{parentOptions.map(o=><button key={o.id} onClick={()=>setSignupFor(o.id)} style={{padding:"8px 14px",borderRadius:10,fontSize:10,fontWeight:signupFor===o.id?700:500,cursor:"pointer",background:signupFor===o.id?"rgba(255,159,67,.12)":"rgba(255,255,255,.03)",border:signupFor===o.id?"1px solid rgba(255,159,67,.35)":"1px solid rgba(255,255,255,.06)",color:signupFor===o.id?"#ff9f43":"rgba(255,255,255,.3)",transition:"all .12s"}}>{o.label}</button>)}</div></div>}
-<div style={{display:"flex",flexDirection:"column",gap:10}}>{hlp.map((h,i)=>{const full=h.u>=h.n;const done=signedUp[h.id];return<div key={h.id} className={`glass anim d${Math.min(i+1,5)}`} style={{borderRadius:18,padding:14}}><div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:8}}><div><h4 style={{fontSize:13,fontWeight:600}}>{h.tl}</h4><div style={{fontSize:10,color:"rgba(255,255,255,.25)",fontWeight:300,marginTop:3}}>{h.d} · {h.tm}</div></div><span className="badge" style={{background:"rgba(var(--c2r),.1)",border:"1px solid rgba(var(--c2r),.2)",color:"var(--c2)"}}>+{h.p}</span></div><div style={{display:"flex",alignItems:"center",gap:12,marginTop:10}}><Ring val={h.u} max={h.n} size={38} sw={3} color={full?"#ff6b35":"var(--c2)"}><span style={{fontSize:8,fontWeight:700,color:"rgba(255,255,255,.5)"}}>{h.u}</span></Ring><div style={{flex:1}}><div style={{fontSize:10,color:"rgba(255,255,255,.4)",fontWeight:500}}>{h.u}/{h.n} Helfer</div><div style={{height:4,background:"rgba(255,255,255,.04)",borderRadius:3,overflow:"hidden",marginTop:5}}><div style={{height:"100%",borderRadius:3,width:`${(h.u/h.n)*100}%`,background:full?"#ff6b35":"linear-gradient(90deg,var(--c2),var(--c3))",transition:"width .6s"}}/></div></div></div>
-{done?<div style={{width:"100%",marginTop:12,padding:10,borderRadius:10,fontSize:10,fontWeight:700,textAlign:"center",background:"rgba(var(--c1r),.08)",border:"1px solid rgba(var(--c1r),.15)",color:"var(--c1)"}}>Angemeldet{typeof done==="string"&&<span style={{fontWeight:500,marginLeft:4}}>({done})</span>}</div>
-:<button onClick={()=>handleSignup(h.id)} style={{width:"100%",marginTop:12,padding:10,borderRadius:10,fontSize:10,fontWeight:700,textTransform:"uppercase",cursor:full?"not-allowed":"pointer",border:"none",background:full?"rgba(255,255,255,.03)":"rgba(var(--c2r),.1)",color:full?"rgba(255,255,255,.15)":"var(--c2)",transition:"all .12s"}} disabled={full}>{full?"Voll":"Anmelden →"}</button>}
-</div>})}</div></div>};
+const Helpers=({role})=>{
+const isParent=role==="elternteil";
+const isAdmin=role==="vorstand"||role==="admin";
+const[helpers,setHelpers]=useState(()=>JSON.parse(JSON.stringify(hlpData)));
+const[selectedHelp,setSelectedHelp]=useState(null);
+const[editShift,setEditShift]=useState(null);
+const[editJob,setEditJob]=useState(null);
+const[deleteConfirm,setDeleteConfirm]=useState(null);
+const[deleteJobConfirm,setDeleteJobConfirm]=useState(null);
+const[parentPicker,setParentPicker]=useState(null);
+const parentOptions=[{id:"self",label:parentUser.name},{id:"partner",label:parentUser.partner},...parentUser.children.filter(c=>c.linked).map(c=>({id:c.id,label:c.name}))];
+const userName="Luca Meier";
+const getTotalSigned=(h)=>h.jobs.reduce((a,j)=>a+j.signed.length,0);
+const getTotalNeeded=(h)=>h.jobs.reduce((a,j)=>a+j.n,0);
+const getOpenSlots=(h)=>getTotalNeeded(h)-getTotalSigned(h);
+const nextId=(arr)=>arr.length>0?Math.max(...arr.map(x=>x.id))+1:1;
+
+/* Create/Edit shift popup */
+const ShiftPopup=()=>{
+  const isNew=!editShift?.id;
+  const[tl,setTl]=useState(editShift?.tl||"");
+  const[d,setD]=useState(editShift?.d||"");
+  const[tm,setTm]=useState(editShift?.tm||"");
+  const[loc,setLoc]=useState(editShift?.loc||"");
+  const[desc,setDesc]=useState(editShift?.desc||"");
+  const[p,setP]=useState(editShift?.p||0);
+  const save=()=>{if(!tl.trim())return;if(isNew){const nw={id:nextId(helpers),tl,d,tm,loc,desc,p:Number(p),jobs:[]};setHelpers(prev=>[...prev,nw])}else{setHelpers(prev=>prev.map(h=>h.id===editShift.id?{...h,tl,d,tm,loc,desc,p:Number(p)}:h));if(selectedHelp&&selectedHelp.id===editShift.id)setSelectedHelp(prev=>({...prev,tl,d,tm,loc,desc,p:Number(p)}))}setEditShift(null)};
+  return<div style={{position:"fixed",inset:0,zIndex:100,display:"flex",alignItems:"center",justifyContent:"center",padding:20}} onClick={()=>setEditShift(null)}>
+    <div style={{position:"absolute",inset:0,background:"rgba(0,0,0,.6)",backdropFilter:"blur(8px)",WebkitBackdropFilter:"blur(8px)"}}/>
+    <div onClick={e=>e.stopPropagation()} style={{position:"relative",width:"100%",maxWidth:340,maxHeight:"80vh",overflowY:"auto",borderRadius:20,background:"rgba(13,16,23,.75)",backdropFilter:"blur(40px)",WebkitBackdropFilter:"blur(40px)",border:"1px solid rgba(255,255,255,.1)",padding:20,animation:"slideUp .25s ease-out",boxShadow:"0 24px 64px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.08)"}}>
+      <h3 style={{fontSize:16,fontWeight:800,marginBottom:14}}>{isNew?"Neuer Helfereinsatz":"Einsatz bearbeiten"}</h3>
+      <div style={{display:"flex",flexDirection:"column",gap:12}}>
+        <div><label className="label">Titel</label><input value={tl} onChange={e=>setTl(e.target.value)} placeholder="z.B. Vereinsfest Aufbau"/></div>
+        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8}}>
+          <div><label className="label">Datum</label><input value={d} onChange={e=>setD(e.target.value)} placeholder="Fr, 18. Apr"/></div>
+          <div><label className="label">Zeit</label><input value={tm} onChange={e=>setTm(e.target.value)} placeholder="14–18h"/></div>
+        </div>
+        <div><label className="label">Ort</label><input value={loc} onChange={e=>setLoc(e.target.value)} placeholder="Vereinsgelände"/></div>
+        <div><label className="label">Beschreibung</label><textarea value={desc} onChange={e=>setDesc(e.target.value)} placeholder="Details zum Einsatz..." style={{width:"100%",minHeight:60,background:"rgba(255,255,255,.04)",border:"1px solid rgba(255,255,255,.06)",borderRadius:12,padding:"10px 12px",color:"#fff",fontSize:13,fontFamily:"'Outfit',sans-serif",outline:"none",resize:"vertical"}}/></div>
+        <div><label className="label">Punkte</label><input type="number" value={p} onChange={e=>setP(e.target.value)} placeholder="4"/></div>
+      </div>
+      <div style={{display:"flex",gap:8,marginTop:16}}>
+        <button onClick={()=>setEditShift(null)} style={{flex:1,padding:11,borderRadius:12,fontSize:12,fontWeight:600,cursor:"pointer",border:"1px solid rgba(255,255,255,.06)",background:"rgba(255,255,255,.03)",color:"rgba(255,255,255,.3)"}}>Abbrechen</button>
+        <button onClick={save} className="ag aglow" style={{flex:1,padding:11,borderRadius:12,fontSize:12,fontWeight:700,cursor:"pointer",border:"none",color:"#06080f"}}>{isNew?"Erstellen":"Speichern"}</button>
+      </div>
+    </div>
+  </div>
+};
+
+/* Create/Edit job popup */
+const JobPopup=()=>{
+  const isNew=!editJob?.jid;
+  const[name,setName]=useState(editJob?.name||"");
+  const[n,setN]=useState(editJob?.n||2);
+  const save=()=>{if(!name.trim())return;const hId=editJob.hId;if(isNew){const newJob={id:nextId((helpers.find(h=>h.id===hId)||{jobs:[]}).jobs),name,n:Number(n),signed:[]};setHelpers(prev=>prev.map(h=>h.id===hId?{...h,jobs:[...h.jobs,newJob]}:h));if(selectedHelp&&selectedHelp.id===hId)setSelectedHelp(prev=>({...prev,jobs:[...prev.jobs,newJob]}))}else{setHelpers(prev=>prev.map(h=>h.id===hId?{...h,jobs:h.jobs.map(j=>j.id===editJob.jid?{...j,name,n:Number(n)}:j)}:h));if(selectedHelp&&selectedHelp.id===hId)setSelectedHelp(prev=>({...prev,jobs:prev.jobs.map(j=>j.id===editJob.jid?{...j,name,n:Number(n)}:j)}))}setEditJob(null)};
+  return<div style={{position:"fixed",inset:0,zIndex:100,display:"flex",alignItems:"center",justifyContent:"center",padding:20}} onClick={()=>setEditJob(null)}>
+    <div style={{position:"absolute",inset:0,background:"rgba(0,0,0,.6)",backdropFilter:"blur(8px)",WebkitBackdropFilter:"blur(8px)"}}/>
+    <div onClick={e=>e.stopPropagation()} style={{position:"relative",width:"100%",maxWidth:340,borderRadius:20,background:"rgba(13,16,23,.75)",backdropFilter:"blur(40px)",WebkitBackdropFilter:"blur(40px)",border:"1px solid rgba(255,255,255,.1)",padding:20,animation:"slideUp .25s ease-out",boxShadow:"0 24px 64px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.08)"}}>
+      <h3 style={{fontSize:16,fontWeight:800,marginBottom:14}}>{isNew?"Job hinzufügen":"Job bearbeiten"}</h3>
+      <div style={{display:"flex",flexDirection:"column",gap:12}}>
+        <div><label className="label">Job-Name</label><input value={name} onChange={e=>setName(e.target.value)} placeholder="z.B. Zelte aufstellen"/></div>
+        <div><label className="label">Anzahl Helfer benötigt</label><input type="number" value={n} onChange={e=>setN(e.target.value)} placeholder="4"/></div>
+      </div>
+      <div style={{display:"flex",gap:8,marginTop:16}}>
+        <button onClick={()=>setEditJob(null)} style={{flex:1,padding:11,borderRadius:12,fontSize:12,fontWeight:600,cursor:"pointer",border:"1px solid rgba(255,255,255,.06)",background:"rgba(255,255,255,.03)",color:"rgba(255,255,255,.3)"}}>Abbrechen</button>
+        <button onClick={save} className="ag aglow" style={{flex:1,padding:11,borderRadius:12,fontSize:12,fontWeight:700,cursor:"pointer",border:"none",color:"#06080f"}}>{isNew?"Hinzufügen":"Speichern"}</button>
+      </div>
+    </div>
+  </div>
+};
+
+/* Delete confirmation popup */
+const DeletePopup=({title,onConfirm,onCancel})=><div style={{position:"fixed",inset:0,zIndex:100,display:"flex",alignItems:"center",justifyContent:"center",padding:20}} onClick={onCancel}>
+  <div style={{position:"absolute",inset:0,background:"rgba(0,0,0,.6)",backdropFilter:"blur(8px)",WebkitBackdropFilter:"blur(8px)"}}/>
+  <div onClick={e=>e.stopPropagation()} style={{position:"relative",width:"100%",maxWidth:300,borderRadius:20,background:"rgba(13,16,23,.75)",backdropFilter:"blur(40px)",WebkitBackdropFilter:"blur(40px)",border:"1px solid rgba(255,255,255,.1)",padding:20,animation:"slideUp .25s ease-out",boxShadow:"0 24px 64px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.08)"}}>
+    <h3 style={{fontSize:16,fontWeight:800,marginBottom:6}}>Löschen?</h3>
+    <p style={{fontSize:12,color:"rgba(255,255,255,.45)",fontWeight:300,marginBottom:16,lineHeight:1.5}}>{title}</p>
+    <div style={{display:"flex",gap:8}}>
+      <button onClick={onCancel} style={{flex:1,padding:11,borderRadius:12,fontSize:12,fontWeight:600,cursor:"pointer",border:"1px solid rgba(255,255,255,.06)",background:"rgba(255,255,255,.03)",color:"rgba(255,255,255,.3)"}}>Abbrechen</button>
+      <button onClick={onConfirm} style={{flex:1,padding:11,borderRadius:12,fontSize:12,fontWeight:700,cursor:"pointer",border:"none",background:"rgba(239,68,68,.8)",color:"#fff"}}>Löschen</button>
+    </div>
+  </div>
+</div>;
+
+const doSignup=(hId,jId,who)=>{setHelpers(prev=>prev.map(h=>h.id===hId?{...h,jobs:h.jobs.map(j=>j.id===jId?{...j,signed:[...j.signed,who]}:j)}:h));if(selectedHelp&&selectedHelp.id===hId)setSelectedHelp(prev=>({...prev,jobs:prev.jobs.map(j=>j.id===jId?{...j,signed:[...j.signed,who]}:j)}))};
+const doSignoff=(hId,jId,who)=>{setHelpers(prev=>prev.map(h=>h.id===hId?{...h,jobs:h.jobs.map(j=>j.id===jId?{...j,signed:j.signed.filter(s=>s!==who)}:j)}:h));if(selectedHelp&&selectedHelp.id===hId)setSelectedHelp(prev=>({...prev,jobs:prev.jobs.map(j=>j.id===jId?{...j,signed:j.signed.filter(s=>s!==who)}:j)}))};
+const isSignedUp=(job,who)=>job.signed.includes(who);
+const myNames=isParent?parentOptions.map(o=>o.label):[userName];
+const amISigned=(job)=>myNames.some(n=>job.signed.includes(n));
+const mySignedName=(job)=>myNames.find(n=>job.signed.includes(n));
+
+/* Detail view */
+if(selectedHelp){
+  const h=helpers.find(x=>x.id===selectedHelp.id)||selectedHelp;
+  const totalS=getTotalSigned(h);const totalN=getTotalNeeded(h);const full=totalS>=totalN;
+  return<div className="screen" style={{padding:`0 ${px}px 20px`}}>
+    <Back onClick={()=>setSelectedHelp(null)}/>
+    <div className="anim" style={{marginBottom:16}}>
+      <div style={{display:"flex",alignItems:"flex-start",justifyContent:"space-between",gap:10}}>
+        <div style={{flex:1}}>
+          <h2 style={{fontSize:22,fontWeight:800,marginBottom:6}}>{h.tl}</h2>
+          <div style={{display:"flex",flexDirection:"column",gap:6}}>
+            {[{i:"calendar",t:`${h.d}, ${h.tm}`},{i:"target",t:h.loc}].map((x,j)=><div key={j} style={{display:"flex",alignItems:"center",gap:8,fontSize:12,color:"rgba(255,255,255,.4)",fontWeight:300}}><Ic n={x.i} s={14} c="var(--c2)"/><span>{x.t}</span></div>)}
+          </div>
+          {h.desc&&<p style={{fontSize:12,color:"rgba(255,255,255,.35)",fontWeight:300,marginTop:8,lineHeight:1.5}}>{h.desc}</p>}
+        </div>
+        <div style={{display:"flex",flexDirection:"column",alignItems:"center",gap:6}}>
+          <Ring val={totalS} max={totalN} size={60} sw={4} color={full?"#ff6b35":"var(--c2)"}><span style={{fontSize:14,fontWeight:900}}>{totalS}</span></Ring>
+          <span className="badge" style={{background:"rgba(var(--c2r),.1)",border:"none",color:"var(--c2)"}}>+{h.p} Pkt</span>
+        </div>
+      </div>
+    </div>
+
+    {isAdmin&&<div className="anim d1" style={{display:"flex",gap:8,marginBottom:16}}>
+      <button onClick={()=>setEditShift(h)} style={{flex:1,padding:9,borderRadius:10,fontSize:10,fontWeight:700,cursor:"pointer",border:"1px solid rgba(var(--c2r),.2)",background:"rgba(var(--c2r),.06)",color:"var(--c2)",display:"flex",alignItems:"center",justifyContent:"center",gap:4}}><Ic n="pencil" s={12} c="var(--c2)"/> Bearbeiten</button>
+      <button onClick={()=>setDeleteConfirm(h)} style={{padding:"9px 14px",borderRadius:10,fontSize:10,fontWeight:700,cursor:"pointer",border:"1px solid rgba(239,68,68,.15)",background:"rgba(239,68,68,.06)",color:"rgba(239,68,68,.6)",display:"flex",alignItems:"center",justifyContent:"center",gap:4}}><Ic n="trash" s={12} c="rgba(239,68,68,.6)"/></button>
+    </div>}
+
+    <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:10}}>
+      <h3 className="section-title" style={{marginBottom:0}}>Jobs ({h.jobs.length})</h3>
+      {isAdmin&&<button onClick={()=>setEditJob({hId:h.id})} className="ag aglow" style={{width:28,height:28,borderRadius:8,border:"none",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}}><Ic n="plus" s={13} c="#06080f"/></button>}
+    </div>
+
+    <div style={{display:"flex",flexDirection:"column",gap:10}}>
+      {h.jobs.map((j,ji)=>{const jFull=j.signed.length>=j.n;const mySig=mySignedName(j);
+      return<div key={j.id} className={`glass anim d${Math.min(ji+1,5)}`} style={{borderRadius:16,padding:14}}>
+        <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:8}}>
+          <h4 style={{fontSize:13,fontWeight:600,flex:1}}>{j.name}</h4>
+          <span style={{fontSize:10,fontWeight:700,color:jFull?"#ff6b35":"var(--c2)",background:jFull?"rgba(255,107,53,.1)":"rgba(var(--c2r),.1)",padding:"3px 8px",borderRadius:8}}>{j.signed.length}/{j.n}</span>
+        </div>
+        <div style={{height:4,background:"rgba(255,255,255,.04)",borderRadius:3,overflow:"hidden",marginBottom:8}}>
+          <div style={{height:"100%",borderRadius:3,width:`${(j.signed.length/j.n)*100}%`,background:jFull?"#ff6b35":"linear-gradient(90deg,var(--c2),var(--c3))",transition:"width .6s"}}/>
+        </div>
+        {j.signed.length>0&&<div style={{display:"flex",flexWrap:"wrap",gap:6,marginBottom:8}}>
+          {j.signed.map((s,si)=><div key={si} style={{display:"flex",alignItems:"center",gap:5,padding:"3px 8px 3px 3px",borderRadius:8,background:"rgba(255,255,255,.03)",border:"1px solid rgba(255,255,255,.04)"}}>
+            <Av name={s} size={20}/><span style={{fontSize:10,color:"rgba(255,255,255,.5)",fontWeight:500}}>{s}</span>
+          </div>)}
+        </div>}
+        {mySig?<button onClick={()=>doSignoff(h.id,j.id,mySig)} style={{width:"100%",padding:9,borderRadius:10,fontSize:10,fontWeight:700,cursor:"pointer",border:"1px solid rgba(var(--c1r),.15)",background:"rgba(var(--c1r),.08)",color:"var(--c1)",transition:"all .12s"}}>Abmelden{isParent&&<span style={{fontWeight:500,marginLeft:4}}>({mySig})</span>}</button>
+        :!jFull?isParent?<button onClick={()=>setParentPicker({hId:h.id,jId:j.id})} style={{width:"100%",padding:9,borderRadius:10,fontSize:10,fontWeight:700,cursor:"pointer",border:"none",background:"rgba(var(--c2r),.1)",color:"var(--c2)",transition:"all .12s"}}>Anmelden</button>
+        :<button onClick={()=>doSignup(h.id,j.id,userName)} style={{width:"100%",padding:9,borderRadius:10,fontSize:10,fontWeight:700,cursor:"pointer",border:"none",background:"rgba(var(--c2r),.1)",color:"var(--c2)",transition:"all .12s"}}>Anmelden</button>
+        :<div style={{width:"100%",padding:9,borderRadius:10,fontSize:10,fontWeight:700,textAlign:"center",background:"rgba(255,255,255,.03)",color:"rgba(255,255,255,.15)"}}>Voll</div>}
+        {isAdmin&&<div style={{display:"flex",gap:6,marginTop:8}}>
+          <button onClick={()=>setEditJob({hId:h.id,jid:j.id,name:j.name,n:j.n})} style={{flex:1,padding:7,borderRadius:8,fontSize:9,fontWeight:600,cursor:"pointer",border:"1px solid rgba(255,255,255,.06)",background:"rgba(255,255,255,.03)",color:"rgba(255,255,255,.25)",display:"flex",alignItems:"center",justifyContent:"center",gap:3}}><Ic n="pencil" s={10} c="rgba(255,255,255,.25)"/> Bearbeiten</button>
+          <button onClick={()=>setDeleteJobConfirm({hId:h.id,jId:j.id,name:j.name})} style={{padding:"7px 10px",borderRadius:8,fontSize:9,fontWeight:600,cursor:"pointer",border:"1px solid rgba(239,68,68,.1)",background:"rgba(239,68,68,.04)",color:"rgba(239,68,68,.4)",display:"flex",alignItems:"center",justifyContent:"center"}}><Ic n="trash" s={10} c="rgba(239,68,68,.4)"/></button>
+        </div>}
+      </div>})}
+    </div>
+
+    {parentPicker&&<div style={{position:"fixed",inset:0,zIndex:100,display:"flex",alignItems:"center",justifyContent:"center",padding:20}} onClick={()=>setParentPicker(null)}>
+      <div style={{position:"absolute",inset:0,background:"rgba(0,0,0,.6)",backdropFilter:"blur(8px)",WebkitBackdropFilter:"blur(8px)"}}/>
+      <div onClick={e=>e.stopPropagation()} style={{position:"relative",width:"100%",maxWidth:300,borderRadius:20,background:"rgba(13,16,23,.75)",backdropFilter:"blur(40px)",WebkitBackdropFilter:"blur(40px)",border:"1px solid rgba(255,255,255,.1)",padding:20,animation:"slideUp .25s ease-out",boxShadow:"0 24px 64px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.08)"}}>
+        <h3 style={{fontSize:16,fontWeight:800,marginBottom:14}}>Für wen anmelden?</h3>
+        <div style={{display:"flex",flexDirection:"column",gap:6}}>
+          {parentOptions.map(o=><button key={o.id} onClick={()=>{doSignup(parentPicker.hId,parentPicker.jId,o.label);setParentPicker(null)}} style={{padding:"11px 14px",borderRadius:12,fontSize:12,fontWeight:600,cursor:"pointer",border:"1px solid rgba(255,159,67,.2)",background:"rgba(255,159,67,.06)",color:"#ff9f43",textAlign:"left",transition:"all .12s"}}>{o.label}</button>)}
+        </div>
+        <button onClick={()=>setParentPicker(null)} style={{width:"100%",marginTop:10,padding:10,borderRadius:12,fontSize:11,fontWeight:500,cursor:"pointer",border:"1px solid rgba(255,255,255,.06)",background:"rgba(255,255,255,.03)",color:"rgba(255,255,255,.3)"}}>Abbrechen</button>
+      </div>
+    </div>}
+
+    {editShift&&<ShiftPopup/>}
+    {editJob&&<JobPopup/>}
+    {deleteConfirm&&<DeletePopup title={`"${deleteConfirm.tl}" und alle zugehörigen Jobs wirklich löschen?`} onCancel={()=>setDeleteConfirm(null)} onConfirm={()=>{setHelpers(prev=>prev.filter(x=>x.id!==deleteConfirm.id));setDeleteConfirm(null);setSelectedHelp(null)}}/>}
+    {deleteJobConfirm&&<DeletePopup title={`Job "${deleteJobConfirm.name}" wirklich löschen?`} onCancel={()=>setDeleteJobConfirm(null)} onConfirm={()=>{setHelpers(prev=>prev.map(x=>x.id===deleteJobConfirm.hId?{...x,jobs:x.jobs.filter(j=>j.id!==deleteJobConfirm.jId)}:x));if(selectedHelp&&selectedHelp.id===deleteJobConfirm.hId)setSelectedHelp(prev=>({...prev,jobs:prev.jobs.filter(j=>j.id!==deleteJobConfirm.jId)}));setDeleteJobConfirm(null)}}/>}
+  </div>
+}
+
+/* List view */
+return<div className="screen" style={{padding:`0 ${px}px 20px`}}>
+  <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:3}}>
+    <h2 className="anim" style={{fontSize:20,fontWeight:800}}>Helfereinsätze</h2>
+    {isAdmin&&<button onClick={()=>setEditShift({})} className="ag aglow" style={{width:34,height:34,borderRadius:10,border:"none",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}}><Ic n="plus" s={15} c="#06080f"/></button>}
+  </div>
+  <p className="anim d1" style={{fontSize:11,color:"rgba(255,255,255,.25)",fontWeight:300,marginBottom:16}}>Punkte sammeln!</p>
+  <div style={{display:"flex",flexDirection:"column",gap:10}}>
+    {helpers.map((h,i)=>{const totalS=getTotalSigned(h);const totalN=getTotalNeeded(h);const full=totalS>=totalN;const open=totalN-totalS;
+    return<div key={h.id} className={`glass anim d${Math.min(i+1,5)}`} style={{borderRadius:18,padding:14,cursor:"pointer"}} onClick={()=>setSelectedHelp(h)}>
+      <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:8}}>
+        <div style={{flex:1,minWidth:0}}>
+          <h4 style={{fontSize:13,fontWeight:600}}>{h.tl}</h4>
+          <div style={{fontSize:10,color:"rgba(255,255,255,.25)",fontWeight:300,marginTop:3}}>{h.d} · {h.tm}</div>
+        </div>
+        <span className="badge" style={{background:"rgba(var(--c2r),.1)",border:"1px solid rgba(var(--c2r),.2)",color:"var(--c2)",flexShrink:0}}>+{h.p}</span>
+      </div>
+      <div style={{display:"flex",alignItems:"center",gap:12,marginTop:10}}>
+        <Ring val={totalS} max={totalN} size={38} sw={3} color={full?"#ff6b35":"var(--c2)"}><span style={{fontSize:8,fontWeight:700,color:"rgba(255,255,255,.5)"}}>{totalS}</span></Ring>
+        <div style={{flex:1}}>
+          <div style={{fontSize:10,color:"rgba(255,255,255,.4)",fontWeight:500}}>{totalS}/{totalN} Helfer</div>
+          <div style={{height:4,background:"rgba(255,255,255,.04)",borderRadius:3,overflow:"hidden",marginTop:5}}>
+            <div style={{height:"100%",borderRadius:3,width:`${totalN>0?(totalS/totalN)*100:0}%`,background:full?"#ff6b35":"linear-gradient(90deg,var(--c2),var(--c3))",transition:"width .6s"}}/>
+          </div>
+        </div>
+      </div>
+      <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginTop:10}}>
+        <span style={{fontSize:10,fontWeight:600,color:full?"#ff6b35":"var(--c1)"}}>{full?"Voll":`${open} Plätze frei`}</span>
+        <span style={{fontSize:10,color:"rgba(255,255,255,.15)",fontWeight:300}}>{h.jobs.length} Jobs ›</span>
+      </div>
+      {isAdmin&&<div style={{display:"flex",gap:6,marginTop:8}} onClick={e=>e.stopPropagation()}>
+        <button onClick={()=>setEditShift(h)} style={{flex:1,padding:7,borderRadius:8,fontSize:9,fontWeight:600,cursor:"pointer",border:"1px solid rgba(var(--c2r),.15)",background:"rgba(var(--c2r),.04)",color:"var(--c2)",display:"flex",alignItems:"center",justifyContent:"center",gap:3}}><Ic n="pencil" s={10} c="var(--c2)"/> Bearbeiten</button>
+        <button onClick={()=>setDeleteConfirm(h)} style={{padding:"7px 10px",borderRadius:8,fontSize:9,fontWeight:600,cursor:"pointer",border:"1px solid rgba(239,68,68,.1)",background:"rgba(239,68,68,.04)",color:"rgba(239,68,68,.4)",display:"flex",alignItems:"center",justifyContent:"center"}}><Ic n="trash" s={10} c="rgba(239,68,68,.4)"/></button>
+      </div>}
+    </div>})}
+  </div>
+  {editShift&&<ShiftPopup/>}
+  {deleteConfirm&&<DeletePopup title={`"${deleteConfirm.tl}" und alle zugehörigen Jobs wirklich löschen?`} onCancel={()=>setDeleteConfirm(null)} onConfirm={()=>{setHelpers(prev=>prev.filter(x=>x.id!==deleteConfirm.id));setDeleteConfirm(null)}}/>}
+</div>};
 
 const Stats=({onBack})=>{
   const teamStats=[
@@ -1216,7 +1413,7 @@ return<div className="dot-grid" style={{position:"relative",minHeight:"100%"}}><
   </div>
   <div style={{height:18}}/>
   <div style={{paddingBottom:85}}>{S[scr]||<Dash role={role} nav={nav}/>}</div>
-  <Nav active={mains.includes(scr)?scr:prev} nav={nav} role={role} chatBadge={(()=>{const isS=role==="trainer"||role==="vorstand"||role==="admin";const c=isS?convos.trainer:role==="elternteil"?convos.elternteil||[]:convos.spieler;return c.reduce((a,x)=>a+(x.unread||0),0)+chatBadge})()} helperBadge={hlp.filter(h=>h.u<h.n).length} eventsBadge={evts.filter(e=>e.status==="offen"&&parseEvDate(e)>new Date()).length}/>
+  <Nav active={mains.includes(scr)?scr:prev} nav={nav} role={role} chatBadge={(()=>{const isS=role==="trainer"||role==="vorstand"||role==="admin";const c=isS?convos.trainer:role==="elternteil"?convos.elternteil||[]:convos.spieler;return c.reduce((a,x)=>a+(x.unread||0),0)+chatBadge})()} helperBadge={hlpData.filter(h=>h.jobs.reduce((a,j)=>a+j.signed.length,0)<h.jobs.reduce((a,j)=>a+j.n,0)).length} eventsBadge={evts.filter(e=>e.status==="offen"&&parseEvDate(e)>new Date()).length}/>
   <NewsPopup open={showNews} onClose={()=>setShowNews(false)} role={role}/>
 </div>};
 class EB extends React.Component{constructor(p){super(p);this.state={err:null}}static getDerivedStateFromError(e){return{err:e}}render(){if(this.state.err)return React.createElement('div',{style:{padding:20,color:'#ff6b35'}},React.createElement('h2',null,'Fehler'),React.createElement('pre',{style:{fontSize:11,whiteSpace:'pre-wrap',color:'#fff',opacity:.6}},this.state.err.toString()));return this.props.children}}
