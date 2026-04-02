@@ -192,7 +192,7 @@ const isWithin24h=(ev)=>(parseEvDate(ev)-new Date())<24*60*60*1000;
 
 const filterEvtsByRole=(allEvts,role)=>{if(role==="admin"||role==="vorstand")return allEvts;if(role==="trainer")return allEvts.filter(e=>!e.team||trainerTeams.includes(e.team));if(role==="spieler"||role==="Mitglied")return allEvts.filter(e=>!e.team||e.team===U.teamId);return allEvts};
 
-const Dash=({role,nav})=>{const isStaff=role==="trainer"||role==="vorstand"||role==="admin";const isParent=role==="elternteil";const q=getMotivation();const filteredEvts=filterEvtsByRole(evts,role);
+const Dash=({role,nav})=>{const isStaff=role==="trainer"||role==="vorstand"||role==="admin";const isAdmin=role==="vorstand"||role==="admin";const isParent=role==="elternteil";const q=getMotivation();const filteredEvts=filterEvtsByRole(evts,role);
 const[statuses,setStatuses]=useState(()=>{const o={};evts.forEach(e=>o[e.id]=e.status);return o});
 const[childStatuses,setChildStatuses]=useState({});
 const[absPopup,setAbsPopup]=useState(null);const[absReason,setAbsReason]=useState("");const[absChild,setAbsChild]=useState(null);
@@ -229,7 +229,96 @@ return<div className="screen" style={{padding:`0 ${px}px 20px`}}>
     </div>}
   </div>})()}
 
-  {soonEvts.length>0&&<div className="anim d1 section" style={{display:"flex",flexDirection:"column",gap:6}}>
+  {isAdmin&&<>
+    {/* Quick Stats */}
+    <div className="anim d1 section" style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10}}>
+      {[{l:"Mitglieder",v:mems.length,s:"Total aktiv",ic:"users",c:"var(--c1)"},{l:"Aktive Teams",v:teams.length,s:"Saison 25/26",ic:"shield",c:"var(--c2)"},{l:"Ø Präsenz",v:Math.round(ranks.reduce((a,r)=>a+r.a,0)/ranks.length)+"%",s:"Alle Teams",ic:"chart",c:"var(--c3)"},{l:"Offene Bussen",v:memberFines.filter(f=>f.status==="offen").length,s:"CHF "+memberFines.filter(f=>f.status==="offen").reduce((a,f)=>a+f.amount,0)+".–",ic:"money",c:"#ff6b35"}].map(s=><div key={s.l} className="glass card" style={{padding:14}}>
+        <div style={{display:"flex",alignItems:"center",gap:6,marginBottom:8}}>
+          <div style={{width:26,height:26,borderRadius:8,background:`${s.c}12`,display:"flex",alignItems:"center",justifyContent:"center"}}><Ic n={s.ic} s={12} c={s.c}/></div>
+          <span style={{fontSize:8,color:"rgba(255,255,255,.25)",fontWeight:700,textTransform:"uppercase",letterSpacing:".12em"}}>{s.l}</span>
+        </div>
+        <div style={{fontSize:22,fontWeight:900}}>{s.v}</div>
+        <div style={{fontSize:9,color:"rgba(255,255,255,.2)",fontWeight:300,marginTop:3}}>{s.s}</div>
+      </div>)}
+    </div>
+
+    {/* Kritische Hinweise */}
+    <div className="anim d2 section">
+      <h3 className="section-title" style={{display:"flex",alignItems:"center",gap:6}}><Ic n="bell" s={12} c="rgba(255,255,255,.25)"/> Kritische Hinweise</h3>
+      <div style={{display:"flex",flexDirection:"column",gap:8}}>
+        {[
+          {type:"absence",icon:"bell",title:"Unentschuldigte Absenzen",desc:"Tim Müller – 3x Training verpasst ohne Abwesenheitsmeldung",color:"#ff6b35"},
+          {type:"absence",icon:"bell",title:"Unentschuldigte Absenzen",desc:"Lea Schmid – 2x Training verpasst ohne Abwesenheitsmeldung",color:"#ff6b35"},
+          {type:"fines",icon:"money",title:"Offene Bussen",desc:"4 offene Bussen · Total CHF 90.–",color:"#ffd700"},
+          {type:"helpers",icon:"hand",title:"Helfer gesucht",desc:"Vereinsfest Aufbau – 9 Plätze frei",color:"var(--c2)"},
+        ].map((a,i)=><div key={i} className="glass card" style={{padding:12,borderColor:`${a.color}25`,borderLeft:`3px solid ${a.color}60`}}>
+          <div style={{display:"flex",alignItems:"center",gap:10}}>
+            <div style={{width:32,height:32,borderRadius:10,background:`${a.color}12`,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}><Ic n={a.icon} s={15} c={a.color}/></div>
+            <div style={{flex:1,minWidth:0}}>
+              <div style={{fontSize:10,fontWeight:700,color:a.color,textTransform:"uppercase",letterSpacing:".06em",marginBottom:2}}>{a.title}</div>
+              <div style={{fontSize:12,color:"rgba(255,255,255,.6)",fontWeight:400,lineHeight:1.4}}>{a.desc}</div>
+            </div>
+          </div>
+        </div>)}
+      </div>
+    </div>
+
+    {/* Team-Übersicht */}
+    <div className="anim d3 section">
+      <h3 className="section-title">Team-Übersicht</h3>
+      <div style={{display:"flex",gap:8,overflowX:"auto",paddingBottom:6}}>
+        {teams.map(t=>{const mc=mems.filter(m=>m.teamId===t.id||(m.teamIds&&m.teamIds.includes(t.id))).length;const tAtt=Math.round(60+Math.random()*30);return<div key={t.id} onClick={()=>nav("events")} className="glass card" style={{minWidth:120,flexShrink:0,padding:12,cursor:"pointer"}}>
+          <div style={{display:"flex",alignItems:"center",gap:6,marginBottom:8}}>
+            <span style={{width:10,height:10,borderRadius:5,background:t.color,flexShrink:0}}/>
+            <span style={{fontSize:12,fontWeight:600,color:"rgba(255,255,255,.8)"}}>{t.name}</span>
+          </div>
+          <div style={{fontSize:10,color:"rgba(255,255,255,.3)",fontWeight:300}}>{mc} Mitglieder</div>
+          <div style={{display:"flex",alignItems:"center",gap:4,marginTop:6}}>
+            <div style={{flex:1,height:3,background:"rgba(255,255,255,.04)",borderRadius:3,overflow:"hidden"}}><div style={{height:"100%",borderRadius:3,width:`${tAtt}%`,background:t.color,opacity:.6}}/></div>
+            <span className="mono" style={{fontSize:8,color:t.color}}>{tAtt}%</span>
+          </div>
+        </div>})}
+      </div>
+    </div>
+
+    {/* Letzte Aktivitäten */}
+    <div className="anim d4 section">
+      <h3 className="section-title">Letzte Aktivitäten</h3>
+      <div style={{display:"flex",flexDirection:"column",gap:6}}>
+        {[
+          {name:"Noah Brunner",action:"hat sich für Training angemeldet",time:"vor 12 Min"},
+          {name:"Mia Keller",action:"hat Helfer: Vereinsfest bestätigt",time:"vor 45 Min"},
+          {name:"Tim Müller",action:"hat sich vom Training abgemeldet",time:"vor 2 Std"},
+          {name:"Elena Fischer",action:"Abwesenheit gemeldet (Ferien, 10.–17. Apr)",time:"vor 3 Std"},
+          {name:"Coach Reto",action:"neuen Termin erstellt: Training U18H",time:"gestern"},
+        ].map((a,i)=><div key={i} className="glass card" style={{padding:10,display:"flex",alignItems:"center",gap:10}}>
+          <Av name={a.name} size={28}/>
+          <div style={{flex:1,minWidth:0}}>
+            <div style={{fontSize:12,color:"rgba(255,255,255,.6)",fontWeight:400,lineHeight:1.4}}><span style={{fontWeight:600,color:"rgba(255,255,255,.8)"}}>{a.name.split(" ")[0]}</span> {a.action}</div>
+            <div className="mono" style={{fontSize:8,color:"rgba(255,255,255,.15)",marginTop:2}}>{a.time}</div>
+          </div>
+        </div>)}
+      </div>
+    </div>
+
+    {/* Quick Actions */}
+    <div className="anim d5 section">
+      <h3 className="section-title">Schnellzugriff</h3>
+      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8}}>
+        {[
+          {l:"Neuer Termin",ic:"plus",c:"var(--c1)",to:"createEvent"},
+          {l:"Mitglieder",ic:"users",c:"var(--c2)",to:"members"},
+          {l:"Statistiken",ic:"chart",c:"var(--c3)",to:"stats"},
+          {l:"Bussenkatalog",ic:"money",c:"#ffd700",to:"fines"},
+        ].map(a=><div key={a.l} onClick={()=>nav(a.to)} className="glass card" style={{padding:14,cursor:"pointer",display:"flex",alignItems:"center",gap:10}}>
+          <div style={{width:32,height:32,borderRadius:10,background:`${a.c}12`,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}><Ic n={a.ic} s={15} c={a.c}/></div>
+          <span style={{fontSize:12,fontWeight:600,color:"rgba(255,255,255,.7)"}}>{a.l}</span>
+        </div>)}
+      </div>
+    </div>
+  </>}
+
+  {!isAdmin&&soonEvts.length>0&&<div className="anim d1 section" style={{display:"flex",flexDirection:"column",gap:6}}>
     {soonEvts.map(ev=>{const s=TC[ev.type]||TC.training;const d=parseEvDate(ev);const now=new Date();const hrs=Math.round((d-now)/(1000*60*60));const label=hrs<24?`In ${hrs}h`:hrs<48?"Morgen":"In "+Math.ceil(hrs/24)+" Tagen";
     return<div key={ev.id} onClick={()=>nav("eventDetail",ev)} className="glass" style={{borderRadius:14,padding:"12px 14px",cursor:"pointer",borderColor:`${s.c}25`,background:`${s.c}06`}}>
       <div style={{display:"flex",alignItems:"center",gap:10}}>
@@ -265,11 +354,11 @@ return<div className="screen" style={{padding:`0 ${px}px 20px`}}>
       </div>
     </div>})}
   </div>}
-  {isStaff&&<div className="anim d2 section" onClick={()=>nav("stats")} style={{cursor:"pointer",borderRadius:16,padding:"12px 14px",background:"rgba(255,255,255,.03)",border:"1px solid rgba(255,255,255,.06)",display:"flex",alignItems:"center",justifyContent:"space-between",transition:"all .12s"}}>
+  {isStaff&&!isAdmin&&<div className="anim d2 section" onClick={()=>nav("stats")} style={{cursor:"pointer",borderRadius:16,padding:"12px 14px",background:"rgba(255,255,255,.03)",border:"1px solid rgba(255,255,255,.06)",display:"flex",alignItems:"center",justifyContent:"space-between",transition:"all .12s"}}>
     <div style={{display:"flex",alignItems:"center",gap:10}}><div style={{width:32,height:32,borderRadius:10,background:"rgba(var(--c3r),.1)",display:"flex",alignItems:"center",justifyContent:"center"}}><Ic n="chart" s={15} c="var(--c3)"/></div><div><span style={{fontSize:13,fontWeight:600,color:"rgba(255,255,255,.7)"}}>Statistiken</span><p style={{fontSize:9,color:"rgba(255,255,255,.2)",marginTop:1}}>Punkte, Präsenz, Leistung</p></div></div>
     <span style={{color:"rgba(255,255,255,.15)",fontSize:16}}>›</span>
   </div>}
-  <div className="anim d3"><div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:12}}><h3 className="section-title" style={{marginBottom:0}}>Nächste Termine</h3><button style={{fontSize:10,color:"var(--c2)",fontWeight:600,background:"none",border:"none",cursor:"pointer"}} onClick={()=>nav("events")}>Alle →</button></div><div style={{display:"flex",flexDirection:"column",gap:8}}>{filteredEvts.slice(0,4).map((ev,i)=>{const st=statuses[ev.id];const evCS=childStatuses[ev.id]||{};return<div key={ev.id} className={`glass card anim d${Math.min(i+2,5)}`} style={{cursor:"pointer"}}>
+  {!isAdmin&&<div className="anim d3"><div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:12}}><h3 className="section-title" style={{marginBottom:0}}>Nächste Termine</h3><button style={{fontSize:10,color:"var(--c2)",fontWeight:600,background:"none",border:"none",cursor:"pointer"}} onClick={()=>nav("events")}>Alle →</button></div><div style={{display:"flex",flexDirection:"column",gap:8}}>{filteredEvts.slice(0,4).map((ev,i)=>{const st=statuses[ev.id];const evCS=childStatuses[ev.id]||{};return<div key={ev.id} className={`glass card anim d${Math.min(i+2,5)}`} style={{cursor:"pointer"}}>
     <div onClick={()=>nav("eventDetail",ev)}>
       <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:8}}><div><div style={{display:"flex",alignItems:"center",gap:6,marginBottom:4}}><Bdg type={ev.type}>{ev.type}</Bdg><span style={{fontSize:8,fontWeight:700,color:"rgba(255,255,255,.2)",background:"rgba(255,255,255,.04)",padding:"2px 6px",borderRadius:20}}>+{ev.pts}</span>{evPhotos[ev.id]&&<span style={{display:"inline-flex",alignItems:"center",gap:3,padding:"2px 7px",borderRadius:20,background:"rgba(var(--c2r),.1)"}}><Ic n="camera" s={9} c="var(--c2)"/><span style={{fontSize:8,fontWeight:700,color:"var(--c2)"}}>{evPhotos[ev.id].length}</span></span>}</div><h4 style={{fontSize:13,fontWeight:600}}>{ev.title}</h4></div></div>
       <div style={{display:"flex",alignItems:"center",gap:8,fontSize:10,color:"rgba(255,255,255,.3)",fontWeight:300}}><span>{ev.date}</span><span style={{color:"rgba(255,255,255,.1)"}}>·</span><span>{ev.time}</span></div>
