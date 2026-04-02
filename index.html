@@ -68,12 +68,11 @@ select{appearance:none;color:rgba(255,255,255,.5)}
 [data-mode="light"] body{background:#f1f5f9;color:#0f172a}
 [data-mode="light"] #root{background:#f1f5f9}
 
-/* Glass elements */
-[data-mode="light"] .glass{background:rgba(255,255,255,.75);border-color:rgba(15,23,42,.06);box-shadow:0 1px 3px rgba(15,23,42,.06),0 4px 12px rgba(15,23,42,.03);backdrop-filter:blur(16px)}
-[data-mode="light"] .glass-s{background:rgba(255,255,255,.9);border-color:rgba(15,23,42,.08)}
-[data-mode="light"] .glass-header{background:rgba(241,245,249,.92);border-color:rgba(15,23,42,.06);box-shadow:0 1px 2px rgba(15,23,42,.04)}
-[data-mode="light"] .nav-inner{background:rgba(241,245,249,.95);border-color:rgba(15,23,42,.06);box-shadow:0 -1px 2px rgba(15,23,42,.04)}
-[data-mode="light"] .card{background:rgba(255,255,255,.75);border-color:rgba(15,23,42,.06);box-shadow:0 1px 3px rgba(15,23,42,.06),0 4px 12px rgba(15,23,42,.03)}
+/* Glass elements - strong contrast */
+[data-mode="light"] .glass{background:rgba(255,255,255,.85);border-color:rgba(0,0,0,.1);box-shadow:0 1px 4px rgba(0,0,0,.08),0 4px 16px rgba(0,0,0,.04);backdrop-filter:blur(16px)}
+[data-mode="light"] .glass-s{background:rgba(255,255,255,.95);border-color:rgba(0,0,0,.1)}
+[data-mode="light"] .glass-header{background:rgba(255,255,255,.95);border-color:rgba(0,0,0,.08);box-shadow:0 1px 4px rgba(0,0,0,.06)}
+[data-mode="light"] .card{background:rgba(255,255,255,.9);border-color:rgba(0,0,0,.08);box-shadow:0 1px 4px rgba(0,0,0,.08),0 4px 16px rgba(0,0,0,.04)}
 
 /* Form elements */
 [data-mode="light"] input,[data-mode="light"] select,[data-mode="light"] textarea{background:#fff;border-color:rgba(15,23,42,.12);color:#0f172a;box-shadow:0 1px 2px rgba(15,23,42,.04)}
@@ -109,19 +108,22 @@ select{appearance:none;color:rgba(255,255,255,.5)}
 [data-mode="light"] .ring-wrap svg circle:first-child{stroke:rgba(15,23,42,.08)!important}
 [data-mode="light"] .ring-wrap svg{filter:none!important}
 
-/* ALL text color overrides - GLOBAL catch-all */
-[data-mode="light"] h1,[data-mode="light"] h2,[data-mode="light"] h3,[data-mode="light"] h4{color:#0f172a!important}
-[data-mode="light"] p{color:#334155!important}
-[data-mode="light"] span{color:#334155}
-[data-mode="light"] div{color:#334155}
-[data-mode="light"] .section-title{color:#64748b!important}
-[data-mode="light"] .label{color:#64748b!important}
-[data-mode="light"] .mono{color:#475569}
-[data-mode="light"] svg{color:#475569}
+/* ALL text color overrides - GLOBAL with strong contrast */
+[data-mode="light"] h1,[data-mode="light"] h2,[data-mode="light"] h3,[data-mode="light"] h4{color:#000!important}
+[data-mode="light"] p{color:#1a1a1a!important}
+[data-mode="light"] span{color:#1a1a1a}
+[data-mode="light"] div{color:#1a1a1a}
+[data-mode="light"] .section-title{color:#555!important}
+[data-mode="light"] .label{color:#555!important}
+[data-mode="light"] .mono{color:#333}
+[data-mode="light"] svg{color:#333;stroke:#333}
 
-/* Nav text */
-[data-mode="light"] .nav-btn span{color:#94a3b8!important}
+/* Nav - strong contrast */
+[data-mode="light"] .nav-inner{background:rgba(255,255,255,.97)!important;border-color:rgba(0,0,0,.1)!important;box-shadow:0 -2px 8px rgba(0,0,0,.06)!important}
+[data-mode="light"] .nav-btn span{color:#666!important}
+[data-mode="light"] .nav-btn svg{stroke:#666!important}
 [data-mode="light"] .nav-btn-active span{color:#0f766e!important}
+[data-mode="light"] .nav-btn-active svg{stroke:#0f766e!important}
 
 /* Preserve colored elements */
 [data-mode="light"] .gt span,[data-mode="light"] .gt{color:transparent!important;-webkit-text-fill-color:transparent!important}
