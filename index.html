@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
-:root{--c1:#a3f7bf;--c2:#00d4ff;--c3:#7c5cfc;--c1r:163,247,191;--c2r:0,212,255;--c3r:124,92,252;--glass:rgba(255,255,255,.05);--glass-s:rgba(255,255,255,.08);--glass-border:rgba(255,255,255,.1);--glass-border-s:rgba(255,255,255,.15);--blur:24px;--blur-s:40px}
+:root{--c1:#00d4aa;--c2:#00b4d8;--c3:#e0fbfc;--c1r:0,212,170;--c2r:0,180,216;--c3r:224,251,252;--glass:rgba(255,255,255,.05);--glass-s:rgba(255,255,255,.08);--glass-border:rgba(255,255,255,.1);--glass-border-s:rgba(255,255,255,.15);--blur:24px;--blur-s:40px}
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 *{font-family:'Outfit',sans-serif;-webkit-tap-highlight-color:transparent}
 html{height:100%;background:#000}
@@ -74,17 +74,14 @@ select{appearance:none;color:rgba(255,255,255,.5)}
 const {useState,useEffect}=React;
 
 const THEMES={
-  aurora:{name:"Aurora",c1:"#a3f7bf",c2:"#00d4ff",c3:"#7c5cfc",c1r:"163,247,191",c2r:"0,212,255",c3r:"124,92,252",preview:["#a3f7bf","#00d4ff","#7c5cfc"]},
-  sunset:{name:"Sunset",c1:"#ff9f43",c2:"#ee5a24",c3:"#ffd32a",c1r:"255,159,67",c2r:"238,90,36",c3r:"255,211,42",preview:["#ff9f43","#ee5a24","#ffd32a"]},
-  ocean:{name:"Ocean",c1:"#0abde3",c2:"#48dbfb",c3:"#1dd1a1",c1r:"10,189,227",c2r:"72,219,251",c3r:"29,209,161",preview:["#0abde3","#48dbfb","#1dd1a1"]},
-  neon:{name:"Neon",c1:"#f368e0",c2:"#ff6b6b",c3:"#00d2d3",c1r:"243,104,224",c2r:"255,107,107",c3r:"0,210,211",preview:["#f368e0","#ff6b6b","#00d2d3"]},
-  forest:{name:"Forest",c1:"#2ecc71",c2:"#a3cb38",c3:"#f7d794",c1r:"46,204,113",c2r:"163,203,56",c3r:"247,215,148",preview:["#2ecc71","#a3cb38","#f7d794"]},
-  royal:{name:"Royal",c1:"#f9ca24",c2:"#c8a415",c3:"#dfe6e9",c1r:"249,202,36",c2r:"200,164,21",c3r:"223,230,233",preview:["#f9ca24","#c8a415","#dfe6e9"]}
+  lime:{name:"Electric Lime",c1:"#c8ff00",c2:"#00e676",c3:"#76ff03",c1r:"200,255,0",c2r:"0,230,118",c3r:"118,255,3",preview:["#c8ff00","#00e676","#76ff03"]},
+  coral:{name:"Coral Sport",c1:"#ff6b6b",c2:"#ffa502",c3:"#ff9ff3",c1r:"255,107,107",c2r:"255,165,2",c3r:"255,159,243",preview:["#ff6b6b","#ffa502","#ff9ff3"]},
+  alpine:{name:"Alpine Fresh",c1:"#00d4aa",c2:"#00b4d8",c3:"#e0fbfc",c1r:"0,212,170",c2r:"0,180,216",c3r:"224,251,252",preview:["#00d4aa","#00b4d8","#e0fbfc"]}
 };
-const applyTheme=(id)=>{const t=THEMES[id]||THEMES.aurora;const r=document.documentElement;r.style.setProperty("--c1",t.c1);r.style.setProperty("--c2",t.c2);r.style.setProperty("--c3",t.c3);r.style.setProperty("--c1r",t.c1r);r.style.setProperty("--c2r",t.c2r);r.style.setProperty("--c3r",t.c3r);try{localStorage.setItem("sporti-theme",id)}catch(e){}};
-const savedTheme=(()=>{try{return localStorage.getItem("sporti-theme")||"aurora"}catch(e){return"aurora"}})();
+const applyTheme=(id)=>{const t=THEMES[id]||THEMES.alpine;const r=document.documentElement;r.style.setProperty("--c1",t.c1);r.style.setProperty("--c2",t.c2);r.style.setProperty("--c3",t.c3);r.style.setProperty("--c1r",t.c1r);r.style.setProperty("--c2r",t.c2r);r.style.setProperty("--c3r",t.c3r);try{localStorage.setItem("sporti-theme",id)}catch(e){}};
+const savedTheme=(()=>{try{return localStorage.getItem("sporti-theme")||"alpine"}catch(e){return"alpine"}})();
 applyTheme(savedTheme);
-document.documentElement.removeAttribute('data-theme');try{localStorage.removeItem('sporti-mode')}catch(e){}
+document.documentElement.removeAttribute('data-theme');try{localStorage.removeItem('sporti-mode');if(!THEMES[localStorage.getItem('sporti-theme')])localStorage.removeItem('sporti-theme')}catch(e){}
 const useTheme=(tid)=>{const t=THEMES[tid]||THEMES.aurora;return t};
 
 const U={name:"Luca Meier",role:"Mitglied",team:"U18 Herren",teamId:"u18h",pts:187,rank:3,att:78,tot:22};
