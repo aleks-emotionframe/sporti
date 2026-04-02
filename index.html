@@ -84,6 +84,7 @@ const THEMES={
 const applyTheme=(id)=>{const t=THEMES[id]||THEMES.aurora;const r=document.documentElement;r.style.setProperty("--c1",t.c1);r.style.setProperty("--c2",t.c2);r.style.setProperty("--c3",t.c3);r.style.setProperty("--c1r",t.c1r);r.style.setProperty("--c2r",t.c2r);r.style.setProperty("--c3r",t.c3r);try{localStorage.setItem("sporti-theme",id)}catch(e){}};
 const savedTheme=(()=>{try{return localStorage.getItem("sporti-theme")||"aurora"}catch(e){return"aurora"}})();
 applyTheme(savedTheme);
+document.documentElement.removeAttribute('data-theme');try{localStorage.removeItem('sporti-mode')}catch(e){}
 const useTheme=(tid)=>{const t=THEMES[tid]||THEMES.aurora;return t};
 
 const U={name:"Luca Meier",role:"Mitglied",team:"U18 Herren",teamId:"u18h",pts:187,rank:3,att:78,tot:22};
@@ -1207,7 +1208,8 @@ return<div className="dot-grid" style={{position:"relative",minHeight:"100%"}}><
   <Nav active={mains.includes(scr)?scr:prev} nav={nav} role={role} chatBadge={(()=>{const isS=role==="trainer"||role==="vorstand"||role==="admin";const c=isS?convos.trainer:role==="elternteil"?convos.elternteil||[]:convos.spieler;return c.reduce((a,x)=>a+(x.unread||0),0)+chatBadge})()} helperBadge={hlp.filter(h=>h.u<h.n).length} eventsBadge={evts.filter(e=>e.status==="offen"&&parseEvDate(e)>new Date()).length}/>
   <NewsPopup open={showNews} onClose={()=>setShowNews(false)} role={role}/>
 </div>};
-ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+class EB extends React.Component{constructor(p){super(p);this.state={err:null}}static getDerivedStateFromError(e){return{err:e}}render(){if(this.state.err)return React.createElement('div',{style:{padding:20,color:'#ff6b35'}},React.createElement('h2',null,'Fehler'),React.createElement('pre',{style:{fontSize:11,whiteSpace:'pre-wrap',color:'#fff',opacity:.6}},this.state.err.toString()));return this.props.children}}
+ReactDOM.createRoot(document.getElementById("root")).render(React.createElement(EB,null,React.createElement(App)));
 </script>
 </body>
 </html>
