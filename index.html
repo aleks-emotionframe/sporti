@@ -63,145 +63,6 @@ select{appearance:none;color:rgba(255,255,255,.5)}
 .section-title{font-size:10px;font-weight:700;color:rgba(255,255,255,.25);text-transform:uppercase;letter-spacing:.18em;margin-bottom:10px}
 .label{display:block;color:rgba(255,255,255,.25);font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.18em;margin-bottom:6px}
 
-/* Light Mode – festes Farbschema (Slate + Teal) */
-[data-theme="light"]{--c1:#0d9488;--c2:#14b8a6;--c3:#5b21b6;--c1r:13,148,136;--c2r:20,184,166;--c3r:91,33,182;--glass:rgba(255,255,255,.72);--glass-s:rgba(255,255,255,.88);--glass-border:rgba(15,23,42,.06);--glass-border-s:rgba(15,23,42,.1)}
-[data-theme="light"] body{background:#f8fafc;color:#0f172a}
-[data-theme="light"] #root{background:#f8fafc}
-[data-theme="light"] .glass{background:rgba(255,255,255,.72);border-color:rgba(15,23,42,.06);box-shadow:0 1px 2px rgba(15,23,42,.04),0 4px 16px rgba(15,23,42,.03)}
-[data-theme="light"] .glass-s{background:rgba(255,255,255,.88);border-color:rgba(15,23,42,.08)}
-[data-theme="light"] .glass-header{background:rgba(248,250,252,.9);border-bottom-color:rgba(15,23,42,.05);box-shadow:0 1px 2px rgba(15,23,42,.03)}
-[data-theme="light"] .nav-inner{background:rgba(248,250,252,.94);border-top-color:rgba(15,23,42,.06);box-shadow:0 -1px 3px rgba(15,23,42,.03)}
-[data-theme="light"] .card{background:rgba(255,255,255,.72);border-color:rgba(15,23,42,.06);box-shadow:0 1px 2px rgba(15,23,42,.04),0 4px 16px rgba(15,23,42,.03)}
-[data-theme="light"] input,[data-theme="light"] select,[data-theme="light"] textarea{background:#fff;border-color:rgba(15,23,42,.1);color:#0f172a;box-shadow:0 1px 2px rgba(15,23,42,.04)}
-[data-theme="light"] input:focus,[data-theme="light"] select:focus,[data-theme="light"] textarea:focus{border-color:rgba(13,148,136,.4);background:#fff;box-shadow:0 0 0 3px rgba(20,184,166,.1)}
-[data-theme="light"] input::placeholder,[data-theme="light"] textarea::placeholder{color:#94a3b8}
-[data-theme="light"] .badge{box-shadow:0 1px 2px rgba(15,23,42,.05);background:rgba(15,23,42,.04)!important;border-color:rgba(15,23,42,.06)!important}
-[data-theme="light"] .btn{color:#fff;box-shadow:0 2px 8px rgba(13,148,136,.2)}
-[data-theme="light"] .ag{background:linear-gradient(135deg,#0d9488,#14b8a6,#0d9488)}
-[data-theme="light"] .aglow{box-shadow:0 4px 16px rgba(13,148,136,.12)}
-[data-theme="light"] .gt{background:linear-gradient(135deg,#0f172a,#334155);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-[data-theme="light"] .gt-w{background:linear-gradient(135deg,#dc2626,#ef4444);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-[data-theme="light"] .aurora-orb{display:none!important}
-[data-theme="light"] .dot-grid{background-image:none}
-[data-theme="light"] .nav-btn-active{background:rgba(13,148,136,.08)}
-[data-theme="light"] .moti-card{background:rgba(255,255,255,.8)!important}
-[data-theme="light"] .moti-border{background:linear-gradient(135deg,#0d9488,#14b8a6,#5b21b6,#0d9488)!important;background-size:400% 400%!important}
-[data-theme="light"] .moti-border::after{background:#f8fafc}
-[data-theme="light"] h1,[data-theme="light"] h2,[data-theme="light"] h3,[data-theme="light"] h4{color:#0f172a!important}
-[data-theme="light"] p{color:#475569!important}
-[data-theme="light"] span{color:#64748b}
-[data-theme="light"] .section-title{color:#94a3b8!important}
-[data-theme="light"] .label{color:#94a3b8!important}
-[data-theme="light"] .mono{color:#64748b}
-[data-theme="light"] .nav-btn span{color:#94a3b8}
-[data-theme="light"] .nav-btn-active span{color:#0d9488!important}
-[data-theme="light"] .ring-wrap svg circle:first-child{stroke:rgba(15,23,42,.06)!important}
-[data-theme="light"] .ring-wrap svg{filter:none!important}
-
-/* Light mode: comprehensive inline-style overrides */
-[data-theme="light"] button{color:#475569}
-[data-theme="light"] .btn{color:#fff!important}
-[data-theme="light"] .badge span{color:inherit}
-
-/* Modal backgrounds */
-[data-theme="light"] [style*="rgba(13,16,23"]{background:rgba(255,255,255,.92)!important;border-color:rgba(15,23,42,.1)!important;box-shadow:0 24px 64px rgba(15,23,42,.15),0 1px 2px rgba(15,23,42,.08)!important}
-[data-theme="light"] [style*="rgba(0,0,0,.6)"]{background:rgba(15,23,42,.25)!important}
-
-/* Softened text colors for light mode */
-[data-theme="light"] [style*="color:rgba(255,255,255,.7)"]{color:#334155!important}
-[data-theme="light"] [style*="color:rgba(255,255,255,.6)"]{color:#475569!important}
-[data-theme="light"] [style*="color:rgba(255,255,255,.55)"]{color:#475569!important}
-[data-theme="light"] [style*="color:rgba(255,255,255,.5)"]{color:#64748b!important}
-[data-theme="light"] [style*="color:rgba(255,255,255,.4)"]{color:#64748b!important}
-[data-theme="light"] [style*="color:rgba(255,255,255,.35)"]{color:#94a3b8!important}
-[data-theme="light"] [style*="color:rgba(255,255,255,.3)"]{color:#94a3b8!important}
-[data-theme="light"] [style*="color:rgba(255,255,255,.25)"]{color:#94a3b8!important}
-[data-theme="light"] [style*="color:rgba(255,255,255,.2)"]{color:#cbd5e1!important}
-[data-theme="light"] [style*="color:rgba(255,255,255,.15)"]{color:#cbd5e1!important}
-[data-theme="light"] [style*="color:rgba(255,255,255,.12)"]{color:#e2e8f0!important}
-[data-theme="light"] [style*="color:rgba(255,255,255,.1)"]{color:#e2e8f0!important}
-[data-theme="light"] [style*="color:#fff"]{color:#0f172a!important}
-[data-theme="light"] .btn [style*="color:#fff"],[data-theme="light"] .ag [style*="color:#fff"]{color:#fff!important}
-[data-theme="light"] button[style*="background:rgba(239,68,68"]{color:#fff!important}
-
-/* Background overrides for light mode */
-[data-theme="light"] [style*="background:rgba(255,255,255,.02)"]{background:rgba(15,23,42,.02)!important}
-[data-theme="light"] [style*="background:rgba(255,255,255,.03)"]{background:rgba(15,23,42,.03)!important}
-[data-theme="light"] [style*="background:rgba(255,255,255,.04)"]{background:rgba(15,23,42,.03)!important}
-[data-theme="light"] [style*="background:rgba(255,255,255,.05)"]{background:rgba(15,23,42,.04)!important}
-[data-theme="light"] [style*="background:rgba(255,255,255,.08)"]{background:rgba(15,23,42,.05)!important}
-[data-theme="light"] [style*="background:rgba(255,255,255,.1)"]{background:rgba(15,23,42,.06)!important}
-
-/* Border overrides */
-[data-theme="light"] [style*="border:1px solid rgba(255,255,255,.06)"]{border-color:rgba(15,23,42,.06)!important}
-[data-theme="light"] [style*="border:1px solid rgba(255,255,255,.04)"]{border-color:rgba(15,23,42,.04)!important}
-[data-theme="light"] [style*="border:1px solid rgba(255,255,255,.08)"]{border-color:rgba(15,23,42,.06)!important}
-[data-theme="light"] [style*="border:1px solid rgba(255,255,255,.1)"]{border-color:rgba(15,23,42,.08)!important}
-[data-theme="light"] [style*="border:1px solid rgba(255,255,255,.12)"]{border-color:rgba(15,23,42,.08)!important}
-[data-theme="light"] [style*="border:2px solid #06080f"]{border-color:#f8fafc!important}
-
-/* Progress bar tracks */
-[data-theme="light"] [style*="background:rgba(255,255,255,.04)"][style*="overflow:hidden"]{background:rgba(15,23,42,.06)!important}
-
-/* Notification badge on light */
-[data-theme="light"] [style*="border:2px solid #06080f"]{border-color:#f8fafc!important}
-
-@media(min-width:500px){[data-theme="light"] #root{border-color:rgba(15,23,42,.08);box-shadow:0 25px 60px rgba(15,23,42,.08)}[data-theme="light"] body{background:#e2e8f0}}
-
-/* Light mode: gradient button text fix – #06080f text on .ag buttons should stay dark */
-[data-theme="light"] .ag svg[stroke="#06080f"]{stroke:#0f172a}
-/* Send/plus icon buttons on gradient backgrounds */
-[data-theme="light"] .ag [style*="color:#06080f"]{color:#0f172a!important}
-
-/* Light mode: progress bar inner fills – soften gradient */
-[data-theme="light"] [style*="overflow:hidden"] [style*="border-radius:3"]{opacity:.7}
-
-/* Light mode: NavBadge & header notification badge border */
-[data-theme="light"] [style*="border:2px solid #06080f"]{border-color:#f8fafc!important}
-
-/* Light mode: Vibe card text */
-[data-theme="light"] .moti-card [style*="color:rgba(255,255,255,.8)"]{color:#1e293b!important}
-[data-theme="light"] .moti-card [style*="color:rgba(255,255,255,.35)"]{color:#64748b!important}
-
-/* Light mode: Back button */
-[data-theme="light"] [style*="color:rgba(255,255,255,.3)"] svg{stroke:#94a3b8!important}
-
-/* Light mode: RBdg role badges – ensure readable on light */
-[data-theme="light"] .badge[style*="border:\"none\""]{background:rgba(15,23,42,.04)!important}
-
-/* Light mode: SPill "Offen" state */
-[data-theme="light"] .badge[style*="rgba(255,255,255,.05)"]{background:rgba(15,23,42,.04)!important}
-[data-theme="light"] .badge[style*="rgba(255,255,255,.25)"]{color:#94a3b8!important}
-
-/* Light mode: filter/tab buttons inactive state */
-[data-theme="light"] button[style*="rgba(255,255,255,.03)"]{background:rgba(15,23,42,.03)!important}
-[data-theme="light"] button[style*="color:rgba(255,255,255,.25)"]{color:#94a3b8!important}
-[data-theme="light"] button[style*="color:rgba(255,255,255,.2)"]{color:#94a3b8!important}
-[data-theme="light"] button[style*="color:rgba(255,255,255,.15)"]{color:#cbd5e1!important}
-[data-theme="light"] button[style*="color:rgba(255,255,255,.3)"]{color:#94a3b8!important}
-[data-theme="light"] button[style*="border:1px solid rgba(255,255,255,.06)"]{border-color:rgba(15,23,42,.06)!important}
-[data-theme="light"] button[style*="border:1px solid rgba(255,255,255,.05)"]{border-color:rgba(15,23,42,.05)!important}
-
-/* Light mode: cancel/secondary buttons */
-[data-theme="light"] button[style*="background:rgba(255,255,255,.04)"]{background:rgba(15,23,42,.04)!important}
-
-/* Light mode: chat bubbles */
-[data-theme="light"] [style*="rgba(255,255,255,.03)"][style*="border:1px solid rgba(255,255,255"]{background:rgba(15,23,42,.03)!important;border-color:rgba(15,23,42,.06)!important}
-
-/* Light mode: parent child rows */
-[data-theme="light"] [style*="background:rgba(255,255,255,.02)"]{background:rgba(15,23,42,.02)!important}
-
-/* Light mode: event detail info items */
-[data-theme="light"] [style*="color:rgba(255,255,255,.4)"]{color:#64748b!important}
-
-/* Light mode: toggle switch inactive */
-[data-theme="light"] button[style*="background:rgba(255,255,255,.06)"]{background:rgba(15,23,42,.1)!important}
-/* Light mode: gradient buttons – use teal gradient */
-[data-theme="light"] button[style*="linear-gradient(135deg,var(--c1),var(--c2)"]{background:linear-gradient(135deg,#0d9488,#14b8a6)!important}
-
-/* Light mode: stat cards text */
-[data-theme="light"] [style*="color:rgba(255,255,255,.8)"]{color:#1e293b!important}
-[data-theme="light"] [style*="color:rgba(255,255,255,.65)"]{color:#334155!important}
 </style>
 </head>
 <body>
@@ -211,7 +72,6 @@ select{appearance:none;color:rgba(255,255,255,.5)}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.9/babel.min.js"></script>
 <script type="text/babel">
 const {useState,useEffect}=React;
-const isDark=()=>window.__dm!==false;
 
 const THEMES={
   aurora:{name:"Aurora",c1:"#a3f7bf",c2:"#00d4ff",c3:"#7c5cfc",c1r:"163,247,191",c2r:"0,212,255",c3r:"124,92,252",preview:["#a3f7bf","#00d4ff","#7c5cfc"]},
@@ -308,20 +168,20 @@ const getTC=()=>{const o={};eventTypes.forEach(t=>o[t.key]=tcFromColor(t.c));ret
 let TC=getTC();
 const RC={spieler:"#a3f7bf",trainer:"#ffd700",vorstand:"#b794fc",admin:"#00d4ff",elternteil:"#ff9f43"};
 const RL={spieler:"Mitglied",trainer:"Trainer",vorstand:"Vorstand",admin:"Admin",elternteil:"Elternteil"};
-const PP={home:"M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-4 0a1 1 0 01-1-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 01-1 1",calendar:"M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z",trophy:"M12 15l-2 5h4l-2-5zm0 0a6 6 0 006-6V4H6v5a6 6 0 006 6zM6 4H3v3a3 3 0 003 3m12-6h3v3a3 3 0 01-3 3",users:"M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z",chat:"M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z",settings:"M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.573-1.066z",check:"M5 13l4 4L19 7",x:"M6 18L18 6M6 6l12 12",star:"M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z",hand:"M7 11.5V14m0-2.5v-6a1.5 1.5 0 113 0m-3 6a1.5 1.5 0 00-3 0v2a7.5 7.5 0 0015 0v-5a1.5 1.5 0 00-3 0m-6-3V11m0-5.5v-1a1.5 1.5 0 013 0v1m0 0V11m0-5.5a1.5 1.5 0 013 0v3m0 0V11",money:"M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z",bell:"M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9",plus:"M12 4v16m8-8H4",back:"M15 19l-7-7 7-7",profile:"M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z",injury:"M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z",shield:"M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z",logout:"M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1",chart:"M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z",send:"M12 19l9 2-9-18-9 18 9-2zm0 0v-8",zap:"M13 2L3 14h9l-1 8 10-12h-9l1-8z",target:"M12 2a10 10 0 100 20 10 10 0 000-20zm0 4a6 6 0 100 12 6 6 0 000-12zm0 4a2 2 0 100 4 2 2 0 000-4z",camera:"M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z M15 13a3 3 0 11-6 0 3 3 0 016 0z",pencil:"M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z",trash:"M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16",sun:"M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z",moon:"M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"};
+const PP={home:"M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-4 0a1 1 0 01-1-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 01-1 1",calendar:"M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z",trophy:"M12 15l-2 5h4l-2-5zm0 0a6 6 0 006-6V4H6v5a6 6 0 006 6zM6 4H3v3a3 3 0 003 3m12-6h3v3a3 3 0 01-3 3",users:"M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z",chat:"M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z",settings:"M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.573-1.066z",check:"M5 13l4 4L19 7",x:"M6 18L18 6M6 6l12 12",star:"M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z",hand:"M7 11.5V14m0-2.5v-6a1.5 1.5 0 113 0m-3 6a1.5 1.5 0 00-3 0v2a7.5 7.5 0 0015 0v-5a1.5 1.5 0 00-3 0m-6-3V11m0-5.5v-1a1.5 1.5 0 013 0v1m0 0V11m0-5.5a1.5 1.5 0 013 0v3m0 0V11",money:"M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z",bell:"M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9",plus:"M12 4v16m8-8H4",back:"M15 19l-7-7 7-7",profile:"M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z",injury:"M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z",shield:"M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z",logout:"M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1",chart:"M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z",send:"M12 19l9 2-9-18-9 18 9-2zm0 0v-8",zap:"M13 2L3 14h9l-1 8 10-12h-9l1-8z",target:"M12 2a10 10 0 100 20 10 10 0 000-20zm0 4a6 6 0 100 12 6 6 0 000-12zm0 4a2 2 0 100 4 2 2 0 000-4z",camera:"M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z M15 13a3 3 0 11-6 0 3 3 0 016 0z",pencil:"M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z",trash:"M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"};
 const Ic=({n,s=18,c="currentColor"})=><svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d={PP[n]||PP.star}/></svg>;
 
-const Av=({name,size=32,glow,ring})=>{const i=name.split(" ").map(n=>n[0]).join("");const dm=isDark();return<div className={glow?"aglow":""} style={{width:size,height:size,borderRadius:size>40?14:10,background:dm?"linear-gradient(135deg,rgba(var(--c1r),.15),rgba(var(--c2r),.15),rgba(var(--c3r),.15))":"linear-gradient(135deg,rgba(var(--c1r),.12),rgba(var(--c2r),.12),rgba(var(--c3r),.12))",border:ring?`2px solid rgba(var(--c2r),${dm?.3:.2})`:`1px solid ${dm?"rgba(255,255,255,.06)":"rgba(15,23,42,.08)"}`,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}><span style={{fontWeight:700,color:dm?"rgba(255,255,255,.7)":"#334155",fontSize:size*.3}}>{i}</span></div>};
+const Av=({name,size=32,glow,ring})=>{const i=name.split(" ").map(n=>n[0]).join("");return<div className={glow?"aglow":""} style={{width:size,height:size,borderRadius:size>40?14:10,background:dm?"linear-gradient(135deg,rgba(var(--c1r),.15),rgba(var(--c2r),.15),rgba(var(--c3r),.15))":"linear-gradient(135deg,rgba(var(--c1r),.12),rgba(var(--c2r),.12),rgba(var(--c3r),.12))",border:ring?`2px solid rgba(var(--c2r),${dm?.3:.2})`:`1px solid ${dm?"rgba(255,255,255,.06)":"rgba(15,23,42,.08)"}`,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}><span style={{fontWeight:700,color:dm?"rgba(255,255,255,.7)":"#334155",fontSize:size*.3}}>{i}</span></div>};
 const Ring=({val,max=100,size=64,sw=4,color="var(--c2)",children})=>{const r=(size-sw)/2,c=2*Math.PI*r,o=c-(val/max)*c;return<div className="ring-wrap" style={{width:size,height:size}}><svg width={size} height={size} style={{transform:"rotate(-90deg)",filter:`drop-shadow(0 0 8px ${color}30)`}}><circle cx={size/2} cy={size/2} r={r} fill="none" stroke="rgba(255,255,255,.04)" strokeWidth={sw}/><circle cx={size/2} cy={size/2} r={r} fill="none" stroke={color} strokeWidth={sw} strokeLinecap="round" strokeDasharray={c} strokeDashoffset={o} style={{transition:"stroke-dashoffset 1s ease"}}/></svg><div className="ring-content">{children}</div></div>};
-const Bdg=({children,type})=>{const s=TC[type]||{bg:"rgba(255,255,255,.05)",bd:"rgba(255,255,255,.1)",c:"rgba(255,255,255,.5)"};const dm=isDark();return<span className="badge" style={{background:dm?s.bg:`${s.c}10`,border:"none",color:dm?s.c:s.c}}><span style={{width:6,height:6,borderRadius:3,background:s.c,flexShrink:0}}/>{children}</span>};
+const Bdg=({children,type})=>{const s=TC[type]||{bg:"rgba(255,255,255,.05)",bd:"rgba(255,255,255,.1)",c:"rgba(255,255,255,.5)"};return<span className="badge" style={{background:s.bg,border:"none",color:s.c}}><span style={{width:6,height:6,borderRadius:3,background:s.c,flexShrink:0}}/>{children}</span>};
 const RBdg=({role})=><span className="badge" style={{background:`${RC[role]||"#fff"}18`,border:"none",color:RC[role]||"#fff"}}>{RL[role]||role}</span>;
-const SPill=({status})=>{if(status==="angemeldet")return<span className="badge" style={{background:"rgba(var(--c1r),.12)",border:"none",color:"var(--c1)"}}><Ic n="check" s={10}/> Dabei</span>;if(status==="abgemeldet")return<span className="badge" style={{background:"rgba(255,107,53,.12)",border:"none",color:"#ff6b35"}}><Ic n="x" s={10}/> Nein</span>;return<span className="badge" style={{background:isDark()?"rgba(255,255,255,.05)":"rgba(15,23,42,.05)",border:"none",color:isDark()?"rgba(255,255,255,.25)":"#94a3b8"}}>Offen</span>};
-const Back=({onClick})=><button onClick={onClick} style={{display:"flex",alignItems:"center",gap:6,color:isDark()?"rgba(255,255,255,.3)":"#94a3b8",background:"none",border:"none",cursor:"pointer",marginBottom:20,fontSize:13,fontWeight:400,padding:0}}><Ic n="back" s={16}/> Zurück</button>;
+const SPill=({status})=>{if(status==="angemeldet")return<span className="badge" style={{background:"rgba(var(--c1r),.12)",border:"none",color:"var(--c1)"}}><Ic n="check" s={10}/> Dabei</span>;if(status==="abgemeldet")return<span className="badge" style={{background:"rgba(255,107,53,.12)",border:"none",color:"#ff6b35"}}><Ic n="x" s={10}/> Nein</span>;return<span className="badge" style={{background:"rgba(255,255,255,.05)",border:"none",color:"rgba(255,255,255,.25)"}}>Offen</span>};
+const Back=({onClick})=><button onClick={onClick} style={{display:"flex",alignItems:"center",gap:6,color:"rgba(255,255,255,.3)",background:"none",border:"none",cursor:"pointer",marginBottom:20,fontSize:13,fontWeight:400,padding:0}}><Ic n="back" s={16}/> Zurück</button>;
 const Aurora=()=><div style={{position:"absolute",inset:0,overflow:"hidden",pointerEvents:"none",zIndex:0}}><div className="aurora-orb" style={{width:400,height:400,top:"-10%",left:"-15%",background:`radial-gradient(circle,var(--c1),transparent 70%)`,opacity:.1,animation:"aurora 20s ease-in-out infinite"}}/><div className="aurora-orb" style={{width:450,height:450,top:"40%",right:"-25%",background:`radial-gradient(circle,var(--c2),transparent 70%)`,opacity:.08,animation:"aurora 25s ease-in-out infinite reverse"}}/><div className="aurora-orb" style={{width:350,height:350,bottom:"-5%",left:"30%",background:`radial-gradient(circle,var(--c3),transparent 70%)`,opacity:.06,animation:"aurora 22s ease-in-out infinite 5s"}}/></div>;
 const px=16;
 
 const Login=({onLogin})=>{const[r,setR]=useState("spieler");const[sh,setSh]=useState(false);useEffect(()=>{setSh(true)},[]);
-return<div style={{minHeight:"100vh",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:24,position:"relative",overflow:"hidden",background:isDark()?"#06080f":"#f8fafc"}}><Aurora/><div style={{width:"100%",maxWidth:320,position:"relative",zIndex:10,transition:"all .6s",opacity:sh?1:0,transform:sh?"translateY(0)":"translateY(24px)"}}><div style={{textAlign:"center",marginBottom:40}}>
+return<div style={{minHeight:"100vh",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:24,position:"relative",overflow:"hidden",background:"#06080f"}}><Aurora/><div style={{width:"100%",maxWidth:320,position:"relative",zIndex:10,transition:"all .6s",opacity:sh?1:0,transform:sh?"translateY(0)":"translateY(24px)"}}><div style={{textAlign:"center",marginBottom:40}}>
   <h1 className="gt" style={{fontSize:52,fontWeight:900,letterSpacing:"-.04em",lineHeight:1,marginBottom:8,filter:"drop-shadow(0 0 30px rgba(var(--c2r),.2))"}}>sporti</h1>
   <div style={{display:"flex",alignItems:"center",justifyContent:"center",gap:10}}>
     <div style={{flex:1,maxWidth:40,height:1,background:"linear-gradient(90deg,transparent,rgba(var(--c2r),.25))"}}/>
@@ -369,7 +229,7 @@ return<div className="screen" style={{padding:`0 ${px}px 20px`}}>
         <div style={{height:4,flex:1,maxWidth:60,background:`rgba(${colR},.15)`,borderRadius:3,overflow:"hidden"}}><div style={{height:"100%",width:`${U.att}%`,borderRadius:3,background:col,transition:"width .8s"}}/></div>
         <span style={{fontSize:11,fontWeight:800,color:col}}>{U.att}%</span>
       </div>
-      <p style={{fontSize:13,fontWeight:600,color:isDark()?"rgba(255,255,255,.8)":"#1e293b",lineHeight:1.4}}>{m.text}</p>
+      <p style={{fontSize:13,fontWeight:600,color:"rgba(255,255,255,.8)",lineHeight:1.4}}>{m.text}</p>
     </div>}
   </div>})()}
 
@@ -474,8 +334,8 @@ return<div className="screen" style={{padding:`0 ${px}px 20px`}}>
             <span style={{fontSize:9,fontWeight:800,color:"#06080f",background:s.c,padding:"2px 8px",borderRadius:20}}>{label}</span>
             <Bdg type={ev.type}>{ev.type}</Bdg>
           </div>
-          <h4 style={{fontSize:13,fontWeight:600,color:isDark()?"rgba(255,255,255,.85)":"#0f172a"}}>{ev.title}</h4>
-          <div style={{fontSize:10,color:isDark()?"rgba(255,255,255,.3)":"#64748b",fontWeight:300,marginTop:1}}>{ev.date} · {ev.time}</div>
+          <h4 style={{fontSize:13,fontWeight:600,color:"rgba(255,255,255,.85)"}}>{ev.title}</h4>
+          <div style={{fontSize:10,color:"rgba(255,255,255,.3)",fontWeight:300,marginTop:1}}>{ev.date} · {ev.time}</div>
         </div>
       </div>
     </div>})}
@@ -509,8 +369,8 @@ return<div className="screen" style={{padding:`0 ${px}px 20px`}}>
       <div style={{display:"flex",alignItems:"center",gap:6,marginTop:8}}><div style={{flex:1,height:3,background:"rgba(255,255,255,.04)",borderRadius:3,overflow:"hidden"}}><div style={{height:"100%",borderRadius:3,width:`${(ev.att/ev.max)*100}%`,background:`linear-gradient(90deg,${(TC[ev.type]||TC.training).c}80,${(TC[ev.type]||TC.training).c}25)`,transition:"width .6s"}}/></div><span className="mono" style={{fontSize:8,color:"rgba(255,255,255,.2)"}}>{ev.att}/{ev.max}</span></div>
     </div>
     {!isParent&&<div style={{display:"flex",gap:6,marginTop:10}}>
-      <button onClick={e=>pickChild(e,ev,"zu")} style={{flex:1,padding:"7px 0",borderRadius:8,fontSize:10,fontWeight:700,cursor:"pointer",border:"none",transition:"all .12s",background:st==="angemeldet"?(isDark()?"linear-gradient(135deg,var(--c1),var(--c2))":"linear-gradient(135deg,#0d9488,#14b8a6)"):"rgba(var(--c1r),.08)",color:st==="angemeldet"?(isDark()?"#06080f":"#fff"):"var(--c1)",boxShadow:st==="angemeldet"?(isDark()?"0 0 12px rgba(var(--c1r),.15)":"0 2px 8px rgba(13,148,136,.2)"):"none"}}>✓ Zusage</button>
-      <button onClick={e=>pickChild(e,ev,"ab")} style={{flex:1,padding:"7px 0",borderRadius:8,fontSize:10,fontWeight:700,cursor:"pointer",border:"none",transition:"all .12s",background:st==="abgemeldet"?"rgba(239,68,68,.7)":(isDark()?"rgba(255,255,255,.04)":"rgba(15,23,42,.04)"),color:st==="abgemeldet"?"#fff":(isDark()?"rgba(255,255,255,.25)":"#94a3b8")}}>✗ Absage</button>
+      <button onClick={e=>pickChild(e,ev,"zu")} style={{flex:1,padding:"7px 0",borderRadius:8,fontSize:10,fontWeight:700,cursor:"pointer",border:"none",transition:"all .12s",background:st==="angemeldet"?("linear-gradient(135deg,var(--c1),var(--c2))"):"rgba(var(--c1r),.08)",color:st==="angemeldet"?("#06080f"):"var(--c1)",boxShadow:st==="angemeldet"?("0 0 12px rgba(var(--c1r),.15)"):"none"}}>✓ Zusage</button>
+      <button onClick={e=>pickChild(e,ev,"ab")} style={{flex:1,padding:"7px 0",borderRadius:8,fontSize:10,fontWeight:700,cursor:"pointer",border:"none",transition:"all .12s",background:st==="abgemeldet"?"rgba(239,68,68,.7)":("rgba(255,255,255,.04)"),color:st==="abgemeldet"?"#fff":("rgba(255,255,255,.25)")}}>✗ Absage</button>
     </div>}
     {isParent&&<div style={{marginTop:10}}>
       <div style={{display:"flex",flexDirection:"column",gap:4}}>
@@ -633,7 +493,7 @@ const evPhotos={
   ]
 };
 
-const EvDetail=({ev,onBack})=>{const[st,setSt]=useState(ev?.status||"offen");const[msgs,setMsgs]=useState([]);const[inp,setInp]=useState("");const[photos,setPhotos]=useState([]);const[viewer,setViewer]=useState(null);useEffect(()=>{if(ev){setMsgs(evChats[ev.id]||[]);setPhotos(evPhotos[ev.id]?[...evPhotos[ev.id]]:[])}},  [ev]);const sendMsg=()=>{if(!inp.trim())return;setMsgs(p=>[...p,{f:"Luca",t:inp.trim(),tm:new Date().toLocaleTimeString("de-CH",{hour:"2-digit",minute:"2-digit"}),me:true}]);setInp("")};const addPhoto=()=>{if(photos.length>=20)return;const colors=["#a3f7bf","#00d4ff","#7c5cfc","#ffd700","#ff9f43","#ff6b6b","#b794fc","#f368e0","#1dd1a1","#48dbfb"];const c=colors[Math.floor(Math.random()*colors.length)];setPhotos(p=>[...p,{id:Date.now(),by:"Luca Meier",time:new Date().toLocaleTimeString("de-CH",{hour:"2-digit",minute:"2-digit"}),color:c}])};const viewerNav=(dir)=>{if(!viewer)return;const idx=photos.findIndex(p=>p.id===viewer.id);const next=idx+dir;if(next>=0&&next<photos.length)setViewer(photos[next])};if(!ev)return null;const s=TC[ev.type]||TC.training;return<div className="screen" style={{padding:`0 ${px}px 20px`}}><Back onClick={onBack}/><div className="anim section"><Bdg type={ev.type}>{ev.type}</Bdg><h2 style={{fontSize:22,fontWeight:800,marginTop:10,marginBottom:4}}>{ev.title}</h2></div><div className="anim d1 section" style={{display:"flex",flexDirection:"column",gap:10}}>{[{i:"calendar",t:`${ev.date}, ${ev.time}`},{i:"target",t:ev.loc},{i:"zap",t:`${ev.pts} Punkte`}].map((x,j)=><div key={j} style={{display:"flex",alignItems:"center",gap:10,fontSize:13,color:"rgba(255,255,255,.4)",fontWeight:300}}><Ic n={x.i} s={15} c={s.c}/><span>{x.t}</span></div>)}</div><div className="glass anim d2 section" style={{borderRadius:18,padding:16,display:"flex",alignItems:"center",gap:16}}><Ring val={ev.att} max={ev.max} size={56} sw={3} color={s.c}><span style={{fontSize:13,fontWeight:900}}>{ev.att}</span></Ring><div><div style={{fontSize:14,fontWeight:600,color:"rgba(255,255,255,.7)"}}>{ev.att} von {ev.max}</div><div style={{fontSize:11,color:"rgba(255,255,255,.25)",fontWeight:300}}>Anmeldungen</div></div></div><div className="anim d3 section" style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8}}><button onClick={()=>setSt("angemeldet")} style={{padding:13,borderRadius:12,fontWeight:700,fontSize:13,cursor:"pointer",border:"none",background:st==="angemeldet"?(isDark()?"linear-gradient(135deg,var(--c1),var(--c2),var(--c3))":"linear-gradient(135deg,#0d9488,#14b8a6)"):"rgba(255,255,255,.03)",color:st==="angemeldet"?(isDark()?"#06080f":"#fff"):(isDark()?"rgba(255,255,255,.3)":"#94a3b8"),boxShadow:st==="angemeldet"?"0 0 20px rgba(var(--c2r),.12)":"none",transition:"all .12s"}}>✓ Anmelden</button><button onClick={()=>setSt("abgemeldet")} style={{padding:13,borderRadius:12,fontWeight:700,fontSize:13,cursor:"pointer",border:"none",background:st==="abgemeldet"?"rgba(239,68,68,.8)":(isDark()?"rgba(255,255,255,.03)":"rgba(15,23,42,.04)"),color:st==="abgemeldet"?"#fff":(isDark()?"rgba(255,255,255,.3)":"#94a3b8"),transition:"all .12s"}}>✗ Abmelden</button></div><h3 className="section-title">Angemeldet</h3><div style={{display:"flex",flexDirection:"column",gap:6}}>{mems.filter(m=>m.rl==="Mitglied").slice(0,5).map((m,i)=><div key={i} className={`glass card anim d${Math.min(i+1,5)}`} style={{display:"flex",alignItems:"center",gap:10,padding:10}}><Av name={m.n} size={30}/><span style={{fontSize:13,color:"rgba(255,255,255,.7)",flex:1,fontWeight:500}}>{m.n}{m.par&&<span style={{fontSize:8,color:"rgba(255,159,67,.5)",fontWeight:500,marginLeft:5,background:"rgba(255,159,67,.08)",padding:"2px 5px",borderRadius:4}}>via {m.par}</span>}</span><Ic n="check" s={12} c="var(--c1)"/></div>)}</div>
+const EvDetail=({ev,onBack})=>{const[st,setSt]=useState(ev?.status||"offen");const[msgs,setMsgs]=useState([]);const[inp,setInp]=useState("");const[photos,setPhotos]=useState([]);const[viewer,setViewer]=useState(null);useEffect(()=>{if(ev){setMsgs(evChats[ev.id]||[]);setPhotos(evPhotos[ev.id]?[...evPhotos[ev.id]]:[])}},  [ev]);const sendMsg=()=>{if(!inp.trim())return;setMsgs(p=>[...p,{f:"Luca",t:inp.trim(),tm:new Date().toLocaleTimeString("de-CH",{hour:"2-digit",minute:"2-digit"}),me:true}]);setInp("")};const addPhoto=()=>{if(photos.length>=20)return;const colors=["#a3f7bf","#00d4ff","#7c5cfc","#ffd700","#ff9f43","#ff6b6b","#b794fc","#f368e0","#1dd1a1","#48dbfb"];const c=colors[Math.floor(Math.random()*colors.length)];setPhotos(p=>[...p,{id:Date.now(),by:"Luca Meier",time:new Date().toLocaleTimeString("de-CH",{hour:"2-digit",minute:"2-digit"}),color:c}])};const viewerNav=(dir)=>{if(!viewer)return;const idx=photos.findIndex(p=>p.id===viewer.id);const next=idx+dir;if(next>=0&&next<photos.length)setViewer(photos[next])};if(!ev)return null;const s=TC[ev.type]||TC.training;return<div className="screen" style={{padding:`0 ${px}px 20px`}}><Back onClick={onBack}/><div className="anim section"><Bdg type={ev.type}>{ev.type}</Bdg><h2 style={{fontSize:22,fontWeight:800,marginTop:10,marginBottom:4}}>{ev.title}</h2></div><div className="anim d1 section" style={{display:"flex",flexDirection:"column",gap:10}}>{[{i:"calendar",t:`${ev.date}, ${ev.time}`},{i:"target",t:ev.loc},{i:"zap",t:`${ev.pts} Punkte`}].map((x,j)=><div key={j} style={{display:"flex",alignItems:"center",gap:10,fontSize:13,color:"rgba(255,255,255,.4)",fontWeight:300}}><Ic n={x.i} s={15} c={s.c}/><span>{x.t}</span></div>)}</div><div className="glass anim d2 section" style={{borderRadius:18,padding:16,display:"flex",alignItems:"center",gap:16}}><Ring val={ev.att} max={ev.max} size={56} sw={3} color={s.c}><span style={{fontSize:13,fontWeight:900}}>{ev.att}</span></Ring><div><div style={{fontSize:14,fontWeight:600,color:"rgba(255,255,255,.7)"}}>{ev.att} von {ev.max}</div><div style={{fontSize:11,color:"rgba(255,255,255,.25)",fontWeight:300}}>Anmeldungen</div></div></div><div className="anim d3 section" style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8}}><button onClick={()=>setSt("angemeldet")} style={{padding:13,borderRadius:12,fontWeight:700,fontSize:13,cursor:"pointer",border:"none",background:st==="angemeldet"?("linear-gradient(135deg,var(--c1),var(--c2),var(--c3))"):"rgba(255,255,255,.03)",color:st==="angemeldet"?("#06080f"):("rgba(255,255,255,.3)"),boxShadow:st==="angemeldet"?"0 0 20px rgba(var(--c2r),.12)":"none",transition:"all .12s"}}>✓ Anmelden</button><button onClick={()=>setSt("abgemeldet")} style={{padding:13,borderRadius:12,fontWeight:700,fontSize:13,cursor:"pointer",border:"none",background:st==="abgemeldet"?"rgba(239,68,68,.8)":("rgba(255,255,255,.03)"),color:st==="abgemeldet"?"#fff":("rgba(255,255,255,.3)"),transition:"all .12s"}}>✗ Abmelden</button></div><h3 className="section-title">Angemeldet</h3><div style={{display:"flex",flexDirection:"column",gap:6}}>{mems.filter(m=>m.rl==="Mitglied").slice(0,5).map((m,i)=><div key={i} className={`glass card anim d${Math.min(i+1,5)}`} style={{display:"flex",alignItems:"center",gap:10,padding:10}}><Av name={m.n} size={30}/><span style={{fontSize:13,color:"rgba(255,255,255,.7)",flex:1,fontWeight:500}}>{m.n}{m.par&&<span style={{fontSize:8,color:"rgba(255,159,67,.5)",fontWeight:500,marginLeft:5,background:"rgba(255,159,67,.08)",padding:"2px 5px",borderRadius:4}}>via {m.par}</span>}</span><Ic n="check" s={12} c="var(--c1)"/></div>)}</div>
   <div className="anim d4" style={{marginTop:20}}>
     <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:10}}>
       <h3 className="section-title" style={{marginBottom:0,display:"flex",alignItems:"center",gap:6}}><Ic n="camera" s={12} c="rgba(255,255,255,.25)"/> Fotos</h3>
@@ -1092,7 +952,7 @@ const MemberForm=({title,btnLabel,onSubmit,onCancel})=><div style={popupStyle} o
 {formRole==="Trainer"&&<div><label className="label">Teams (Mehrfachauswahl)</label><div style={{display:"flex",gap:4,flexWrap:"wrap"}}>{teams.map(t=><button key={t.id} onClick={()=>toggleFormTeam(t.id)} style={{padding:"6px 10px",borderRadius:8,fontSize:9,fontWeight:600,cursor:"pointer",display:"flex",alignItems:"center",gap:4,background:formTeams.includes(t.id)?`${t.color}18`:"rgba(255,255,255,.03)",border:formTeams.includes(t.id)?`1px solid ${t.color}40`:"1px solid rgba(255,255,255,.06)",color:formTeams.includes(t.id)?t.color:"rgba(255,255,255,.25)",transition:"all .12s"}}><span style={{width:6,height:6,borderRadius:3,background:t.color,flexShrink:0}}/>{t.name}</button>)}</div></div>}
 <div style={{display:"flex",gap:8,marginTop:4}}>
 <button onClick={onCancel} style={{flex:1,padding:11,borderRadius:12,fontSize:12,fontWeight:600,cursor:"pointer",border:"1px solid rgba(255,255,255,.06)",background:"rgba(255,255,255,.03)",color:"rgba(255,255,255,.3)"}}>Abbrechen</button>
-<button onClick={onSubmit} style={{flex:1,padding:11,borderRadius:12,fontSize:12,fontWeight:700,cursor:"pointer",border:"none",background:formName.trim()?"linear-gradient(135deg,var(--c1),var(--c2))":"rgba(255,255,255,.04)",color:formName.trim()?(isDark()?"#06080f":"#fff"):(isDark()?"rgba(255,255,255,.15)":"#cbd5e1"),transition:"all .15s"}}>{btnLabel}</button>
+<button onClick={onSubmit} style={{flex:1,padding:11,borderRadius:12,fontSize:12,fontWeight:700,cursor:"pointer",border:"none",background:formName.trim()?"linear-gradient(135deg,var(--c1),var(--c2))":"rgba(255,255,255,.04)",color:formName.trim()?("#06080f"):("rgba(255,255,255,.15)"),transition:"all .15s"}}>{btnLabel}</button>
 </div></div></div></div>;
 
 return<div className="screen" style={{padding:`0 ${px}px 20px`}}>
@@ -1227,7 +1087,7 @@ return<div className="anim d3 section">
         <div><label className="label">Bemerkung (optional)</label><textarea value={absBemerkung} onChange={e=>setAbsBemerkung(e.target.value)} placeholder="z.B. Details zur Verletzung..." style={{width:"100%",minHeight:60,background:"rgba(255,255,255,.04)",border:"1px solid rgba(255,255,255,.06)",borderRadius:12,padding:"10px 12px",color:"#fff",fontSize:13,fontFamily:"'Outfit',sans-serif",outline:"none",resize:"vertical"}}/></div>
         <div style={{display:"flex",gap:8}}>
           <button onClick={()=>setShowAbsPopup(false)} style={{flex:1,padding:11,borderRadius:12,fontSize:12,fontWeight:600,cursor:"pointer",border:"1px solid rgba(255,255,255,.06)",background:"rgba(255,255,255,.03)",color:"rgba(255,255,255,.3)"}}>Abbrechen</button>
-          <button onClick={handleMelden} style={{flex:1,padding:11,borderRadius:12,fontSize:12,fontWeight:700,cursor:"pointer",border:"none",background:(absVon&&absBis)?"linear-gradient(135deg,var(--c1),var(--c2))":"rgba(255,255,255,.04)",color:(absVon&&absBis)?(isDark()?"#06080f":"#fff"):(isDark()?"rgba(255,255,255,.15)":"#cbd5e1"),transition:"all .15s"}}>Melden</button>
+          <button onClick={handleMelden} style={{flex:1,padding:11,borderRadius:12,fontSize:12,fontWeight:700,cursor:"pointer",border:"none",background:(absVon&&absBis)?"linear-gradient(135deg,var(--c1),var(--c2))":"rgba(255,255,255,.04)",color:(absVon&&absBis)?("#06080f"):("rgba(255,255,255,.15)"),transition:"all .15s"}}>Melden</button>
         </div>
       </div>
       </>}
@@ -1316,18 +1176,16 @@ return<div style={{position:"fixed",inset:0,zIndex:100,display:"flex",alignItems
   </div>
 </div>};
 
-const NavBadge=({count})=>count>0?<div style={{position:"absolute",top:2,right:4,minWidth:16,height:16,borderRadius:8,background:"linear-gradient(135deg,#ff6b35,#ee5a24)",display:"flex",alignItems:"center",justifyContent:"center",padding:"0 4px",border:`2px solid ${isDark()?"#06080f":"#f8fafc"}`,animation:"pulse-ring 1.5s ease-in-out infinite",boxShadow:"0 0 8px rgba(255,107,53,.4)"}}><span style={{fontSize:8,fontWeight:800,color:"#fff"}}>{count}</span></div>:null;
+const NavBadge=({count})=>count>0?<div style={{position:"absolute",top:2,right:4,minWidth:16,height:16,borderRadius:8,background:"linear-gradient(135deg,#ff6b35,#ee5a24)",display:"flex",alignItems:"center",justifyContent:"center",padding:"0 4px",border:`2px solid ${"#06080f"}`,animation:"pulse-ring 1.5s ease-in-out infinite",boxShadow:"0 0 8px rgba(255,107,53,.4)"}}><span style={{fontSize:8,fontWeight:800,color:"#fff"}}>{count}</span></div>:null;
 
 const Nav=({active,nav,role,chatBadge=0,helperBadge=0,eventsBadge=0})=>{const isStaff=role==="trainer"||role==="vorstand"||role==="admin";const isParent=role==="elternteil";const items=[{id:"dashboard",ic:"home",l:"Home"},{id:"events",ic:"calendar",l:"Termine"},isStaff?{id:"rankings",ic:"trophy",l:"Ranking"}:{id:"helpers",ic:"hand",l:"Helfer"},{id:"chat",ic:"chat",l:"Chat"}];items.push(isStaff?{id:"admin",ic:"settings",l:"Admin"}:{id:"profile",ic:"profile",l:"Profil"});
 const badges={chat:chatBadge,helpers:helperBadge,events:eventsBadge};
 return<div className="nav"><div className="nav-inner">{items.map(it=>{const a=active===it.id;return<button key={it.id} onClick={()=>nav(it.id)} className={`nav-btn${a?" nav-btn-active":""}`} style={{position:"relative"}}>
-<Ic n={it.ic} s={22} c={a?"var(--c2)":(isDark()?"rgba(255,255,255,.25)":"#94a3b8")}/>
+<Ic n={it.ic} s={22} c={a?"var(--c2)":("rgba(255,255,255,.25)")}/>
 <NavBadge count={badges[it.id]||0}/>
 <span style={{fontSize:10,fontWeight:a?700:500,color:a?"var(--c2)":"rgba(255,255,255,.25)",transition:"all .2s"}}>{it.l}</span></button>})}</div></div>};
 
 const App=()=>{const[scr,setScr]=useState("login");const[role,setRole]=useState("spieler");const[evD,setEvD]=useState(null);const[prev,setPrev]=useState("dashboard");const[showNews,setShowNews]=useState(false);const[trainerInbox,setTrainerInbox]=useState([]);const[chatBadge,setChatBadge]=useState(0);const[themeId,setThemeId]=useState(savedTheme);const th=useTheme(themeId);
-const[darkMode,setDarkMode]=useState(()=>{try{return localStorage.getItem('sporti-mode')!=='light'}catch(e){return true}});
-window.__dm=darkMode;useEffect(()=>{document.documentElement.setAttribute('data-theme',darkMode?'dark':'light');window.__dm=darkMode;try{localStorage.setItem('sporti-mode',darkMode?'dark':'light')}catch(e){}},[darkMode]);
 const changeTheme=(id)=>{setThemeId(id);applyTheme(id)};
 const nav=(t,d)=>{if(t==="eventDetail"){setEvD(d);setPrev(scr)}if(t==="chat")setChatBadge(0);setScr(t);document.getElementById("root").scrollTop=0;window.scrollTo?.(0,0)};
 window.__addTrainerMsg=(msg,ev)=>{const m={id:Date.now(),from:U.name,event:ev?.title||"Termin",t:msg,time:new Date().toLocaleTimeString("de-CH",{hour:"2-digit",minute:"2-digit"})};setTrainerInbox(p=>[m,...p]);setChatBadge(p=>p+1)};
@@ -1341,7 +1199,7 @@ return<div className="dot-grid" style={{position:"relative",minHeight:"100%"}}><
       <div style={{display:"flex",alignItems:"center"}}>
         <span className="gt" style={{fontSize:20,fontWeight:900,letterSpacing:"-.03em"}}>sporti</span>
       </div>
-      <div style={{display:"flex",alignItems:"center",gap:8}}><RBdg role={role}/><div className="glass" style={{width:34,height:34,borderRadius:11,display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer"}} onClick={()=>setDarkMode(d=>!d)}><Ic n={darkMode?"moon":"sun"} s={15} c={darkMode?"rgba(255,255,255,.4)":"rgba(0,0,0,.45)"}/></div><div style={{position:"relative",cursor:"pointer"}} onClick={()=>setShowNews(true)}><div className="glass" style={{width:34,height:34,borderRadius:11,display:"flex",alignItems:"center",justifyContent:"center"}}><Ic n="bell" s={15} c={darkMode?"rgba(255,255,255,.4)":"rgba(0,0,0,.45)"}/></div><div style={{position:"absolute",top:-5,right:-5,minWidth:20,height:20,borderRadius:10,background:"linear-gradient(135deg,#ff6b35,#ee5a24)",display:"flex",alignItems:"center",justifyContent:"center",padding:"0 5px",border:`2px solid ${isDark()?"#06080f":"#f8fafc"}`,animation:"pulse-ring 1.5s ease-in-out infinite",boxShadow:"0 0 10px rgba(255,107,53,.4)"}}><span style={{fontSize:10,fontWeight:900,color:"#fff"}}>4</span></div></div></div>
+      <div style={{display:"flex",alignItems:"center",gap:8}}><RBdg role={role}/><div style={{position:"relative",cursor:"pointer"}} onClick={()=>setShowNews(true)}><div className="glass" style={{width:34,height:34,borderRadius:11,display:"flex",alignItems:"center",justifyContent:"center"}}><Ic n="bell" s={15} c="rgba(255,255,255,.4)"/></div><div style={{position:"absolute",top:-5,right:-5,minWidth:20,height:20,borderRadius:10,background:"linear-gradient(135deg,#ff6b35,#ee5a24)",display:"flex",alignItems:"center",justifyContent:"center",padding:"0 5px",border:"2px solid #06080f",animation:"pulse-ring 1.5s ease-in-out infinite",boxShadow:"0 0 10px rgba(255,107,53,.4)"}}><span style={{fontSize:10,fontWeight:900,color:"#fff"}}>4</span></div></div></div>
     </div>
   </div>
   <div style={{height:18}}/>
