@@ -1,7 +1,19 @@
-// Sporti Service Worker – Push Notifications
+// Sporti Service Worker – Push Notifications (no caching)
 
 self.addEventListener('install', () => self.skipWaiting())
-self.addEventListener('activate', (e) => e.waitUntil(self.clients.claim()))
+
+self.addEventListener('activate', (event) => {
+  // Clear all caches on activate to prevent stale content
+  event.waitUntil(
+    caches.keys().then(keys => Promise.all(keys.map(key => caches.delete(key))))
+      .then(() => self.clients.claim())
+  )
+})
+
+// Always fetch from network, never serve from cache
+self.addEventListener('fetch', (event) => {
+  event.respondWith(fetch(event.request))
+})
 
 // Handle push events
 self.addEventListener('push', (event) => {
