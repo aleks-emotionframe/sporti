@@ -1,0 +1,14 @@
+{
+  "name": "Sporti – Gemeinsam mehr erreichen",
+  "short_name": "Sporti",
+  "description": "Vereinsmanagement für Sportclubs",
+  "start_url": "/sporti/",
+  "scope": "/sporti/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#06080f",
+  "theme_color": "#06080f",
+  "icons": [
+    { "src": "/sporti/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}
