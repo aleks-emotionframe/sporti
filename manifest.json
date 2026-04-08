@@ -6,8 +6,8 @@
   "scope": "/sporti/",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#06080f",
-  "theme_color": "#06080f",
+  "background_color": "#f1f5f9",
+  "theme_color": "#f1f5f9",
   "icons": [
     { "src": "/sporti/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
   ]
